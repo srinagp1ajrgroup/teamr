@@ -1,0 +1,97 @@
+<!-- <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 main-wrapper">
+            <div class="col-lg-6">
+                <div class="trlogo"><img src="content/images/logo.png" alt="teamr logo"/></div> 
+            </div>
+            <div class="col-lg-4">
+                <div class="user-first-login user-login-details" ng-if="isForgotpwd == false">
+                    <div class="user-name"><p><span>Welcome,</span> Please login</p></div>
+                    <form action="">
+                         <div class = "form-group">
+                            <i class="nc-icon-mini users_single-05"></i><input type = "text" class="form-control input-style" id="name" placeholder="User Name" required ng-model="credentials.username" ng-class="{submitted:submitted}">
+                        </div>
+                        <div class = "form-group">
+                            <i class="nc-icon-mini ui-1_lock-open"></i><input type = "password" class="form-control input-style" id="password" placeholder="Password" required ng-model="credentials.password" ng-class="{submitted:submitted}">
+                        </div>
+                        <div class="error-msg" ng-if="loginAlert != ''"><p>{{loginAlert}}</p></div>
+                        <button type="button" class="btn btn-info login-btn" ng-click="submitted=true;loginformsubmit()">Login</button>
+                    </form>
+                    <div class="forgot-pw"><a href="" ng-click="forgotpass()">Forgot Password</a></div>
+                    <div class="copy-right">&copy;2016 TeamR. All rights reserved.</div>
+                </div>
+                <div class="pw-reset-details user-login-details" ng-if="isForgotpwd == true">
+                    <div class="reset-pw">
+                        <h3>Password Reset</h3>
+                        <p class="reset-text">Enter your e-mail address to reset your password.</p>
+                    </div>  
+                    <form action=""> 
+                        <div class = "form-group">
+                            <input type = "text" class="form-control input-style" id="name" placeholder="User Name" required ng-model="credentials.username" ng-class="{submitted:submitted}">
+                        </div>
+                        <div class="error-msg" ng-if="loginAlert != ''"><p>{{loginAlert}}</p></div>
+                        
+                        <button type="button" class="btn btn-info forget-btn" ng-click="submitted=true;resetpwd()">Sbumit</button>
+                         <button type="button" class="btn btn-danger forget-btn" ng-click="cancelpwd()">Cancel</button>
+                         <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                    <div class="copy-right">&copy;2016 TeamR. All rights reserved.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+<div layout="row">
+    <div flex="50">
+        <div class="tr-logo">
+            <img src="content/images/logo.png" alt="teamR logo"/>
+        </div>
+    </div>
+    <div flex="50">
+        <div class="user-login-page" ng-if="isForgotpwd == false">
+            <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
+                <i class="nc-icon-mini users_single-05"></i>
+                <label for="input_27">User Name</label>
+                <input ng-model="credentials.username" class="ng-pristine ng-valid md-input ng-touched" id="input_27" aria-invalid="false" style=""><div class="md-errors-spacer"></div>
+            </md-input-container>
+            <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
+                <i class="nc-icon-mini ui-1_lock-open"></i>
+                <label for="input_27">Password</label>
+                <input ng-model="credentials.password" class="ng-pristine ng-valid md-input ng-touched" id="input_28" aria-invalid="false" style="" type="password"><div class="md-errors-spacer"></div>
+            </md-input-container>
+            <div class="submit-btn">
+                <md-button class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Primary" ng-click="loginformsubmit()">
+                    <span class="ng-scope">Login</span>
+                    <div class="md-ripple-container"></div>
+                </md-button>
+            </div>
+            <div class="forgot-pw"><a href="" ng-click="forgotpass()">Forgot Password</a></div>
+        </div>
+
+        <div class="user-login-page" ng-if="isForgotpwd == true">
+            <div class="password-reset">
+                <h3>Password Reset</h3>
+                <p>Enter your e-mail address below to reset your password.</p>
+            </div>
+            <md-input-container class="md-block flex-gt-sm md-input-invalid password-reset-form" flex-gt-sm="">
+                <label for="input_92">Email</label>
+                <input name="email" ng-model="user.email" required="" minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" class="ng-pristine md-input ng-invalid ng-invalid-required ng-valid-pattern ng-valid-minlength ng-valid-maxlength ng-touched" id="input_92" aria-required="true" aria-invalid="true">
+                <div class="md-errors-spacer"></div>  
+            </md-input-container>
+            <div class="password-reset-btn">
+                <md-button class="md-raised md-primary md-button md-ink-ripple btn-submit" type="button" ng-transclude="" aria-label="Primary">
+                    <span class="ng-scope">Submit</span>
+                    <div class="md-ripple-container"></div>
+                </md-button>
+                <md-button class="md-raised md-warn md-button md-ink-ripple btn-cancel" type="button" ng-transclude="" aria-label="Primary" ng-click="cancelpwd()">
+                    <span class="ng-scope">Cancel</span>
+                    <div class="md-ripple-container"></div>
+                </md-button>
+            </div>
+        </div>
+    </div>
+</div>
+

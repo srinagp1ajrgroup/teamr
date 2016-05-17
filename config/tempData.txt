@@ -1,0 +1,184 @@
+// Users
+{
+	"_id" : ObjectId("56ac446c4de30fbe683647b2"),
+	"username" : "vasu",
+	"picUrl" : "",
+	"firstName" : "vasu",
+	"lastName" : "vanka",
+	"status" : "offline"
+}
+{
+	"_id" : ObjectId("56ac448c4de30fbe683647b3"),
+	"username" : "venkat",
+	"picUrl" : "",
+	"firstName" : "venkat",
+	"lastName" : "sama",
+	"status" : "offline"
+}
+{
+	"_id" : ObjectId("56ac44cf4de30fbe683647b4"),
+	"username" : "vinay",
+	"picUrl" : "",
+	"firstName" : "vinay",
+	"lastName" : "chenna",
+	"status" : "offline"
+}
+
+// userContacts
+
+{
+	"_id" : ObjectId("56ac49664de30fbe683647b5"),
+	"userId" : ObjectId("56ac446c4de30fbe683647b2"),
+	"contactId" : ObjectId("56ac448c4de30fbe683647b3")
+}
+{
+	"_id" : ObjectId("56ac497c4de30fbe683647b6"),
+	"userId" : ObjectId("56ac446c4de30fbe683647b2"),
+	"contactId" : ObjectId("56ac44cf4de30fbe683647b4")
+}
+{
+	"_id" : ObjectId("56ac49914de30fbe683647b7"),
+	"userId" : ObjectId("56ac448c4de30fbe683647b3"),
+	"contactId" : ObjectId("56ac44cf4de30fbe683647b4")
+}
+{
+	"_id" : ObjectId("56ac49a14de30fbe683647b8"),
+	"userId" : ObjectId("56ac448c4de30fbe683647b3"),
+	"contactId" : ObjectId("56ac446c4de30fbe683647b2")
+}
+{
+	"_id" : ObjectId("56ac49ed4de30fbe683647b9"),
+	"userId" : ObjectId("56ac44cf4de30fbe683647b4"),
+	"contactId" : ObjectId("56ac446c4de30fbe683647b2")
+}
+
+// Groups
+
+{
+	"_id" : ObjectId("56ac4b5c4de30fbe683647ba"),
+	"name" : "vgroup",
+	"picUrl" : "",
+	"customId" : "vasugroup123456"
+}
+{
+	"_id" : ObjectId("56ac4b6f4de30fbe683647bb"),
+	"name" : "Ajrgroup",
+	"picUrl" : "",
+	"customId" : "vasugroup15656"
+}
+{
+	"_id" : ObjectId("56ac4b854de30fbe683647bc"),
+	"name" : "igtgroup",
+	"picUrl" : "",
+	"customId" : "vasugrou4645656"
+}
+
+// userGroups
+
+{
+	"_id" : ObjectId("56ac4dad4de30fbe683647bd"),
+	"userId" : ObjectId("56ac446c4de30fbe683647b2"),
+	"groupId" : ObjectId("56ac4b5c4de30fbe683647ba"),
+	"isAdmin" : true,
+	"isModifier" : true
+}
+{
+	"_id" : ObjectId("56ac4dec4de30fbe683647be"),
+	"userId" : ObjectId("56ac448c4de30fbe683647b3"),
+	"groupId" : ObjectId("56ac4b6f4de30fbe683647bb"),
+	"isAdmin" : true,
+	"isModifier" : true
+}
+{
+	"_id" : ObjectId("56ac4e2a4de30fbe683647bf"),
+	"userId" : ObjectId("56ac44cf4de30fbe683647b4"),
+	"groupId" : ObjectId("56ac4b854de30fbe683647bc"),
+	"isAdmin" : true,
+	"isModifier" : true
+}
+{
+	"_id" : ObjectId("56ac4ef94de30fbe683647c0"),
+	"userId" : ObjectId("56ac446c4de30fbe683647b2"),
+	"groupId" : ObjectId("56ac4b854de30fbe683647bc"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+{
+	"_id" : ObjectId("56ac4f0a4de30fbe683647c1"),
+	"userId" : ObjectId("56ac446c4de30fbe683647b2"),
+	"groupId" : ObjectId("56ac4b6f4de30fbe683647bb"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+{
+	"_id" : ObjectId("56ac4f534de30fbe683647c2"),
+	"userId" : ObjectId("56ac448c4de30fbe683647b3"),
+	"groupId" : ObjectId("56ac4b5c4de30fbe683647ba"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+{
+	"_id" : ObjectId("56ac4f6a4de30fbe683647c3"),
+	"userId" : ObjectId("56ac448c4de30fbe683647b3"),
+	"groupId" : ObjectId("56ac4b854de30fbe683647bc"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+{
+	"_id" : ObjectId("56ac4f964de30fbe683647c4"),
+	"userId" : ObjectId("56ac44cf4de30fbe683647b4"),
+	"groupId" : ObjectId("56ac4b5c4de30fbe683647ba"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+{
+	"_id" : ObjectId("56ac4faa4de30fbe683647c5"),
+	"userId" : ObjectId("56ac44cf4de30fbe683647b4"),
+	"groupId" : ObjectId("56ac4b6f4de30fbe683647bb"),
+	"isAdmin" : false,
+	"isModifier" : false
+}
+
+
+
+
+var cluster  = require('cluster'),
+	_portSocket  = 8080,
+	_portRedis   = 6379,
+	_HostRedis   = 'localhost';
+
+if (cluster.isMaster) {	
+	var server = require('http').createServer(),
+		socketIO = require('socket.io').listen(server),
+		redis = require('socket.io-redis');	
+	socketIO.adapter(redis({ host: _HostRedis, port: _portRedis }));
+	
+	var numberOfCPUs = require('os').cpus().length;
+	for (var i = 0; i < numberOfCPUs; i++) {
+		cluster.fork();		
+	}
+	
+    cluster.on('exit', function(worker, code, signal) {
+        console.log('worker %s signal (%s)', worker.id, signal || code);
+        if (!worker.suicide) {
+            console.log('worker dead %s :-( ', worker.id);
+            cluster.fork();
+        }
+    });
+}
+
+if (cluster.isWorker) {	
+
+	var http = require('http');
+	http.globalAgent.maxSockets = Infinity;	
+	
+	var app = require('express')(),
+		ent = require('ent'),
+		fs  = require('fs'),
+		server = http.createServer(app).listen(_portSocket),
+		socketIO = require('socket.io').listen(server), 
+		redis = require('socket.io-redis');
+	
+	socketIO.adapter(redis({ host: _HostRedis, port: _portRedis }));
+	
+}

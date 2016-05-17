@@ -1,0 +1,27 @@
+<div class="middle-contact" ng-class="{slide:!showmenu,close:showmenu}">
+	<div class="middle-contact-middle add-contact">
+		<div class="add-contact-search">
+			<input type="text" placeholder="Charles Morgan" ng-model="searchContact">
+			<i class="nc-icon-mini ui-1_zoom" ng-click="getcontact()"></i> 
+		</div>
+		<div class="add-contact-list">
+			<div class="left-list">
+				<ul>
+					<li class="" role="presentation" ng-repeat="item in searchList">
+						<a href="">
+							<div class="added-contact-left"> 
+								<span><img alt="" class="added-contact-bg" src="content/images/11.jpg" /></span>
+								<p class="added-contact-text">{{item.username}}</p>
+								<p>Cincinatti, Oh, United States</p>
+							</div>
+							<div class="added-contact-right" ng-click="sendcontactreq($index)">
+								<i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i>
+								<i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
