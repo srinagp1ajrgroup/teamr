@@ -63,15 +63,62 @@
 							</div>
 						</div>
 					</a>
-					<md-button class="md-danger dropdown user-name" ng-click="myDropdownIsActive=!myDropdownIsActive" ng-class="{active:myDropdownIsActive}">
-						<h4> {{userdetails.username}}</h4>
-						<i class="nc-icon-mini arrows-1_small-triangle-down"></i>
-						<ul class="dropdown-menu md-whiteframe-z1">
-							<li><md-button ng-click="action1()">Profile</md-button></li>
-							<li><md-button>Change Password</md-button></li>
-							<li ng-click="logout()"><md-button>Signout</md-button></li>
-						</ul>
-					</md-button>
+					<md-menu>
+						<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+							<md-icon md-menu-origin>{{userdetails.username}}<i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
+						</md-button>
+						<md-menu-content class="menu-dropdown">
+							<md-menu-item>
+								<md-button>
+									<div layout="row">
+										<p flex>Profile</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+							<md-menu-item>
+								<md-button>
+									<div layout="row">
+										<p flex>Change Password</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+							<md-menu-item>
+								<md-button ng-click="logout()">
+									<div layout="row">
+										<p flex>Signout</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu>
+					<!-- <md-menu>
+						<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+							<md-icon md-menu-origin>{{userdetails.username}}<i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
+						</md-button>
+						<md-menu-content width="3" class="menu-dropdown">
+							<md-menu-item>
+								<md-button>
+									<div layout="row">
+										<p flex>Profile</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+							<md-menu-item>
+								<md-button>
+									<div layout="row">
+										<p flex>Change Password</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+							<md-menu-item>
+								<md-button ng-click="logout()">
+									<div layout="row">
+										<p flex>Signout</p>
+									</div>
+								</md-button>
+							</md-menu-item>
+						</md-menu-content>
+					</md-menu> -->
 				</div>
 			</div>
 		</div>

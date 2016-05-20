@@ -30,16 +30,16 @@ xenApp.factory('teamrService', function($rootScope) {
         comser.chathistory(username, fromid, toid, callback);
     }
 
-    teamrService.disconnect = function () {
-        comser.disconnect();
+    teamrService.disconnect = function (username) {
+        comser.disconnect(username);
     }
 
-    teamrService.fileUpload = function (form, cscocuurlallback) {
-        comser.fileUpload(form, callback);
+    teamrService.fileupload = function (username, formdata, callback) {
+        comser.fileupload(username, formdata, callback);
     }
 
-    teamrService.getFileURL = function (msg, callback) {
-        comser.getFileURL(msg, callback);
+    teamrService.getfileurl = function (username, msg, callback) {
+        comser.getfileurl(username, msg, callback);
     }
 
     teamrService.addcontact = function (from, toname, toid, callback) {
@@ -99,9 +99,9 @@ xenApp.factory('teamrService', function($rootScope) {
                     $rootScope.$broadcast('videochat', obj);
                 }
                 break;
-                case 'chatAck':
+                case 'chatack':
                 {
-                    $rootScope.$broadcast('chatAck', obj);
+                    $rootScope.$broadcast('chatack', obj);
                 }
                 break;
                 case 'contactreq':

@@ -56,6 +56,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 			if (data.username != null && data.devType != null && data.username != undefined && data.devType != undefined) {
 				console.log('subscribe: '+data.devType+'_'+data.username);
 				setSocketId(data.devType+'_'+data.username,socket.id);
+				socket.username = data.devType+'_'+data.username,socket.id;
 				/*adding all users to main room*/
 				socket.join("allXenChatUsers");
 				callback({success:true, status:"success"})
@@ -215,7 +216,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
 					err = "Invalid ID";
-					callback({status:"error"})
+					callback({success:false, data:err.body})
 				}
 				else{
 					var msgobj = {
@@ -224,74 +225,62 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 						"from_user_id":data.from_user_id, 
 						"to_user_id":data.to_user_id,
 						"type":data.type,
-						"isvideo":data.isvideo,
-						"ismedia":data.ismedia,
-						"issent":true,
-						"isdelivered":data.isdelivered,
-						"isread":data.isread,
-						"isaudio":data.isaudio,
-						"isfiletransfer":data.isfiletransfer,
+						"video":data.video,
+						"media":data.media,
+						"sent":true,
+						"delivered":data.delivered,
+						"read":data.read,
+						"audio":data.audio,
+						"file_transfer":data.file_transfer,
 						"timestamp":data.timestamp,
-						"messageid":data.messageid
+						"message_id":data.message_id
 					};
 
-					data.issent = true;
+					data.sent = true;
 					callback({success:true, data:msgobj});
 					getSocketId(data.devType+'_'+data.touser, function(sockid){
 						if(sockid)
 							emitToUser("privateChat", data, sockid);
 						else
-							msgobj.isoffline = true;
+							msgobj.offline = true;
 
-						scocu.senddata('comserv/'+doc.user_id+'/messages', 'POST', msgobj, doc.token, function(err, result){
+						var message = {message:msgobj};
+
+						scocu.senddata('comserv/'+doc.user_id+'/messages', 'POST', message, doc.token, function(err, result){
 							console.log(result);
+							// callback({success:true, data:result});
 						});
-
-						// var obj = {"formName":"contactmsg", "data":msgobj};
-						// scocu.createRecord("contactmsgs", obj, doc.token, function(err, resp){
-						// 	var res = JSON.parse(resp);
-						// 	if(res.status == "success")
-						// 	{
-						// 	}
-						// });
 					});
 				}
 			});
 		});
 
-		socket.on('chatAck',function (data, callback){
-			utils.getUserData(data.fromUser, function(err, doc)
+		socket.on('chatack',function (data, callback){
+			utils.getUserData(data.fromuser, function(err, doc)
 			{
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
 					err = "Invalid ID";
-					callback({status:"error"})				
+					callback({success:false, data:err.body})
 				}
 				else{
-
-					getSocketId(data.devType+'_'+data.toUser, function(sockid){
-						emitToUser("chatAck", data, sockid);
-					});
-
-					var filter = {
-						"fields": {
-							"only": ["id"]
-						},
-						"filters":{
-							"and":{"field": "messageid","cond": "eq","val": data.messageid}
-						}
-					}
-
-					scocu.search('contactmsgs', filter, doc.token, function(err, resp)
+					getSocketId(data.devType+'_'+data.touser, function(sockid)
 					{
-						var rsp = JSON.parse(resp);
-						if(rsp.status == "success"){
-							var obj = {"formName":"contactmsg", "data":{isdelivered: true}};
-							scocu.update("contactmsgs", obj, rsp.data[0].id, doc.token, function(err, res){
-								callback({'status':'success'});	
+						if(sockid)
+							emitToUser("chatack", data, sockid);
+
+						var ackobj = {delivered:data.delivered, offline:data.offlin}
+						var message = {message:ackobj};
+
+						setTimeout(function () {
+							var url = 'comserv/messages/'+data.message_id;
+							scocu.senddata(url, 'PUT', message, doc.token, 
+								function(err, result){
+								console.log(result);
 							});
-						}
+						}, 5000)						
 					});
+					
 				}
 			});
 		});
@@ -434,7 +423,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 
 		socket.on('disconnect', function (data) {
 			/* {'username':'','devType':''} */
-			removeSocketId ( data.devType + '_' + data.username ) ;
+			removeSocketId(socket.username);
 	       	socket.disconnect();
 	    });
 

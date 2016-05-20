@@ -1,4 +1,8 @@
-var globals = require('../config/global');
+var globals         = require('../config/global');
+var requestify      = require('requestify'); 
+var request         = require('request');
+var FormData        = require('form-data');
+var fs              = require('fs');
 function scocu(requestify, utils){
 
     this.senddata = function(excatURL, method, data, token, callback){
@@ -24,6 +28,24 @@ function scocu(requestify, utils){
             }
             break;
         }
+    }
+
+    this.fileupload = function(file, callback){
+        var asset = {};
+        var req = request.post('https://brisol.net/ss-d/api/files', function (err, resp, body) {
+            if (err) {
+                console.log('Error!');
+                callback(err, body);
+            } 
+            else{
+                callback(err, body);
+            }
+        });
+        var form = req.form();
+        form.append('file', fs.createReadStream(file.path), {
+            file: file.name,
+            'content-Type': 'multipart/form-data',
+        });
     }
 
     function scocuRESTController(url, method, data, token, callback){

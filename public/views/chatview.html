@@ -24,12 +24,33 @@
 							<span>{{chat.from}}</span>
 							<div class="messageview text-right">
 								<span class="time">{{chat.time}}</span>
-								<span class="un-seen" ng-if="chat.issent == true">
+								<span ng-show="chat.sent == true && chat.delivered == false" class="un-seen">
+									<i class="nc-icon-mini ui-1_eye-19"></i>
+								</span>
+								<span class="seen" ng-if="chat.delivered == true">
 									<i class="nc-icon-mini ui-1_eye-19"></i>
 								</span>
 							</div> 
 						</div>
-						<p>{{chat.message}}</p>
+						<p ng-if="chat.filetransfer == false">{{chat.message}}</p>
+						<div class="video-download" ng-if="chat.filetransfer == true"> 
+							<ul class="video-img">
+								<li ng-if="chat.audio == true"><a href=""><img src="content/images/mp3.png" alt="mp3"></a></li>
+								<li ng-if="chat.media == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
+								<!-- <li><a href=""><img src="content/images/rar.png" alt="mp3"></a></li>
+								<li><a href=""><img src="content/images/pdf.png" alt="mp3"></a></li> -->
+								<!-- <li><a href=""><img src="content/images/zip-file.png" alt="mp3"></a></li> -->
+							</ul>
+							<div class="progress-status">
+								<a href="" class="download-btn" ng-click="download(chat.message)">
+									<i class="nc-icon-mini arrows-2_hit-down"></i>
+								</a>
+							</div>
+							<div class="clear"></div>
+							<div class="loading-status">
+								<p>Sending file.rar</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -101,11 +122,12 @@
 	</div>
 	<div class="middle-contact-bottom">
 		<input type="text" placeholder="enter here" ng-model="message" ng-keypress="sendmessage($event)">
-		<a href="" class="attach-file">
+		<a href="" class="attach-file" ng-click="uploadfile()">
 			<i class="nc-icon-mini ui-1_attach-86"></i>
 		</a> 
 		<a href="" class="chatbox-icons" ng-click="sendMessageOnSubmit()">
 			<i class="nc-icon-outline emoticons_satisfied"></i> <i class="nc-icon-mini ui-3_send"></i> 
 		</a>
+		<input type="file" id="choose" multiple=true class="file-loading" style="display:none;">
 	</div>
 </div>

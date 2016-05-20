@@ -12,14 +12,15 @@ var INVITATION_TYPE = {
     BY_APPROVAL: "byapproval"
 };
 
-var ip = "216.117.82.233"
+var ip = "localhost"
 var url = 'http://'+ip+':8081'
 
 function ComSer(){
 	this.socket = null;
 }
 
-function sendxmlhttp(data, url, method, callback){
+function sendxmlhttp(data, url, method, callback)
+{
 	var xmlhttp;
 
 	if (window.XMLHttpRequest) {
@@ -37,9 +38,38 @@ function sendxmlhttp(data, url, method, callback){
 				callback(xmlhttp.response);
 			}
 		}
-
 		xmlhttp.send(JSON.stringify(data));
     }
+}
+
+function sendfile(formdata, url, callback){
+	var xmlhttp;
+
+	if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        // code for IE6, IE5
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if(xmlhttp){
+    	xmlhttp.open('POST', url, true);
+    	xmlhttp.setRequestHeader("enctype", "multipart/form-data");
+		xmlhttp.upload.onprogress = uploadprogress(event);
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState === 4 && xmlhttp.status === 200){
+				callback(xmlhttp.response);
+			}
+		}
+    }
+    xmlhttp.send(formdata)
+}
+
+function uploadprogress(e){
+	if (e.lengthComputable) {
+		var percentComplete = (e.loaded / e.total) * 100;
+		console.log(percentComplete + '% uploaded');
+	}
 }
 
 ComSer.prototype.login = function (credentials, callback){
@@ -137,8 +167,8 @@ ComSer.prototype.listen = function(callback){
 			callback("videochat", data);
 		});
 
-		this.socket.on("chatAck", function(data){
-			callback("chatAck", data);
+		this.socket.on("chatack", function(data){
+			callback("chatack", data);
 		});
 
 		this.socket.on("groupChat", function(data){
@@ -172,6 +202,16 @@ ComSer.prototype.chathistory = function (username, fromid, toid, callback){
 	var data = {username:username, fromid:fromid, toid:toid};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/getchathistory', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
+}
+
+ComSer.prototype.fileupload = function(username, formdata, callback) {
+	if(username == null || username == '' || username == undefined)
+		return ("Please Enter Valid username");
+
+	sendfile(formdata, url+"/fileupload", function(response){
 		var res = JSON.parse(response);
 		callback(res);		
 	});
@@ -302,6 +342,21 @@ ComSer.prototype.creategroup = function(groupname, grouptype, expirydate, sendno
 	this.socket.emit("createGroup", data, function(err, ackData){
 		callback(ackData);
 	});
+}
+
+ComSer.prototype.getfileurl = function(username, msg, callback){
+	if(username == null || username == '' || username == undefined)
+		return "please enter valid username";
+
+	if(msg == null || msg == '' || msg == undefined)
+		return "please enter valid msg";
+	var data = {username:username, fileid:msg};
+	data['devType'] = 'w';
+	sendxmlhttp(data, url+'/getfileurl', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
+
 }
 
 ComSer.prototype.deletegroup = function(groupname, username)

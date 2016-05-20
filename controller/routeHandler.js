@@ -1,5 +1,7 @@
-var globals 	= require('../config/global');
-module.exports = function(app, utils, scocu){
+var globals 		= require('../config/global');
+var multipart       = require('connect-multiparty');
+var multipartMiddleware    = multipart();
+module.exports 		= function(app, utils, scocu, redis){
 	var extend 			= require('extend');
 	app.post('/login', function(req, res){
 		if(req.body.username == "" || req.body.password == "" || 
@@ -49,6 +51,8 @@ module.exports = function(app, utils, scocu){
 						utils.deleteUserData(req.body.username);
 						data = JSON.parse(data);
 						if(data.status == "success"){
+							// removeSocketId ( req.body.devType + '_' + req.body.username ) ;
+							redis.delete(req.body.devType + '_' + req.body.username);
 							res.send({success: true});
 						}else{
 							res.send({success: false});
@@ -123,6 +127,55 @@ module.exports = function(app, utils, scocu){
 				});
 			}
 		});
+	});
+
+	app.post("/fileupload", multipartMiddleware, function(req, res){
+		utils.getUserData(req.body.username, function(err, doc){
+			if(err || doc == null){
+				console.log('err @ getToken : '+err);
+				err = "Invalid ID";
+				res.send({success:false, data:err})
+			}
+			else{
+				for(file in req.files){
+					file = req.files[file];
+				}
+
+				if(file == null){
+					res.send({success:false, data:"File Not Found"})
+				}else{
+					scocu.fileupload(file, function(err, result){
+						if(err){
+							res.send({success:false, data:err.body})
+						}
+						else{
+							res.send({success:true, data:result})
+						}
+					});	
+				}			
+			}
+		});		
+	});
+
+	app.post("/getfileurl", function(req, res){
+		utils.getUserData(req.body.username, function(err, doc){
+			if(err || doc == null){
+				console.log('err @ getToken : '+err);
+				err = "Invalid ID";
+				res.send({success:false, data:err})
+			}
+			else{
+				var url = 'files/asset_url/'+req.body.fileid;
+				scocu.senddata(url, "GET", null, doc.token, function(err, result){
+					if(err){
+						res.send({success:false, data:err.body})
+					}
+					else{
+						res.send({success:true, data:result})
+					}
+				});
+			}
+		});	
 	});
 
 

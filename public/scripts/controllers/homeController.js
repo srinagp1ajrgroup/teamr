@@ -1,6 +1,7 @@
 xenApp.controller('homeController', function ($scope, $state, $rootScope, $window, teamrService, localStorageService){
     $scope.userdetails = JSON.parse(localStorageService.get("localpeer"));
-    $scope.topMiddleIndex = localStorageService.get("tabindex");
+    // $scope.topMiddleIndex = localStorageService.get("tabindex");
+    $scope.topMiddleIndex = 1;
     $scope.contacts = [];
     $scope.home_init = function () {
         document.getElementsByTagName("BODY")[0].className = "";
@@ -10,12 +11,11 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
         });
 
         getContacts($scope.userdetails.username);
-
         teamrService.sendpresence($scope.userdetails.username, "online", $scope.contacts, function(response){
             console.log();
         })
-
-        teamrService.listen();        
+        teamrService.listen();
+        $state.go('home.chat');
     };
 
     $scope.$on('updatecontact', function(event, contactobj){
@@ -72,9 +72,9 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
         teamrService.sendpresence($scope.userdetails.username, "offline", $scope.contacts, function(response){
             console.log(response);
             teamrService.logout($scope.userdetails.username, function(response){
-                if(response.success == true){                
+                if(response.success == true){               
+                    teamrService.disconnect($scope.userdetails.username);
                     localStorageService.clearAll();
-                    teamrService.disconnect();
                     $rootScope.loginSuccess = false;
                     $state.go("login");
                 }
@@ -104,6 +104,8 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
                             console.log();
                         });
                         localStorageService.set("user_contacts", $scope.contacts);
+
+                        $scope.$apply();
                     }
                 }
                 else if(response.success == false){

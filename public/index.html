@@ -37,7 +37,7 @@
         <script src="scripts/services/teamrService.js"></script>
 
     </head>
-    <body class="tr-bg-color">
+    <body class="tr-bg-color" onunload = "javascript:window.localStorage.clear()">
         <div ui-view></div>
     </body>
 </html>

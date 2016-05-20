@@ -66,7 +66,7 @@ module.exports = function(app, mongo, express){
 	var redisCli	= new redisHandler (redisClient);
 	var scocu 		= new scocuHandler(requestify, utils);
 	io.adapter(redisSock(globals.redisConfig));
-	routeHandler(app, utils, scocu);
+	routeHandler(app, utils, scocu, redisCli);
 	// socketHandler(io, app, utils, scocu);
 	redisClient.on("error", function(err) {
 		console.error("Error connecting to redis :" + err);
