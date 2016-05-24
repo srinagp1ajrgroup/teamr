@@ -38,11 +38,19 @@ xenApp.controller('loginController', function ($scope, $state, $rootScope, teamr
                 else if(response.status == "error"){
                     $scope.loginSuccess = false;
                     var resp            = JSON.parse(response.errors[0].message);
-                    $scope.loginAlert   = resp.errors[0].message;
+                    if(typeof resp.errors[0] == 'object')
+                        $scope.loginAlert   = resp.errors[0].message;
+                    else
+                        $scope.loginAlert   = resp.errors[0];
                     $scope.$apply();
                 }
             });
         }
+    }
+
+    $scope.loginkeypress = function($event){
+        if ($event.keyCode === 13)
+            $scope.loginformsubmit();
     }
 
     $scope.resetpwd = function(){

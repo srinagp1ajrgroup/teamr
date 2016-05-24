@@ -1,0 +1,28 @@
+<md-dialog>
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Delete Contact</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<h2>Are you sure you want to delete {{seluser}}?</h2>
+				<p>This will permanently remove {{seluser}} from your contacts</p>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<md-button ng-click="answer('delete')">
+				Delete
+			</md-button>
+			<md-button ng-click="answer('cancel')" style="margin-right:20px;">
+				Cancel
+			</md-button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

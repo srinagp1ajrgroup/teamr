@@ -1,0 +1,197 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700);
+
+@media only screen and (min-width:1367px) and (max-width:1920px) {
+	.middle-contact-middle {
+    height:90%;
+    overflow: hidden;
+    width: 100%;
+}
+}
+@media only screen and (min-width: 979px) and (max-width: 1199px) {
+	
+/*.send-images ul li { width: 17%;}
+.add-contact-search > input { width: 93%;}
+.user-chat-area.request-sent {margin-top: 42%;}*/
+}
+@media only screen and (min-width: 1024px) and (max-width: 1365px) {
+/*.top-left {width: 25% !important; }
+.md-menu {
+    float: left!important;}
+.group-caller {height: 80px;width: 80px;}
+
+.group-audio-calling li {margin: 0 15px;}
+.audio-caller {height: 80px;width: 80px;}
+.caller-name.username {top: -37px;}
+.left-btn {left: 205px;top: 7px;}
+.user-img { margin: 5px 0px 0 40px;}*/
+
+.top-middle ul li a span {
+    padding: 2.5px 44px !important;
+}
+
+.top-middle ul li a span {
+    padding: 2.5px 35px !important;
+}
+
+.user-details {
+    padding: 8px 0 0 0px;
+}
+.top-left {
+    width: 20%;
+}
+.top-right {
+    width: 20%;
+}
+
+.top-middle {
+    width: 60%;
+}
+.top-middle ul li a span {
+    padding: 2.5px 32px !important;
+}
+.sidenav-inner {
+    width: 20%;
+}
+
+.nav-list span {
+    width: 54% !important;
+}
+
+.middle-contact.slide {
+    margin-left: 19.8%;
+    width: 63%;
+}
+}
+@media only screen and (min-width: 980px) and (max-width: 1365px) {
+/*.top-left {float: left;width: 26%;}
+.top-middle ul li a span {padding: 3px 20px 2px;}
+.top-middle {width:49%;}
+.top-right {width: 24%;}
+.top-middle ul li a span {padding: 3px 23px 2px;}
+.left-btn { color: #ccc;position: absolute;left: 205px;top: 7px;}
+.welcome-hover-text {bottom: -63px;}
+.welcome-call-icons li a i {font-size: 9px;height: 18px;line-height: 18px;margin-left: 2px;text-align: center; width: 18px;}
+.welcome-hover-text span {font-size: 11px;margin: 1px 0 0 1px;}
+.online-dot {height: 5px; margin-left: -5px !important;margin-top: 5px !important;width: 5px;}
+.welcome-page-content {min-height: 203px;}
+.welcome-page-content h3 {font-size:17px;padding: 21px 0 0;}
+.welcome-page-content h4 {font-size: 13px;line-height: 19px;padding: 7px 0;}
+.welcome-page-content p {font-size: 13px;line-height: 19px;padding: 4px 0;}
+.welcome-page-content {margin: 0 30px;}
+.user-img {margin: 5px 6px 0 30px;}
+.user-img1 {padding: 2px;}
+.added-contact-left .added-contact-bg {margin: 0 5px 0 5px;}
+.added-contact-left > p:nth-child(3) {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 70%;}
+.added-contact-right i { height: 20px;line-height: 20px;width: 20px;}
+.middle-contact-bottom input {width: 90%;}*/
+}
+@media only screen and (min-width: 768px) and (max-width: 979px) {
+/*.sidenav {width: 207px;}
+.top-left { width: 27%;}
+.top-middle {float: left;width: 47%;}
+.top-right {float: right;margin-right:0px;width:26%;}
+.md-button.md-icon-button {margin:0px !important;}
+.top-middle ul li a span {padding:3px 0px 2px;font-size: 10px;}
+.user-img {margin: 5px 3px 0 5px;}
+.top-right .dropdown {margin: 1px 2px;}
+.user-name h4 {margin-right: 3px;margin-top: 12px;}
+.top-right .dropdown {width: auto;}
+.middle-contact.slide { margin-left: 207px;}
+.top-right .dropdown.active .dropdown-menu {padding: 0 15px 10px 4px;width:100%;}
+.hide_panel {left: -165px;}
+.hide_panel .nav-list li a:hover span {left:181px;}
+.sidenav .nav-list li a { padding-left: 10px;}
+.left-btn {left: 161px;}
+.side-bar-search input { width: 72%;}
+.middle-contact-middle { width: 100%;}
+.sidenav .nav-list li {width: 91%;}
+.welcome-column-1, .welcome-column-2, .welcome-column-3 {width: 100%;}
+.welcome-hover-text.active {width: 96%;}
+.welcome-hover-text {width: 96%;}*/
+
+.top-middle ul li a span {
+    padding: 2.5px 11px !important;
+}
+.top-left {
+    width: 25%;
+}
+.top-right {
+    width: 25%;
+}
+.top-middle {
+   width: 50%;
+}
+.user-details {
+    padding: 8px 0 0 0;
+}
+.sidenav-inner {
+    width: 25%;
+}
+.middle-contact.slide {
+    margin-left: 24.8%;
+    width: 60%;
+}
+.nav-list span {
+    width: 52% !important;
+}
+.call-icons {
+    float: right;
+    padding-top: 0;
+    text-align: right;
+   width: 22%;
+}
+
+.side-bar-search a {
+    float: right;
+    margin: 0;
+}
+.middle-contact.close {
+    margin-left: -8.8%;
+    width: 78.6%;
+}
+.side-bar-search input {
+    width: 79%;
+}
+
+.left-btn {
+    margin: 5px -8px 0 0;
+}
+.chat-user i {
+    margin-right: -5px;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 980px) {
+/*.send-images ul li { width: 16%;}
+.call-icons {width: 23%;}
+.added-contact-right {float: right;width: 13%;}
+.added-contact-left .added-contact-bg{ margin:2px;height: 25px;width: 25px;}
+.added-contact-left {float: left;width: 84%;}
+.add-contact-search > input { width: 92%;}
+.added-contact-right i {font-size: 10px;height: 20px;line-height: 20px;margin-top: 12px;width: 20px;}
+.middle-contact-bottom input {width: 90%;}
+.user-chat-area.request-sent {margin-top:48%;}
+.welcome-page-content h3 {padding: 11px 0 0;}
+.welcome-page-content {min-height: 190px;}
+.group-audio-calling li { margin: 0 15px;}
+.group-caller {height: 80px;width: 80px;}
+.audio-caller {height: 80px;width: 80px;}
+.left-list {width:50%;}
+.right-list {width:50%;}
+.added-contact-right {width: 8%;}
+.added-contact-left .added-contact-bg {margin: 2px 11px;}
+.added-contact-left { width: 77%;}
+.added-contact-right {width: 14%;}
+.vedio-call-option {width: 16%;}
+.vedio-call-duration {width: 27%;}
+.vedio-icon-option ul li {padding: 0 4px 0 0;}
+.vedio-icon-option {width: 50%;}
+.vedio-call-option {width: 16%;}
+.vedio-call-image.maximum .vedio-icon-option ul {margin-left: 2%;}
+.middle-contact-bottom {width: 98%;}*/
+
+}
+@media only screen and (min-width: 769px) and (max-width: 979px) {
+/*	.top-left {
+    width: 26%;
+}*/
+}

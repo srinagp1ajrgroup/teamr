@@ -10,7 +10,7 @@ module.exports 		= function(app, utils, scocu, redis){
 		}
 		console.log('POST /login username:'+req.body.username);
 		var url  = "app_users/login";
-		var data = {"username":req.body.username, "password":req.body.password, "user_ip":"183.82.99.194"};
+		var data = {"username":req.body.username, "password":req.body.password, "user_ip":"216.117.82.233"};
 		scocu.senddata(url, "POST", data, null, function(err, user){
 			if(err){
 				console.log('login error : '+err);
@@ -101,7 +101,21 @@ module.exports 		= function(app, utils, scocu, redis){
 						res.send({success:false, data:err.body})
 					}
 					else{
-						res.send({success:true, data:result})
+						var resp = JSON.parse(result);
+						if(resp.status == "success"){
+							for(var i = 0; i < resp.data.length; i++){
+								if(resp.data[i].USERID1_BLOCKING == true || resp.data[i].USERID2_BLOCKING == true){
+									resp.data[i].PRESENCE = "offline"
+								}
+								else if(resp.data[i].USERID1_REMOVING == true || resp.data[i].USERID2_REMOVING == true){
+									resp.data.splice(i, 1);
+								}
+							}
+
+							res.send({success:true, data:JSON.stringify(resp)})
+						}
+						else
+							res.send({success:false, data:result})
 					}
 				});
 			}
@@ -179,36 +193,48 @@ module.exports 		= function(app, utils, scocu, redis){
 	});
 
 
-	app.post("/createGroup", function(req, res){
-		var data = req.body;
-		utils.getUserData(data.username, function(err, doc){
+	app.post("/creategroup", function(req, res){
+		utils.getUserData(req.body.username, function(err, doc){
 			if(err || doc == null){
 				console.log('err @ getToken : '+err);
 				err = "Invalid ID";
 				res.send({status:"error"},{data:err})
 			}
 			else{
-				var groupreq = {"name":data.groupname, "type":data.grouptype, "expiredate":data.expirydate, 
-				"notification":data.notification, "category":data.category, "joingroup":data.joingroup, "invitation":data.invitation};
-				var obj = {"formName":"group", "data":groupreq};
-				scocu.createRecord("groups", obj, doc.token, function(err, resp){
+				// var groupreq = {"name":data.groupname, "type":data.grouptype, "expiredate":data.expirydate, 
+				// "notification":data.notification, "category":data.category, "joingroup":data.joingroup, "invitation":data.invitation};
+				// var obj = {"formName":"group", "data":groupreq};
+				var groupreq = {};
+
+				var group = {group:groupreq};
+
+				scocu.senddata('', 'POST', group, doc.token, function(err, result){
 					if(err){
-						res.send(err, resp);
+						res.send({success:false, data:err.body})
 					}
 					else{
-						var rsp = JSON.parse(resp);
-						if(rsp.status == "success"){
-							var useringroup = {"isadmin":true, "user_id":doc.user_id, "group_id":rsp.data.id};
-							var userobj = {"formName":"usersingroup", "data":useringroup};
-							scocu.createRecord("usersingroups", userobj, doc.token, function(err, resp){
-								res.send(err, resp);
-							});
-						}
-						else{
-							res.send(err, resp);
-						}
+						res.send({success:true, data:result})
 					}
-				});
+				})
+
+				// scocu.createRecord("groups", obj, doc.token, function(err, resp){
+				// 	if(err){
+				// 		res.send(err, resp);
+				// 	}
+				// 	else{
+				// 		var rsp = JSON.parse(resp);
+				// 		if(rsp.status == "success"){
+				// 			var useringroup = {"isadmin":true, "user_id":doc.user_id, "group_id":rsp.data.id};
+				// 			var userobj = {"formName":"usersingroup", "data":useringroup};
+				// 			scocu.createRecord("usersingroups", userobj, doc.token, function(err, resp){
+				// 				res.send(err, resp);
+				// 			});
+				// 		}
+				// 		else{
+				// 			res.send(err, resp);
+				// 		}
+				// 	}
+				// });
 			}
 		});
 	});

@@ -186,6 +186,14 @@ ComSer.prototype.listen = function(callback){
 		this.socket.on("acceptcontactreq", function(data){
 			callback("acceptcontactreq", data);
 		});
+
+		this.socket.on("blockcontact", function(data){
+			callback("blockcontact", data);
+		});
+
+		this.socket.on("isTyping", function(data){
+			callback("isTyping", data);
+		});
 	}		
 }
 
@@ -293,24 +301,28 @@ ComSer.prototype.acceptContactreq = function (username, toname, recid, callback)
 	return;
 }
 
-ComSer.prototype.deletecontact = function (from, contactid, callback){
-	if(contactid == null || contactid == ''){
-		var errAlert = "please enter valid contactid";
-		return errAlert;
-	}
+ComSer.prototype.deletecontact = function (from, touser, recid, obj, callback){
+	if(recid == null || recid == '')
+		return "please enter valid recid";
 
-	this.socket.emit("delContact", {username:from, contact:contactid}, function(err, ackData){
+	var data = {username:from, touser:touser, recid:recid, obj:obj};
+
+	data['devType'] = 'w';
+	this.socket.emit("deletecontact", data, function(ackData){
 		callback(ackData);
 	});
 
 	return;
 }
 
-ComSer.prototype.blockcontact = function (from, contactid, callback){
-	if(contactid == null || contactid == '')
-		return "please enter valid contactid";
+ComSer.prototype.blockcontact = function (from, touser, recid, obj, callback){
+	if(recid == null || recid == '')
+		return "please enter valid recid";
 
-	this.socket.emit("blockContact", {username:from, contact:contactid}, function(err, ackData){
+	var data = {username:from, touser:touser, recid:recid, obj:obj};
+
+	data['devType'] = 'w';
+	this.socket.emit("blockcontact", data, function(ackData){
 		callback(ackData);
 	});
 
@@ -326,21 +338,12 @@ ComSer.prototype.sendMessage = function (obj, callback)
 	});
 }
 
-
-ComSer.prototype.creategroup = function(groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, from, callback)
+ComSer.prototype.notifyuser = function (username, touser, callback)
 {
-	if(invitationType == null || invitationType == ""){
-		invitationType = INVITATION_TYPE.BY_APPROVAL;
-	}
-	else if(joingroup == null || joingroup == ""){
-		joingroup = JOIN_GROUP.ORGANIZATION;
-	}
-
-	var data = {groupname:groupname, type: grouptype, expirydate: expirydate, notification: sendnotify, category: category, 
-		joingroup: joingroup, invitation:invitationType, username:from};
-
-	this.socket.emit("createGroup", data, function(err, ackData){
-		callback(ackData);
+	var obj = {username:username, touser:touser};
+	obj['devType'] = 'w';
+	this.socket.emit("isTyping", obj, function(ackData){
+		// callback(ackData);
 	});
 }
 
@@ -357,6 +360,25 @@ ComSer.prototype.getfileurl = function(username, msg, callback){
 		callback(res);		
 	});
 
+}
+
+
+ComSer.prototype.creategroup = function(groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, maxlimit, from, callback)
+{
+	if(invitationType == null || invitationType == ""){
+		invitationType = INVITATION_TYPE.BY_APPROVAL;
+	}
+	else if(joingroup == null || joingroup == ""){
+		joingroup = JOIN_GROUP.ORGANIZATION;
+	}
+
+	var data = {groupname:groupname, type: grouptype, expirydate: expirydate, notification: sendnotify, category: category, 
+		joingroup: joingroup, invitation:invitationType, username:from};
+
+	sendxmlhttp(data, url+'/creategroup', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
 }
 
 ComSer.prototype.deletegroup = function(groupname, username)

@@ -50,8 +50,12 @@ xenApp.factory('teamrService', function($rootScope) {
         comser.acceptContactreq(username, toname, recid, callback);
     }
 
-    teamrService.blockContact = function (from, to, callback) {
-        comser.blockcontact(from, to, callback);
+    teamrService.blockcontact = function (from, touser, recid, obj, callback) {
+        comser.blockcontact(from, touser, recid, obj, callback);
+    }
+
+    teamrService.deletecontact = function (from, touser, recid, obj, callback) {
+        comser.deletecontact(from, touser, recid, obj, callback);
     }
 
     teamrService.createGroup = function (groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, from, callback) {
@@ -114,7 +118,21 @@ xenApp.factory('teamrService', function($rootScope) {
                     $rootScope.$broadcast('acceptcontactreq', obj);
                 }
                 break;
-                
+                case 'isTyping':
+                {
+                    $rootScope.$broadcast('isTyping', obj);
+                }
+                break;
+                case 'blockcontact':
+                {
+                    $rootScope.$broadcast('blockcontact', obj);
+                }
+                break;
+                case 'deletecontact':
+                {
+                    // $rootScope.$broadcast('deletecontact', obj);
+                }
+                break;
             }
         });
     }
@@ -128,6 +146,10 @@ xenApp.factory('teamrService', function($rootScope) {
 
     teamrService.sendmessage = function (obj, callback) {
         comser.sendMessage(obj, callback);
+    }
+
+    teamrService.notifyuser = function (username, touser, callback) {
+        comser.notifyuser(username, touser, callback);
     }
 
     teamrService.logout = function (username, callback) 

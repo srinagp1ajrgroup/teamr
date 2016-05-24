@@ -1,34 +1,36 @@
 <div class="contact">
-	<div class="sidenav" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
-		<div class="side-bar-search text-center">
-			<div class="clearfix"></div>
-			<input type="text">
-			<a href=""><i class="nc-icon-mini ui-1_zoom"></i></a>
-		</div>
-		<div class="side-chat-box">
-			<div class="clearfix"></div>
-			<li role="presentation" class="chatlist">
-				<a ui-sref="home.chat.addcontact">CHAT
-					<span class="chat-user">
-						<i class="nc-icon-mini users_add-29"></i>
-					</span>
-				</a>
-			</li>
-		</div>
-		<div class="main">
-			<ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)">
-				<li role="presentation" class="" ng-repeat="contact in contacts" ng-click="getSeluser($index)">
-					<a ui-sref="home.chat.chatview({user:contact.USERNAME })">
-						<img src="content/images/11.jpg" alt="" class="offline" ng-if="contact.WAITING_APPROVAL == true">
-						<img src="content/images/11.jpg" alt="" ng-class="contact.PRESENCE" ng-if="contact.WAITING_APPROVAL == false">
-						<span>{{contact.USERNAME}}</span>
-						<div class="badge request-pending" ng-if="contact.incomingreq == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+	<div class="sidenav">
+		<div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
+			<div class="side-bar-search text-center">
+				<div class="clearfix"></div>
+				<input type="text">
+				<a href=""><i class="nc-icon-mini ui-1_zoom"></i></a>
+			</div>
+			<div class="side-chat-box">
+				<div class="clearfix"></div>
+				<li role="presentation" class="chatlist">
+					<a ui-sref="home.chat.addcontact">Contacts
+						<span class="chat-user">
+							<i class="nc-icon-mini users_add-29"></i>
+						</span>
 					</a>
-					<!-- <div class="badge"></div> -->
 				</li>
-			</ul>
+			</div>
+			<div class="main">
+				<ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)">
+					<li role="presentation" class="" ng-repeat="contact in contacts" ng-click="getSeluser($index)">
+						<a ui-sref="home.chat.chatview({user:contact.USERNAME })">
+							<img src="content/images/11.jpg" alt="" class="offline" ng-if="contact.WAITING_APPROVAL == true">
+							<img src="content/images/11.jpg" alt="" ng-class="contact.PRESENCE" ng-if="contact.WAITING_APPROVAL == false">
+							<span>{{contact.USERNAME}}</span>
+							<div class="badge request-pending" ng-if="contact.incomingreq == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+						</a>
+						<!-- <div class="badge"></div> -->
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
-	<div ui-view></div>
+	<div ui-view style="height:100%;"></div>
 	<div class="middle-right"></div>
 </div>

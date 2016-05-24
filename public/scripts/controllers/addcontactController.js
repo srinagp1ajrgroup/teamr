@@ -2,11 +2,16 @@ xenApp.controller('addcontactController', function ($scope, $state, $rootScope, 
     $scope.userdetails = JSON.parse(localStorageService.get("localpeer"));
     $scope.searchList = [];
     $scope.searchContact = "";
+    $scope.searchalert = "";
 
     $scope.getcontact = function(){
         if($scope.searchContact == "" || $scope.searchContact == null || $scope.searchContact == undefined){
             return;
         }
+        if($scope.searchContact == $scope.userdetails.username){
+            return;
+        }
+
         teamrService.searchcontact($scope.userdetails.username, $scope.searchContact, function(response){
             console.log(response);
             if(response.success == true){

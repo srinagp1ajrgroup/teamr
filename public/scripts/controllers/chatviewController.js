@@ -1,7 +1,7 @@
 var chatList = [];
 var cacheObj = null;
 xenApp.controller('chatviewController', function ($scope, $state, $stateParams, $rootScope, $window, $cacheFactory, 
-    teamrService, localStorageService){
+    teamrService, localStorageService, $mdDialog, $mdMedia){
 
     $scope.userdetails  = JSON.parse(localStorageService.get("localpeer"));
     $scope.contacts     = localStorageService.get("user_contacts");
@@ -11,12 +11,18 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     $scope.message      = '';
     $scope.chats        = [];
     $scope.cacheObject  =  cacheObj;
+    $scope.isblock      = false;
 
     if($scope.selobj.CONTACT_USER_ID1 == $scope.userdetails.user_id)
         $scope.selid = $scope.selobj.CONTACT_USER_ID2;
 
     else if($scope.selobj.CONTACT_USER_ID2 == $scope.userdetails.user_id)
         $scope.selid = $scope.selobj.CONTACT_USER_ID1;
+
+    if($scope.selobj.USERID1_BLOCKING == true)
+        $scope.isblock = true;
+    else if($scope.selobj.USERID2_BLOCKING == true)
+        $scope.isblock = true;
 
     $scope.chatviewinit = function(){
         if ($scope.cacheObject == null || $scope.cacheObject == undefined){
@@ -86,6 +92,96 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         })
     }
 
+    $scope.blockcontact = function(ev) {
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+            controller:'chatviewController',
+            templateUrl: '../../views/blockcontact.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        })
+        .then(function(answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+            $scope.status = 'You cancelled the dialog.';
+        });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });
+    };
+
+    $scope.answer = function(answer) {
+        var obj = {};
+        if(answer == 'block'){
+            if($scope.selobj.CONTACT_USER_ID1 == $scope.userdetails.user_id){
+                $scope.contacts[$scope.selindex].USERID1_BLOCKING = true;
+                obj= {USERID1_BLOCKING: true};
+            }
+
+            else if($scope.selobj.CONTACT_USER_ID2 == $scope.userdetails.user_id){
+                $scope.contacts[$scope.selindex].USERID2_BLOCKING = true;
+                obj= {USERID2_BLOCKING: true};
+            }
+
+            teamrService.blockcontact($scope.userdetails.username, $scope.seluser, $scope.contacts[$scope.selindex].ID, obj, function(response){
+                if(response.success == true){
+                    $rootScope.$broadcast('blockcontact', response.data)
+                } 
+                $scope.$apply();               
+                console.log(response);
+            }); 
+        }
+        else if(answer == 'delete'){
+            if($scope.selobj.CONTACT_USER_ID1 == $scope.userdetails.user_id){
+                $scope.contacts[$scope.selindex].USERID1_REMOVING = true;
+                obj= {USERID1_REMOVING: true};
+            }
+
+            else if($scope.selobj.CONTACT_USER_ID2 == $scope.userdetails.user_id){
+                $scope.contacts[$scope.selindex].USERID2_REMOVING = true;
+                obj= {USERID2_REMOVING: true};
+            }
+
+            teamrService.deletecontact($scope.userdetails.username, $scope.seluser, $scope.contacts[$scope.selindex].ID, obj, function(response){
+                if(response.success == true){
+                    $rootScope.$broadcast('deletecontact', response.data)
+                } 
+                $scope.$apply();               
+                console.log(response);
+            }); 
+        }
+        $mdDialog.hide(answer);
+    };
+    $scope.cancel = function() {
+        $mdDialog.cancel();
+    };
+
+    $scope.deletecontact = function(ev){   
+        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
+        $mdDialog.show({
+            controller:'chatviewController',
+            templateUrl: '../../views/deletecontact.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: useFullScreen
+        })
+        .then(function(answer) {
+            $scope.status = 'You said the information was "' + answer + '".';
+        }, function() {
+            $scope.status = 'You cancelled the dialog.';
+        });
+        $scope.$watch(function() {
+            return $mdMedia('xs') || $mdMedia('sm');
+        }, function(wantsFullScreen) {
+            $scope.customFullscreen = (wantsFullScreen === true);
+        });     
+    }
+
     $scope.$on('updateChat', function (event, obj) {
         console.log(obj);
         var currentdate = new Date();
@@ -111,6 +207,18 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         $scope.$apply();
     });
 
+    $scope.$on('acceptcontactreq', function(event, contactobj){
+        for(var i = 0; i < $scope.contacts.length; i++){
+            if($scope.contacts[i].id == contactobj.id){
+                $scope.contacts[i].WAITING_APPROVAL = contactobj.WAITING_APPROVAL;
+                $scope.selobj.WAITING_APPROVAL = contactobj.WAITING_APPROVAL;
+                break;
+            }
+        }
+        $scope.$apply();
+        localStorageService.set("user_contacts", $scope.contacts);
+    });
+
     $scope.$on("chatack", function(event, obj){
         for(var i = 0; i < $scope.chats.length; i++){
             if($scope.chats[i].message_id == obj.message_id){
@@ -122,11 +230,11 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         $scope.$apply();
     });
 
+    $scope.$on('isTyping', function (event, obj) {
+        console.log("isTyping");
+    });
+
     $scope.download = function (msg) {
-        // commservService.getFileURL(data, function (response) {
-        //     var jsonOBJ = JSON.parse(response);
-        //     $window.open(jsonOBJ.data, '_blank')
-        // })
         teamrService.getfileurl($scope.userdetails.username, msg, function(response){
             console.log(response);
             if(response.success == true){
@@ -144,6 +252,12 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         });
     }
 
+    $scope.notifyTyping = function(){
+        teamrService.notifyuser($scope.userdetails.username, $scope.seluser, function(response){
+
+        })
+    }
+
     $scope.sendmessage = function ($event) {
         if ($event.keyCode === 13) {
             submitmessage();
@@ -159,7 +273,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     }
 
     function submitmessage(){
-        if($scope.message == '' || $scope.message == undefined)
+        if($scope.message == '' || $scope.message == undefined || $scope.isblock == true)
             return;
 
         $scope.time = gettime();
@@ -181,7 +295,8 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
             "offline"       : false,
             "message"       : $scope.message,
             "type"          : "chat",
-            "timestamp"     : timestamp
+            "timestamp"     : timestamp,
+            "file_name"     : null
         };
         
         updatechatui($scope.userdetails.username, $scope.seluser, $scope.message, chat.message_id, "user-chat", false, false, false, false, false, false);
@@ -233,6 +348,9 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     }
 
     $scope.uploadfile = function () {
+        if($scope.isblock == true)
+            return;
+
         $scope.audioProgress = {};
         $scope.videoProgress = {};
         $scope.duration = {};
@@ -287,7 +405,8 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                             "offline"       : false,
                             "message"       : resp.data.id,
                             "type"          : "chat",
-                            "timestamp"     : timestamp
+                            "timestamp"     : timestamp,
+                            "file_name"     : filename
                         };
                         
                         updatechatui($scope.userdetails.username, $scope.seluser, resp.data.id, chat.message_id, "user-chat", 

@@ -1,16 +1,17 @@
-xenApp.directive('mbScrollbar', function(){
-	return {
-		restrict: 'A',
-		transclude: true,
-		scope: {
+xenApp.directive('mbScrollbar', function() {
+    return {
+        restrict: 'A',
+        transclude: true,
+        scope: {
             config: '=mbScrollbar'
         },
         template: "<div class='ngscroll-resizable' style='position: relative; width: 100%; height: 100%;'> <div class='ngscroll-container' style='width: 100%; height: 100%;' ng-transclude></div> <div class='ngscroll-scrollbar-container' ng-style='styles.scrollbarContainer'><div class='ngscroll-scrollbar' ng-style='styles.scrollbar'></div></div> </div>",
-        link: function(scope, element){
-        	function ifVertElseHor(vertical, horizontal) {
+        link: function(scope, element) {
+
+            // Helper functions
+            function ifVertElseHor(vertical, horizontal) {
                 return config.direction == 'horizontal' ? horizontal : vertical;
             }
-
             function overwriteProperties(baseObject, newObject) {
                 for(var k in newObject) {
                     if( (newObject || {}).hasOwnProperty(k) && (baseObject || {}).hasOwnProperty(k) ) {
@@ -24,6 +25,7 @@ xenApp.directive('mbScrollbar', function(){
                 return baseObject;
             }
 
+            // Base Configuration
             var config = {
                 autoResize: false,
                 direction: (scope.config || {}).direction || 'vertical',
@@ -34,14 +36,13 @@ xenApp.directive('mbScrollbar', function(){
                     show: false
                 },
                 scrollbarContainer: {
-                    width: 12,
+                    width: 6,
                     color: 'rgba(0,0,0,.1)'
                 },
                 dragSpeedModifier : 1,
                 firefoxModifier: 40,
                 scrollTo: (scope.config || {}).scrollTo || null
             };
-
             config.dimension = ifVertElseHor('height', 'width');
             config.rDimension = ifVertElseHor('width', 'height');
             config.position = ifVertElseHor('top', 'left');
@@ -110,14 +111,14 @@ xenApp.directive('mbScrollbar', function(){
             function hideScrollbar() {
                 scrollbar.css('opacity', 0);
             }
-
             function showScrollbar() {
                 scrollbar.css('opacity', 1);
             }
 
+            // On item set change
             var recalculate = function() {
-            	ifVertElseHor(function() {
-                    // child.css('', 'auto');
+                ifVertElseHor(function() {
+                    child.css('', 'auto');
                     length = child[0].scrollHeight || 0;
                 }, function() {
                     length = 0;
@@ -131,9 +132,9 @@ xenApp.directive('mbScrollbar', function(){
                 })();
 
                 // Bug that the containerSize is not known at the initialisation of the script. After a recalculate it is known, update and use it.
-				containerSize = ifVertElseHor( element[0].offsetHeight, element[0].offsetWidth);
-
-				// A higher drag-speed modifier on longer container sizes makes for more comfortable scrolling
+                containerSize = ifVertElseHor( element[0].offsetHeight, element[0].offsetWidth);
+                
+                // A higher drag-speed modifier on longer container sizes makes for more comfortable scrolling
                 config.dragSpeedModifier = Math.max(1, 1 / ( scrollbarLength / containerSize ));
 
                 child.css(config.dimension, length+'px');
@@ -196,11 +197,11 @@ xenApp.directive('mbScrollbar', function(){
                     recalculate();
                 }, 5);
             });
-
+            
             scope.$on('scrollToMBScrollbars', function (event, offset) {
-            	setTimeout(function () {
-            		scrollTo(offset);
-            	}, 5);
+                setTimeout(function () {
+                    scrollTo(offset);
+                }, 5);
             });
 
             // Move on scroll
@@ -215,7 +216,6 @@ xenApp.directive('mbScrollbar', function(){
 
                 scroll( delta );
             });
-
             if( window.navigator.userAgent.toLowerCase().indexOf('firefox') >= 0) {
                 child.on('wheel', function(event) {
                     event.preventDefault();
@@ -247,7 +247,6 @@ xenApp.directive('mbScrollbar', function(){
                 scrollbarOffset = ifVertElseHor(event.screenY, event.screenX);
                 return false;
             });
-
             angular.element(document).on('mousemove', function(event) {
                 if(!scrollbarMousedown) return;
                 event.preventDefault();
@@ -286,8 +285,9 @@ xenApp.directive('mbScrollbar', function(){
             // Initial calculate
             recalculate();
         }
-	}
-}).service('mbScrollbar', function() {
+    }
+})
+.service('mbScrollbar', function() {
     // Provide a method that wraps the broadcast in a timeout, which allows use inside Controllers
     this.recalculate = function($scope) {
         setTimeout(function() {
@@ -295,7 +295,7 @@ xenApp.directive('mbScrollbar', function(){
         }, 5);
     };
     this.scrollTo = function ($scope, event) {
-    	 setTimeout(function() {
+         setTimeout(function() {
              $scope.$broadcast('scrollToMBScrollbars', event);
          }, 5);
     };

@@ -3,6 +3,7 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
     // $scope.topMiddleIndex = localStorageService.get("tabindex");
     $scope.topMiddleIndex = 1;
     $scope.contacts = [];
+    $scope.statusmenu = false;
     $scope.home_init = function () {
         document.getElementsByTagName("BODY")[0].className = "";
         teamrService.connect();
@@ -11,9 +12,7 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
         });
 
         getContacts($scope.userdetails.username);
-        teamrService.sendpresence($scope.userdetails.username, "online", $scope.contacts, function(response){
-            console.log();
-        })
+        sendstatus("online");
         teamrService.listen();
         $state.go('home.chat');
     };
@@ -24,15 +23,37 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
         localStorageService.set("user_contacts", $scope.contacts);
     });
 
-    $scope.$on('acceptcontactreq', function(event, contactobj){
+    $scope.$on('blockcontact', function(event, contactobj){
         for(var i = 0; i < $scope.contacts.length; i++){
-            if($scope.contacts[i].id == contactobj.id){
-                $scope.contacts[i].WAITING_APPROVAL = contactobj.WAITING_APPROVAL;
+            if($scope.contacts[i].ID == contactobj.recid){
+                if(contactobj.obj.USERID1_BLOCKING != undefined)
+                    $scope.contacts[i].USERID1_BLOCKING = contactobj.obj.USERID1_BLOCKING;
+                else if(contactobj.USERID2_BLOCKING != undefined)
+                    $scope.contacts[i].USERID2_BLOCKING = contactobj.obj.USERID2_BLOCKING;
+
+                $scope.contacts[i].PRESENCE  = "offline";
                 break;
             }
         }
         $scope.$apply();
         localStorageService.set("user_contacts", $scope.contacts);
+    });
+
+    $scope.$on('deletecontact', function(event, contactobj){
+        for(var i = 0; i < $scope.contacts.length; i++){
+            if($scope.contacts[i].ID == contactobj.recid){
+                if(contactobj.obj.USERID1_REMOVING != undefined || contactobj.obj.USERID2_REMOVING != undefined)
+                    $scope.contacts.splice(i, 1)
+
+                break;
+            }
+        }
+        $scope.$apply();
+        localStorageService.set("user_contacts", $scope.contacts);
+    });
+
+    $scope.$watch('statusmenu', function($event){
+        $scope.statusmenu = $event;
     });
 
     $scope.$on('updatepresence', function(event, presenceobj){
@@ -61,11 +82,8 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
     $scope.setStatus = function(status){
         console.log(status);
         var userstatus = document.getElementById("userstatus");
-        userstatus.className = "user-img user-"+status;
-        teamrService.sendpresence($scope.userdetails.username, status, $scope.contacts, function(response){
-            console.log(response);
-        })
-
+        userstatus.className = "user-img "+status;
+        sendstatus(status);        
     }
 
     $scope.logout = function(){
@@ -99,10 +117,8 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
                             else if($scope.contacts[i].WAITING_APPROVAL == true && $scope.userdetails.user_id == $scope.contacts[i].CONTACT_USER_ID1){
                                 $scope.contacts[i].incomingreq = false;
                             }
-                        }
-                        teamrService.sendpresence($scope.userdetails.username, "online", $scope.contacts, function(response){
-                            console.log();
-                        });
+                        }            
+                        sendstatus("online");
                         localStorageService.set("user_contacts", $scope.contacts);
 
                         $scope.$apply();
@@ -114,9 +130,19 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
             });            
         }else{
             $scope.contacts = contacts;
-            teamrService.sendpresence($scope.userdetails.username, "online", $scope.contacts, function(response){
-                console.log();
-            });
+            sendstatus("online");
         }
+    }
+
+    var sendstatus = function(status){
+        var filter = $scope.contacts.filter(function(contact){
+            if(contact.USERID1_BLOCKING == true || contact.USERID2_BLOCKING == true)
+                return;
+
+            return contact;
+        });
+        teamrService.sendpresence($scope.userdetails.username, status, filter, function(response){
+            console.log(response);
+        })
     }
 });

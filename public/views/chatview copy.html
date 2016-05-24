@@ -10,29 +10,7 @@
 				<ul>
 					<li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
 					<li><a href=""><i class="nc-icon-mini media-1_video-67"></i></a></li>
-					<li>
-						<md-menu>
-							<md-button aria-label="Sample Menu" class="md-icon-button  md-button md-ink-ripple md-button" ng-click="$mdOpenMenu($event)">
-	                      		<md-icon md-menu-origin> <a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></md-icon>
-	                    	</md-button>
-							<md-menu-content class="menu-dropdown">
-								<md-menu-item>
-									<md-button ng-click="blockcontact($event)">
-										<div layout="row">
-											<p flex>Block Contact</p>
-										</div>
-									</md-button>
-								</md-menu-item>
-								<md-menu-item>
-									<md-button ng-click="deletecontact($event)">
-										<div layout="row">
-											<p flex>Delete Contact</p>
-										</div>
-									</md-button>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
-					</li>
+					<li><a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></li>
 				</ul>
 			</div>
 			<div class="clear clearfix"></div>
@@ -61,6 +39,9 @@
 								<ul class="video-img">
 									<li ng-if="chat.audio == true"><a href=""><img src="content/images/mp3.png" alt="mp3"></a></li>
 									<li ng-if="chat.media == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
+									<!-- <li><a href=""><img src="content/images/rar.png" alt="mp3"></a></li>
+									<li><a href=""><img src="content/images/pdf.png" alt="mp3"></a></li> -->
+									<!-- <li><a href=""><img src="content/images/zip-file.png" alt="mp3"></a></li> -->
 								</ul>
 								<div class="progress-status">
 									<a href="" class="download-btn" ng-click="download(chat.message)">
@@ -74,7 +55,7 @@
 							</div>
 						</div>
 					</div>
-				</div>				
+				</div>
 			</div>
 		</div>
 
@@ -123,20 +104,20 @@
 			</div>
 		</div>
 		<div class="clear"></div>
-		<div class="middle-contact-bottom" ng-disabled="isblock">
+		<div class="middle-contact-bottom">
 			<div class="bottom-fix">
 				<div class="attach-file">
 					<a href="" ng-click="uploadfile()">
 						<i class="nc-icon-mini ui-1_attach-86"></i>
 					</a>
 				</div>
-				<div class="chat-input" ng-disabled="isblock">
-					<input type="text" placeholder="enter here" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();" ng-disabled="isblock">
+				<div class="chat-input">
+					<input type="text" placeholder="enter here" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();">
 				</div>
-				<div class="chatbox-icons" ng-disabled="isblock">
-					<a href="" ng-click="sendMessageOnSubmit()" ng-disabled="isblock"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
+				<div class="chatbox-icons">
+					<a href="" ng-click="sendMessageOnSubmit()"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
 				</div>
-              	<div class="chatbox-icons"><a href="" ng-disabled="isblock"><i class="nc-icon-mini ui-3_send"></i></a></div>
+              	<div class="chatbox-icons"><a href=""><i class="nc-icon-mini ui-3_send"></i></a></div>
 				 
 				<!-- <a href="" class="chatbox-icons" ng-click="sendMessageOnSubmit()">
 					<i class="nc-icon-outline emoticons_satisfied"></i> <i class="nc-icon-mini ui-3_send"></i> 
@@ -149,3 +130,4 @@
 		<div class="clear"></div>
 	</div>
 </div>
+

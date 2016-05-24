@@ -8,13 +8,13 @@
         <div class="user-login-page" ng-if="isForgotpwd == false">
             <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
                 <i class="nc-icon-mini users_single-05"></i>
-                <label for="input_27">User Name</label>
-                <input ng-model="credentials.username" class="ng-pristine ng-valid md-input ng-touched" id="input_27" aria-invalid="false" style=""><div class="md-errors-spacer"></div>
+                <label for="input_27">Username</label>
+                <input ng-model="credentials.username" class="ng-pristine ng-valid md-input ng-touched" id="input_27" aria-invalid="false" style="" ng-keypress="loginkeypress($event)"><div class="md-errors-spacer"></div>
             </md-input-container>
             <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
                 <i class="nc-icon-mini ui-1_lock-open"></i>
                 <label for="input_27">Password</label>
-                <input ng-model="credentials.password" class="ng-pristine ng-valid md-input ng-touched" id="input_28" aria-invalid="false" style="" type="password"><div class="md-errors-spacer"></div>
+                <input ng-model="credentials.password" class="ng-pristine ng-valid md-input ng-touched" id="input_28" aria-invalid="false" style="" type="password" ng-keypress="loginkeypress($event)"><div class="md-errors-spacer"></div>
             </md-input-container>
             <div class="error-msg" ng-if="loginAlert != '' "><p>{{loginAlert}}</p></div>
             <div class="submit-btn">

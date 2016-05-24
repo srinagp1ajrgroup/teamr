@@ -136,7 +136,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 		});
 
 		/* Delete Contact*/
-		socket.on('delContact',function (data,callback){
+		socket.on('deletecontact',function (data, callback){
 			utils.getUserData(data.username, function(err, doc){
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
@@ -144,15 +144,19 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 					callback({success:false, data:err.body})
 				}
 				else{
-					var obj = {"waiting_approval":false};
-					var contactreq = {"contact":obj};
+					var contactreq = {"contact":data.obj};
 					var url = "comserv/contacts/"+data.recid
 					scocu.senddata(url, "PUT", contactreq, doc.token, function(err, result){
 						if(err){
 							callback({success:false, data:err.body})
 						}
 						else{
-							callback({success:true, data:result})
+							var resp = {obj:data.obj, recid:data.recid};
+							getSocketId(data.devType+'_'+data.touser, function(sockid){
+								if(sockid)
+									emitToUser("deletecontact", resp, sockid);
+							});
+							callback({success:true, data:resp})
 						}
 					});
 				}
@@ -160,7 +164,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 		});
 
 		/* Block Contact*/
-		socket.on('blockContact',function (data, callback){
+		socket.on('blockcontact',function (data, callback){
 			utils.getUserData(data.username, function(err, doc){
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
@@ -168,15 +172,19 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 					callback({success:false, data:err.body})
 				}
 				else{
-					var obj = {"waiting_approval":false};
-					var contactreq = {"contact":obj};
+					var contactreq = {"contact":data.obj};
 					var url = "comserv/contacts/"+data.recid
 					scocu.senddata(url, "PUT", contactreq, doc.token, function(err, result){
 						if(err){
 							callback({success:false, data:err.body})
 						}
 						else{
-							callback({success:true, data:result})
+							var resp = {obj:data.obj, recid:data.recid};
+							getSocketId(data.devType+'_'+data.touser, function(sockid){
+								if(sockid)
+									emitToUser("blockcontact", resp, sockid);
+							});
+							callback({success:true, data:resp})
 						}
 					});
 				}
@@ -231,9 +239,10 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 						"delivered":data.delivered,
 						"read":data.read,
 						"audio":data.audio,
-						"file_transfer":data.file_transfer,
+						"`transfer":data.file_transfer,
 						"timestamp":data.timestamp,
-						"message_id":data.message_id
+						"message_id":data.message_id,
+						"file_name":data.file_name
 					};
 
 					data.sent = true;
@@ -284,6 +293,22 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 				}
 			});
 		});
+
+		socket.on('isTyping', function(data, callback){
+			utils.getUserData(data.username, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({status:"error"})
+				}
+				else{
+					getSocketId(data.devType+'_'+data.touser, function(sockid){
+						if(sockid)
+							emitToUser("isTyping", data, sockid);
+					});
+				}
+			});
+		})
 
 		socket.on('addMembers',function (data, callback){
 			utils.getUserData(data.username, function(err, doc){

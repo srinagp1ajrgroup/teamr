@@ -12,40 +12,48 @@
 			<div class="top-middle">
 				<ul>
 					<li ng-click="setselected(0)">
-						<a ui-sref="home.callphones">
-							<span ng-class="{active: topMiddleIndex == 0}">
-								<span class="nc-icon-mini ui-3_phone top-icon"></span>CALL PHONES
-							</span>
-						</a>
+						<md-button>
+							<a ui-sref="home.callphones">
+								<span ng-class="{active: topMiddleIndex == 0}">
+									<span class="nc-icon-mini ui-3_phone top-icon"></span>CALL PHONES
+								</span>
+							</a>
+						</md-button>
 					</li>
 					<li ng-click="setselected(1)"> 
-						<a ui-sref="home.chat">
-							<span ng-class="{active: topMiddleIndex == 1}">
-								<span class="nc-icon-mini ui-2_chat-round top-icon"></span>CHAT
-							</span>
-						</a>
+						<md-button>
+							<a ui-sref="home.chat">
+								<span ng-class="{active: topMiddleIndex == 1}">
+									<span class="nc-icon-mini ui-2_chat-round top-icon"></span>CHAT
+								</span>
+							</a>
+						</md-button>
 					</li>
 					<li ng-click="setselected(2)">
-						<a ui-sref="home.groupchat">
-							<span ng-class="{active: topMiddleIndex == 2}">
-								<span class="nc-icon-mini users_multiple-11 top-icon"></span>GROUP CHAT
-							</span>
-						</a>
+						<md-button>
+							<a ui-sref="home.groupchat">
+								<span ng-class="{active: topMiddleIndex == 2}">
+									<span class="nc-icon-mini users_multiple-11 top-icon"></span>GROUP CHAT
+								</span>
+							</a>
+						</md-button>
 					</li>
 					<li ng-click="setselected(3)">
-						<a ui-sref="home.broadcast">
-							<span ng-class="{active: topMiddleIndex == 3}">
-								<span class="nc-icon-mini ui-3_signal top-icon"></span>BROADCAST
-							</span>
-						</a>
+						<md-button>
+							<a ui-sref="home.broadcast">
+								<span ng-class="{active: topMiddleIndex == 3}">
+									<span class="nc-icon-mini ui-3_signal top-icon"></span>BROADCAST
+								</span>
+							</a>
+						</md-button>
 					</li>
 				</ul>
 			</div>
 			<div class="top-right">
 				<div class="user-details">
-					<a href="" ng-click="myDropdown=!myDropdown" ng-class="{active:myDropdown}">
+					<a href="" ng-click="statusmenu=!statusmenu" click-outside="handleClick($event)">
 						<span id="userstatus" class="user-img user-online"><img src="content/images/11.jpg"></span>
-						<div class="dropdown-menu user-inner" ng-show="myDropdown" ng-click="">
+						<div class="dropdown-menu user-inner" ng-show="statusmenu">
 							<div class="user-status user-online" ng-click="setStatus('online')"><span class="user-icons "></span>
 								<md-tooltip md-direction="bottom"> Online </md-tooltip>
 							</div>
@@ -64,7 +72,7 @@
 						</div>
 					</a>
 					<md-menu>
-						<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+						<md-button class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
 							<md-icon md-menu-origin>{{userdetails.username}}<i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
 						</md-button>
 						<md-menu-content class="menu-dropdown">
@@ -124,6 +132,6 @@
 		</div>
 	</header>
 	<section>
-		<div ui-view></div>
+		<div ui-view style="height:100%;"></div>
 	</section>
 </div>
