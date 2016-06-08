@@ -1,4 +1,4 @@
-<md-dialog>
+<md-dialog class="">
 	<form>
 		<md-toolbar>
 			<div class="md-toolbar-tools">
@@ -9,13 +9,15 @@
 				</md-button>
 			</div>
 		</md-toolbar>
-		<md-dialog-content>
-			<div class="md-dialog-content">
-				<h2>Are you sure you want to block {{seluser}}?</h2>
-				<p>{{seluser}} will be blocked in your contacts and won’t be able to contact you.</p>
-			</div>
-		</md-dialog-content>
-		<md-dialog-actions layout="row">
+		<div class="blo-contact">
+			<md-dialog-content>
+				<div class="md-dialog-content">
+					<h2>Are you sure you want to block {{seluser}}?</h2>
+					<p>{{seluser}} will be blocked in your contacts and won’t be able to contact you.</p>
+				</div>
+			</md-dialog-content>
+		</div>
+<!-- 		<md-dialog-actions layout="row">
 			<span flex></span>
 			<md-button ng-click="answer('block')">
 				Block
@@ -23,6 +25,11 @@
 			<md-button ng-click="answer('cancel')" style="margin-right:20px;">
 				Cancel
 			</md-button>
-		</md-dialog-actions>
+		</md-dialog-actions> -->
+		<div class="buttons">
+			<md-button class="teamr-btn" type="button" ng-click="answer('block')">Block</md-button>
+			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="answer('cancel')">Cancel </md-button>
+			<div class="clear"></div>
+		</div>
 	</form>
 </md-dialog>

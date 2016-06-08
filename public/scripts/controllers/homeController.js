@@ -4,74 +4,36 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
     $scope.topMiddleIndex = 1;
     $scope.contacts = [];
     $scope.statusmenu = false;
+    $scope.myDropdown = false;
     $scope.home_init = function () {
+        if($scope.userdetails == null){
+            $state.go('login');
+            return;
+        }
         document.getElementsByTagName("BODY")[0].className = "";
         teamrService.connect();
         teamrService.subscribe($scope.userdetails.username, function(ack){
             console.log(ack);
-        });
-
-        getContacts($scope.userdetails.username);
-        sendstatus("online");
+        });        
         teamrService.listen();
         $state.go('home.chat');
-    };
+    };    
 
-    $scope.$on('updatecontact', function(event, contactobj){
-        $scope.contacts.push(contactobj);
-        $scope.$apply();
-        localStorageService.set("user_contacts", $scope.contacts);
-    });
-
-    $scope.$on('blockcontact', function(event, contactobj){
-        for(var i = 0; i < $scope.contacts.length; i++){
-            if($scope.contacts[i].ID == contactobj.recid){
-                if(contactobj.obj.USERID1_BLOCKING != undefined)
-                    $scope.contacts[i].USERID1_BLOCKING = contactobj.obj.USERID1_BLOCKING;
-                else if(contactobj.USERID2_BLOCKING != undefined)
-                    $scope.contacts[i].USERID2_BLOCKING = contactobj.obj.USERID2_BLOCKING;
-
-                $scope.contacts[i].PRESENCE  = "offline";
-                break;
-            }
-        }
-        $scope.$apply();
-        localStorageService.set("user_contacts", $scope.contacts);
-    });
-
-    $scope.$on('deletecontact', function(event, contactobj){
-        for(var i = 0; i < $scope.contacts.length; i++){
-            if($scope.contacts[i].ID == contactobj.recid){
-                if(contactobj.obj.USERID1_REMOVING != undefined || contactobj.obj.USERID2_REMOVING != undefined)
-                    $scope.contacts.splice(i, 1)
-
-                break;
-            }
-        }
-        $scope.$apply();
-        localStorageService.set("user_contacts", $scope.contacts);
-    });
+    $scope.openstatusmenu = function(){
+        $scope.myDropdown = !$scope.myDropdown;
+    }
 
     $scope.$watch('statusmenu', function($event){
         $scope.statusmenu = $event;
     });
 
-    $scope.$on('updatepresence', function(event, presenceobj){
-        // $scope.contacts.push(contactobj);
-        // $scope.$apply();
-        for(var i = 0; i < $scope.contacts.length; i++){
-            if($scope.contacts[i].USERNAME == presenceobj.username){
-                $scope.contacts[i].PRESENCE = presenceobj.status;
-                break;
-            }
-        }
-
-        $scope.$apply();
-        localStorageService.set("user_contacts", $scope.contacts);
-    });
-
     $scope.toggleMenu = function () {
         $scope.showmenu = ($scope.showmenu) ? false : true;
+    };
+
+    $scope.redirectochat = function () {
+        $scope.topMiddleIndex = 1;
+        $state.go('home.chat');
     };
 
     $scope.setselected = function(index){
@@ -83,11 +45,13 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
         console.log(status);
         var userstatus = document.getElementById("userstatus");
         userstatus.className = "user-img "+status;
-        sendstatus(status);        
+        userstatus.setAttribute("status", status);
+        teamrService.sendstatus($scope.userdetails.username, status);        
     }
 
     $scope.logout = function(){
-        teamrService.sendpresence($scope.userdetails.username, "offline", $scope.contacts, function(response){
+        var contacts = localStorageService.get('user_contacts');
+        teamrService.sendpresence($scope.userdetails.username, "offline", contacts, function(response){
             console.log(response);
             teamrService.logout($scope.userdetails.username, function(response){
                 if(response.success == true){               
@@ -98,51 +62,5 @@ xenApp.controller('homeController', function ($scope, $state, $rootScope, $windo
                 }
             });
         });        
-    }
-
-    var getContacts = function(username){
-        var contacts = localStorageService.get("user_contacts");
-        if(contacts == null){
-            teamrService.getcontacts(username, function(response){
-                if(response.success == true){
-                    // Update Contacts
-                    var data = JSON.parse(response.data);
-                    if(data.status == "success"){
-                        $scope.contacts = data.data;
-                        for(var i = 0; i < $scope.contacts.length; i++){
-                            if($scope.contacts[i].WAITING_APPROVAL == true && $scope.userdetails.user_id == $scope.contacts[i].CONTACT_USER_ID2){
-                                $scope.contacts[i].incomingreq = true;
-                            }
-
-                            else if($scope.contacts[i].WAITING_APPROVAL == true && $scope.userdetails.user_id == $scope.contacts[i].CONTACT_USER_ID1){
-                                $scope.contacts[i].incomingreq = false;
-                            }
-                        }            
-                        sendstatus("online");
-                        localStorageService.set("user_contacts", $scope.contacts);
-
-                        $scope.$apply();
-                    }
-                }
-                else if(response.success == false){
-                    // No Contacts
-                }
-            });            
-        }else{
-            $scope.contacts = contacts;
-            sendstatus("online");
-        }
-    }
-
-    var sendstatus = function(status){
-        var filter = $scope.contacts.filter(function(contact){
-            if(contact.USERID1_BLOCKING == true || contact.USERID2_BLOCKING == true)
-                return;
-
-            return contact;
-        });
-        teamrService.sendpresence($scope.userdetails.username, status, filter, function(response){
-            console.log(response);
-        })
     }
 });

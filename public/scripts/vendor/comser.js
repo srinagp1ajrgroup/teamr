@@ -12,7 +12,9 @@ var INVITATION_TYPE = {
     BY_APPROVAL: "byapproval"
 };
 
-var ip = "localhost"
+var FILE_UPLOAD_LIMIT = 100000;
+
+var ip = "216.117.82.233"
 var url = 'http://'+ip+':8081'
 
 function ComSer(){
@@ -171,24 +173,70 @@ ComSer.prototype.listen = function(callback){
 			callback("chatack", data);
 		});
 
-		this.socket.on("groupChat", function(data){
-			callback("groupChat", data);
-		});
-
-		this.socket.on("unicastGroupChat", function(data){
-			callback("unicastGroupChat", data);
+		this.socket.on("groupchat", function(data){
+			callback("groupchat", data);
 		});
 
 		this.socket.on("contactreq", function(data){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			usercontacts.push(data);
+			localStorage.setItem('ls.user_contacts', JSON.stringify(usercontacts));
 			callback("contactreq", data);
 		});
 
 		this.socket.on("acceptcontactreq", function(data){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+            	if(usercontacts[i].ID == data.recid){
+            	    usercontacts[i].WAITING_APPROVAL = data.WAITING_APPROVAL;
+            	    usercontacts[i].PRESENCE = data.status;
+                	break;
+            	}
+        	}
+        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
 			callback("acceptcontactreq", data);
 		});
 
 		this.socket.on("blockcontact", function(data){
 			callback("blockcontact", data);
+		});
+
+		this.socket.on("updategroup", function(data){
+			var usergroups = JSON.parse(localStorage.getItem('ls.user_groups'));
+			usergroups.push(data);
+			localStorage.setItem('ls.user_groups', JSON.stringify(usergroups));
+			callback("updategroup", data);
+		});
+
+		this.socket.on("addmemberstogroup", function(data){
+			callback("addmemberstogroup", data);
+		});
+
+		this.socket.on("delmembersfromgroup", function(data){
+			var isdelgroup = false;
+			var user = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')));
+			var usergroups = JSON.parse(localStorage.getItem('ls.user_groups'));
+			for(var i = 0; i < data.list.length; i++){
+				if(data.list[i].USERNAME == user.username){
+					for(var j = 0; j < usergroups.length; j++){
+						if(usergroups[j].GROUP_ID == data.groupid){
+							isdelgroup = true;
+							usergroups.splice(j, 1)
+							break;
+						}
+					}
+				}
+			}
+
+			localStorage.setItem('ls.user_groups', JSON.stringify(usergroups));
+			if(isdelgroup == true)
+				callback("updategroup", data);
+			
+			callback("delmembersfromgroup", data);
+		});
+
+		this.socket.on("exitgroup", function(data){
+			callback("exitgroup", data);
 		});
 
 		this.socket.on("isTyping", function(data){
@@ -215,9 +263,18 @@ ComSer.prototype.chathistory = function (username, fromid, toid, callback){
 	});
 }
 
-ComSer.prototype.fileupload = function(username, formdata, callback) {
+ComSer.prototype.fileupload = function(username, file, callback) {
 	if(username == null || username == '' || username == undefined)
 		return ("Please Enter Valid username");
+
+	// if(file.size > FILE_UPLOAD_LIMIT)
+	// 	return "File Size is big";
+
+	var formdata    = new FormData();
+    formdata.append('username', username);
+    formdata.append('file', file);
+    formdata.processData = false;
+    formdata.contentType = false;
 
 	sendfile(formdata, url+"/fileupload", function(response){
 		var res = JSON.parse(response);
@@ -285,7 +342,7 @@ ComSer.prototype.sendContactreq = function (username, toname, toid, callback)
 	return;
 }
 
-ComSer.prototype.acceptContactreq = function (username, toname, recid, callback){
+ComSer.prototype.acceptContactreq = function (username, toname, recid, status, callback){
 	if(username == null || username == '' || username == undefined)
 		return "please enter valid fromid";
 
@@ -294,7 +351,22 @@ ComSer.prototype.acceptContactreq = function (username, toname, recid, callback)
 		return errAlert;
 	}
 
-	this.socket.emit("acceptContactreq", {username:username, toname:toname, recid:recid}, function(ackData){
+	var data = {username:username, toname:toname, recid:recid, status:status};
+	data['devType'] = 'w';
+
+	this.socket.emit("acceptContactreq", data, function(ackData){
+		if(ackData.success == true){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+            	if(usercontacts[i].ID == data.recid){
+            	    usercontacts[i].WAITING_APPROVAL = data.WAITING_APPROVAL;
+            	    usercontacts[i].PRESENCE = data.status;
+                	break;
+            	}
+        	}
+
+        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+		}
 		callback(ackData);
 	});
 
@@ -363,19 +435,47 @@ ComSer.prototype.getfileurl = function(username, msg, callback){
 }
 
 
-ComSer.prototype.creategroup = function(groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, maxlimit, from, callback)
+ComSer.prototype.creategroup = function(username, details, callback)
 {
-	if(invitationType == null || invitationType == ""){
-		invitationType = INVITATION_TYPE.BY_APPROVAL;
-	}
-	else if(joingroup == null || joingroup == ""){
-		joingroup = JOIN_GROUP.ORGANIZATION;
-	}
+	if(username == null || username == '' || username == undefined)
+		return "please enter valid username";
 
-	var data = {groupname:groupname, type: grouptype, expirydate: expirydate, notification: sendnotify, category: category, 
-		joingroup: joingroup, invitation:invitationType, username:from};
+	if(details == null || details == "" || details == undefined){
+		return "please enter valid details";
+
+	}
+	// else if(joingroup == null || joingroup == ""){
+	// 	invitationType = INVITATION_TYPE.BY_APPROVAL;
+	// 	joingroup = JOIN_GROUP.ORGANIZATION;
+	// }
+	var data = {username:username, details:details}
+	data['devType'] = 'w';
 
 	sendxmlhttp(data, url+'/creategroup', 'POST', function(response){
+		var res = JSON.parse(response);
+		if(res.success == true){
+			var resp = JSON.parse(res.data);
+			var groups = JSON.parse(localStorage.getItem("ls.user_groups"));
+			groups.push(resp);
+			localStorage.setItem('ls.user_groups', JSON.stringify(groups));
+		}
+		callback(res);		
+	});
+}
+
+ComSer.prototype.searchgroup = function (username, searchname, callback)
+{
+	if(username == null || username == undefined || username == ""){
+		return "Invalid User Name";
+	}
+
+	if(searchname == null || searchname == undefined || searchname == ""){
+		return "Invalid Search Name";
+	}
+
+	var data = {username:username, searchname:searchname};
+	data['devType'] = 'w';
+	sendxmlhttp(data, url+'/searchgroup', 'POST', function(response){
 		var res = JSON.parse(response);
 		callback(res);		
 	});
@@ -388,32 +488,81 @@ ComSer.prototype.deletegroup = function(groupname, username)
 	});
 }
 
-ComSer.prototype.exitgroup = function(groupname, username, callback)
+ComSer.prototype.exitgroup = function(username, groupid, list, callback)
 {
-	this.socket.emit("exitGroup", {username:username, groupid:groupname}, function(err, ackData){
+	var data = {username:username, groupid:groupid, list:list};
+	data['devType'] = 'w';
+
+	this.socket.emit("exitgroup", data, function(ackData){
 		callback(ackData);
 	});
 }
 
-ComSer.prototype.addmemberstogroup = function(groupname, from, members)
-{
-	this.socket.emit("addMembers", {groupname:groupname, mList:members, username: from}, function(err, ackData){
+ComSer.prototype.addmemberstogroup = function(username, groupid, groupname, members, callback){
+	var data = {username:username, groupid:groupid, groupname:groupname, list:members}
+	data['devType'] = 'w';
+	this.socket.emit("addmemberstogroup", data, function(ackData){
 		callback(ackData);
 	});
 }
 
-ComSer.prototype.getgroupmemebers = function(groupname, from, callback)
-{
-	this.socket.emit("getGroupMembers", {username:from, groupid:groupname}, function(err, ackData){
+ComSer.prototype.instantadd = function(username, groupid, groupname, members, callback){
+	var data = {username:username, groupid:groupid, groupname:groupname, list:members}
+	data['devType'] = 'w';
+	this.socket.emit("instantadd", data, function(ackData){
 		callback(ackData);
 	});
 }
 
-ComSer.prototype.getjoinedgroups = function(from, callback)
-{
-	this.socket.emit("getJoinedgroups", {username:from}, function(err, ackData){
+ComSer.prototype.delmembersfromgroup = function(username, groupid, members, callback){
+	var data = {username:username, groupid:groupid, list:members}
+	data['devType'] = 'w';
+	this.socket.emit("delmembersfromgroup", data, function(ackData){
 		callback(ackData);
 	});
+}
+
+ComSer.prototype.getgroupmemebers = function(username, groupid, callback)
+{
+	if(username == null || username == '' || username == undefined)
+		return "please enter valid username";
+
+	if(groupid == null || groupid == "" || groupid == undefined){
+		return "please enter valid groupid";
+
+	}
+	var data = {username:username, groupid:groupid}
+	data['devType'] = 'w';
+
+	sendxmlhttp(data, url+'/getgroupmembers', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);
+	});
+}
+
+ComSer.prototype.getjoinedgroups = function(username, callback)
+{
+	if(username == null || username == '' || username == undefined)
+		return "please enter valid username";
+
+	var data = {username:username}
+	data['devType'] = 'w';
+
+	// sendxmlhttp(data, url+'/getjoinedgroups', 'POST', function(response){
+	// 	var res = JSON.parse(response);
+	// 	callback(res);		
+	// });
+
+	this.socket.emit("getjoinedgroups", data, function(ackData){
+		callback(ackData);
+	});
+}
+
+ComSer.prototype.subscribegroups = function(username, list)
+{
+	var data = {username:username, list:list}
+	data['devType'] = 'w';
+	this.socket.emit("subscribegroups", data);
 }
 
 ComSer.prototype.makeadmin = function(groupname, from, contactid, callback)
@@ -437,20 +586,20 @@ ComSer.prototype.deletemessages = function(groupname, from, messageList)
 	});
 }
 
-ComSer.prototype.groupmessage = function(groupobj, type, callback)
+ComSer.prototype.groupmessage = function(chat, callback)
 {
-	if(type == null || type == "")
-		return "Please Enter Valid Group Type";
+	var data = chat;
+	data['devType'] = 'w';
+	this.socket.emit("groupchat", data, function(err, ackData){
+		callback(ackData);
+	});
+}
 
-	if(type == "unicast"){
-		this.socket.emit("deletemessages", groupobj, function(err, ackData){
-			callback(ackData);
-		});
-	}
-	else if(type == "multicast"){
-		this.socket.emit("groupChat", groupobj, function(err, ackData){
-			callback(ackData);
-		});
-	}
-	
+ComSer.prototype.getgrouphistory = function (username, group_id, callback) {
+    var data = {username:username, group_id:group_id};
+	data['devType'] = 'w';
+	sendxmlhttp(data, url+'/grouphistory', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
 }

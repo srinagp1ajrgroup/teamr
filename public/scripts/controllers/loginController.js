@@ -3,7 +3,12 @@ xenApp.controller('loginController', function ($scope, $state, $rootScope, teamr
     $scope.credentials  = {};
     $scope.loginAlert   = "";
     $scope.isForgotpwd  = false;
-    $scope.isLoading    = false;
+    $scope.isLoading    = false;    
+    var loginsuccess    = localStorageService.get('loginSuccess');
+    if(loginsuccess == true){
+        $state.go('home')
+        return;
+    }
     document.getElementsByTagName("BODY")[0].className = "tr-bg-color";
 
     $scope.forgotpass = function(){
@@ -12,6 +17,10 @@ xenApp.controller('loginController', function ($scope, $state, $rootScope, teamr
 
     $scope.cancelpwd = function(){
         $scope.isForgotpwd = false;   
+    }
+
+    $scope.reload = function(){
+        $state.reload();
     }
 
     /*******************Login with the credentials*******************/
@@ -31,17 +40,20 @@ xenApp.controller('loginController', function ($scope, $state, $rootScope, teamr
                 if(response.status == "success"){
                     $scope.loginSuccess = true;
                     $scope.$apply();
+                    localStorageService.clearAll();
                     localStorageService.set('localpeer', JSON.stringify(response.data));
                     localStorageService.set('loginSuccess', true);
                     $state.go("home");
                 }
                 else if(response.status == "error"){
                     $scope.loginSuccess = false;
-                    var resp            = JSON.parse(response.errors[0].message);
-                    if(typeof resp.errors[0] == 'object')
-                        $scope.loginAlert   = resp.errors[0].message;
+                    // var resp            = response.errors[0].message;
+                    if(typeof response.errors[0] == 'object')
+                        $scope.loginAlert   = response.errors[0].message;
                     else
-                        $scope.loginAlert   = resp.errors[0];
+                        $scope.loginAlert   = response.errors[0];
+                    $scope.credentials = {};
+                    document.getElementById('username').focus();
                     $scope.$apply();
                 }
             });

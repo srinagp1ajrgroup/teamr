@@ -1,32 +1,37 @@
-<div class="contact">
+<div class="contact" ng-init="chat_init()">
 	<div class="sidenav">
 		<div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
 			<div class="side-bar-search text-center">
 				<div class="clearfix"></div>
-				<input type="text">
-				<a href=""><i class="nc-icon-mini ui-1_zoom"></i></a>
+				<input type="text" placeholder="search">
+				<a href="" ng-click="toggleMenu()"><i class="nc-icon-mini ui-1_zoom"></i></a>
 			</div>
-			<div class="side-chat-box">
+			<!-- <div class="side-chat-box">
 				<div class="clearfix"></div>
-				<li role="presentation" class="chatlist">
-					<a ui-sref="home.chat.addcontact">Contacts
-						<span class="chat-user">
-							<i class="nc-icon-mini users_add-29"></i>
-						</span>
-					</a>
-				</li>
-			</div>
+				<div class="chatlist">
+					<span>Contacts</span>
+					<span class="chatlist-right"><a ui-sref="home.chat.addcontact"><i class="nc-icon-mini users_add-29"></i></a></span>
+				</div>
+			</div> -->
+
+			<div class="side-chat-box">
+                <div class="chatlist">
+                    <span>Contacts</span>
+                </div>
+               <div class="addgroup-icons"><div class="chatlist-right"><a ui-sref="home.chat.addcontact"><i class="nc-icon-mini users_add-29"></i></a></div></div>
+               <div class="clear"></div>
+            </div>
 			<div class="main">
 				<ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)">
-					<li role="presentation" class="" ng-repeat="contact in contacts" ng-click="getSeluser($index)">
+					<li role="presentation" ng-repeat="contact in contacts" ng-click="getSeluser($index)" ng-class="{active: $index == selected}">
 						<a ui-sref="home.chat.chatview({user:contact.USERNAME })">
-							<img src="content/images/11.jpg" alt="" class="offline" ng-if="contact.WAITING_APPROVAL == true">
-							<img src="content/images/11.jpg" alt="" ng-class="contact.PRESENCE" ng-if="contact.WAITING_APPROVAL == false">
-							<span>{{contact.USERNAME}}</span>
-							<div class="badge request-pending" ng-if="contact.incomingreq == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+							<div ng-class="contact.PRESENCE">
+								<img src="content/images/01.jpg" class="" alt="">
+							</div>
+							<span>{{contact.USERNAME}}</span> 
 						</a>
-						<!-- <div class="badge"></div> -->
-					</li>
+						<div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+              		</li>
 				</ul>
 			</div>
 		</div>

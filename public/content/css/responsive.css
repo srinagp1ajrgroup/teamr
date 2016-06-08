@@ -1,197 +1,350 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700);
 
 @media only screen and (min-width:1367px) and (max-width:1920px) {
-	.middle-contact-middle {
-    height:90%;
-    overflow: hidden;
-    width: 100%;
+.middle-contact-middle {
+	height: 84%;
+	overflow: auto;
+	width: 100%;
 }
 }
-@media only screen and (min-width: 979px) and (max-width: 1199px) {
-	
-/*.send-images ul li { width: 17%;}
-.add-contact-search > input { width: 93%;}
-.user-chat-area.request-sent {margin-top: 42%;}*/
+@media only screen and (min-width:1280px) and (max-width: 1365px) {
+	.user-inner {
+    right:68px;
+}
+.menu-dropdown.menu-options {
+    right: 222px;
+}
+.middle-contact-right {
+    width: 48%;
+}
 }
 @media only screen and (min-width: 1024px) and (max-width: 1365px) {
-/*.top-left {width: 25% !important; }
-.md-menu {
-    float: left!important;}
-.group-caller {height: 80px;width: 80px;}
-
-.group-audio-calling li {margin: 0 15px;}
-.audio-caller {height: 80px;width: 80px;}
-.caller-name.username {top: -37px;}
-.left-btn {left: 205px;top: 7px;}
-.user-img { margin: 5px 0px 0 40px;}*/
-
 .top-middle ul li a span {
-    padding: 2.5px 44px !important;
-}
-
-.top-middle ul li a span {
-    padding: 2.5px 35px !important;
-}
-
-.user-details {
-    padding: 8px 0 0 0px;
-}
-.top-left {
-    width: 20%;
-}
-.top-right {
-    width: 20%;
-}
-
-.top-middle {
-    width: 60%;
-}
-.top-middle ul li a span {
-    padding: 2.5px 32px !important;
-}
-.sidenav-inner {
-    width: 20%;
-}
-
-.nav-list span {
-    width: 54% !important;
-}
-
-.middle-contact.slide {
-    margin-left: 19.8%;
-    width: 63%;
-}
-}
-@media only screen and (min-width: 980px) and (max-width: 1365px) {
-/*.top-left {float: left;width: 26%;}
-.top-middle ul li a span {padding: 3px 20px 2px;}
-.top-middle {width:49%;}
-.top-right {width: 24%;}
-.top-middle ul li a span {padding: 3px 23px 2px;}
-.left-btn { color: #ccc;position: absolute;left: 205px;top: 7px;}
-.welcome-hover-text {bottom: -63px;}
-.welcome-call-icons li a i {font-size: 9px;height: 18px;line-height: 18px;margin-left: 2px;text-align: center; width: 18px;}
-.welcome-hover-text span {font-size: 11px;margin: 1px 0 0 1px;}
-.online-dot {height: 5px; margin-left: -5px !important;margin-top: 5px !important;width: 5px;}
-.welcome-page-content {min-height: 203px;}
-.welcome-page-content h3 {font-size:17px;padding: 21px 0 0;}
-.welcome-page-content h4 {font-size: 13px;line-height: 19px;padding: 7px 0;}
-.welcome-page-content p {font-size: 13px;line-height: 19px;padding: 4px 0;}
-.welcome-page-content {margin: 0 30px;}
-.user-img {margin: 5px 6px 0 30px;}
-.user-img1 {padding: 2px;}
-.added-contact-left .added-contact-bg {margin: 0 5px 0 5px;}
-.added-contact-left > p:nth-child(3) {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width: 70%;}
-.added-contact-right i { height: 20px;line-height: 20px;width: 20px;}
-.middle-contact-bottom input {width: 90%;}*/
-}
-@media only screen and (min-width: 768px) and (max-width: 979px) {
-/*.sidenav {width: 207px;}
-.top-left { width: 27%;}
-.top-middle {float: left;width: 47%;}
-.top-right {float: right;margin-right:0px;width:26%;}
-.md-button.md-icon-button {margin:0px !important;}
-.top-middle ul li a span {padding:3px 0px 2px;font-size: 10px;}
-.user-img {margin: 5px 3px 0 5px;}
-.top-right .dropdown {margin: 1px 2px;}
-.user-name h4 {margin-right: 3px;margin-top: 12px;}
-.top-right .dropdown {width: auto;}
-.middle-contact.slide { margin-left: 207px;}
-.top-right .dropdown.active .dropdown-menu {padding: 0 15px 10px 4px;width:100%;}
-.hide_panel {left: -165px;}
-.hide_panel .nav-list li a:hover span {left:181px;}
-.sidenav .nav-list li a { padding-left: 10px;}
-.left-btn {left: 161px;}
-.side-bar-search input { width: 72%;}
-.middle-contact-middle { width: 100%;}
-.sidenav .nav-list li {width: 91%;}
-.welcome-column-1, .welcome-column-2, .welcome-column-3 {width: 100%;}
-.welcome-hover-text.active {width: 96%;}
-.welcome-hover-text {width: 96%;}*/
-
-.top-middle ul li a span {
-    padding: 2.5px 11px !important;
-}
-.top-left {
-    width: 25%;
-}
-.top-right {
-    width: 25%;
+	padding: 5.8px 32px !important;
 }
 .top-middle {
-   width: 50%;
+	width: 64.2%;
 }
-.user-details {
-    padding: 8px 0 0 0;
+.top-left {
+	width: 18.9%;
+}
+.top-right {
+	width: 15%;
 }
 .sidenav-inner {
-    width: 25%;
+	width: 19%;
 }
 .middle-contact.slide {
-    margin-left: 24.8%;
-    width: 60%;
+	margin-left: 18.9%;
+	
+	width: 63%;
 }
-.nav-list span {
-    width: 52% !important;
+}
+
+@media only screen and (min-width: 1024px) and (max-width:1279px) {
+.user-inner {
+	right: 36px;
+}
+.sidenav .nav-list li a {
+	padding: 4px 4px 4px 11px;
+}
+.menu-dropdown.menu-options {
+    right: 177px;
+}
+.menu-options::before {
+    right: 24px;
+} 
+.chatlist a {
+    margin-right: -14px;
+}
+.hide_panel .nav-list li a:hover span {
+    margin: 0 2px;
+}
+.middle-contact-right {
+    width: 42%;
 }
 .call-icons {
-    float: right;
-    padding-top: 0;
-    text-align: right;
-   width: 22%;
+    padding-top: 1px;
+    width: 20%;
 }
-
-.side-bar-search a {
-    float: right;
-    margin: 0;
+.middle-contact-middle.add-group .add-contact-search > input {
+    width: 80%;
 }
-.middle-contact.close {
-    margin-left: -8.8%;
-    width: 78.6%;
+.add-contact-search.addmembersearch i {
+    margin-right: 2px;
+}
+.added-contact-left .added-contact-bg {
+    padding: 0px;
+    margin: 0 5px 0 5px;
+}
+.add-group .added-contact-right {
+    margin-right: 4%;
 }
 .side-bar-search input {
     width: 79%;
 }
+.hide_panel .side-bar-search {
+    padding: 0 6px;
+}
+.cgroup {
+    width: 40%;
+    min-height: 80%;
+}
+.top-middle {
+    width: 64.3%;
+}
+.top-right {
+    width: 15%;
+}
+.tr-logo {
+    left: 18%;
+}
+.user-login-page {
+    right:18%;
+}
+.chat-input {
+    width: 88%;
+}
+.hide_panel .chatlist {
+    padding: 0px 11px 0 14px;
+}
+}
+@media only screen and (min-width:980px) and (max-width:1023px) {
+.top-middle {
+width: 64.1%;
+}
+.user-inner {
+    right: 25px;
+    width: 160px;
+    z-index: 99;
+}
+.menu-dropdown.menu-options {
+    right: 168px;
+}
+.menu-dropdown {
+    right: -8px;
+    top: 42px;
+    width: 142px;
+}
+.hide_panel {
+    left: -14.5%;
+}
+.sidenav .nav-list li a {
+    padding: 4px 4px 4px 8px;
+}
 
+.hide_panel .nav-list li a:hover span {
+    margin: 0 6px;
+}
+.middle-contact.close {
+    margin-left: 4.3%;
+
+}
+.chat-input {
+    float: left;
+    width: 85%;
+}
+	.user-details .md-menu {
+    margin: -5px 0px;
+}
+.user-details {
+    margin-left: 0;
+}
+.userdeta {
+    max-width: 89px !important;
+}
+.middle-contact-middle.add-group .add-contact-search > input {
+    width: 80%;
+}
+.add-contact-search.addmembersearch i {
+    margin-right: 2px;
+}
+.added-contact-left .added-contact-bg {
+    padding: 0px;
+    margin: 0 5px 0 5px;
+}
+.add-group .added-contact-right {
+    margin-right: 1%;
+}
+.side-bar-search input {
+    width: 78%;
+
+}
+.cgroup {
+    width: 40%;
+    min-height: 80%;
+}
+.tr-logo{
+    left:18%;
+}
+.user-login-page {
+    right:18%;
+}
+.call-icons {
+    width: 19%;
+
+}
+.middle-contact-right {
+    width: 41%;
+}
+}
+@media only screen and (min-width: 768px) and (max-width: 979px) {
+
+.top-middle ul li a span {
+    padding: 5.8px 11px !important;
+}
+.top-left {
+    width: 21%;
+}
+
+.top-right {
+    float: left;
+    padding-right: 12px;
+    width: 17%;
+    margin-left: 5%;
+}
+.top-middle {
+    width: 48%;
+}
+.user-details {
+	padding:2px 0 0 0;
+}
+
+.sidenav-inner {
+    width: 21%;
+}
+.sidenav .nav-list li a {
+    padding: 4px 2px 4px 6px;
+}
+
+.middle-contact.slide {
+    margin-left: 20.8%;
+}
+/*.nav-list span {
+	width: 52% !important;
+}*/
+.call-icons {
+	float: right;
+	padding-top: 1px;
+	text-align: right;
+	width: 26%;
+}
+.side-bar-search {
+    padding: 0 14px;
+}
+.side-bar-search a {
+	float: right;
+	margin: 0;
+}
+.middle-contact.close {
+	margin-left: -8.8%;
+	width: 78.6%;
+}
+.side-bar-search input {
+	width: 79%;
+}
 .left-btn {
-    margin: 5px -8px 0 0;
+	margin: 5px -8px 0 0;
 }
 .chat-user i {
-    margin-right: -5px;
+	margin-right: -5px;
+}
+.user-inner {
+    right:50px;
+    top:42px;
+    width: 160px;
+}
+
+.add-contact-search > input {
+    width: 85%;
+}
+.menu-dropdown {
+    right: 0px;
+    width: 148px;
+}
+.menu-dropdown.menu-options {
+    right: 109px;
+}
+.bottom-fix {
+    margin-left:7.5% !important;
+    margin-top: 0.8%;
+    width: 91.7%;
+}
+.chat-input {
+    float: left;
+    width: 85%;
+}
+.middle-contact-bottom input {
+    width: 85%;
+}
+.chatbox-icons {
+    margin-right: 21px;
+    margin-top: 9px;
+}
+
+.middle-contact.close {
+    margin-left: 5.2%;
+}
+
+
+.hide_panel .nav-list li a:hover span {
+    margin: 0 5px;
+}
+	.user-details .md-menu {
+    margin: -5px 0px;
+}
+.user-details {
+    margin-left: 0;
+}
+.userdeta {
+    max-width: 89px !important;
+}
+.cgroup {
+    width: 52%;
+}
+md-dialog {
+    min-width:auto !important;
+	min-height:auto !important;
+}
+.tr-logo {
+    left: 10%
+}
+.user-login-page {
+    right: 10%;
+}
+.middle-contact-middle.add-group .add-contact-search > input {
+    width: 77%;
+}
+.added-contact-left {
+
+    width: 82%;
+
+}
+.added-contact-left .added-contact-bg {
+    margin: 0 5px 0 5px;
+
+}
+.added-contact-left > p:nth-child(3) {
+    width: 62%;
+}
+.md-toolbar-tools h2 {
+    font-size: 19px;
+}
+.middle-contact-left {
+    width: 20%;
+}
+.group-chat li {
+    margin-left: 5px;
 }
 }
 @media only screen and (min-width: 768px) and (max-width: 980px) {
-/*.send-images ul li { width: 16%;}
-.call-icons {width: 23%;}
-.added-contact-right {float: right;width: 13%;}
-.added-contact-left .added-contact-bg{ margin:2px;height: 25px;width: 25px;}
-.added-contact-left {float: left;width: 84%;}
-.add-contact-search > input { width: 92%;}
-.added-contact-right i {font-size: 10px;height: 20px;line-height: 20px;margin-top: 12px;width: 20px;}
-.middle-contact-bottom input {width: 90%;}
-.user-chat-area.request-sent {margin-top:48%;}
-.welcome-page-content h3 {padding: 11px 0 0;}
-.welcome-page-content {min-height: 190px;}
-.group-audio-calling li { margin: 0 15px;}
-.group-caller {height: 80px;width: 80px;}
-.audio-caller {height: 80px;width: 80px;}
-.left-list {width:50%;}
-.right-list {width:50%;}
-.added-contact-right {width: 8%;}
-.added-contact-left .added-contact-bg {margin: 2px 11px;}
-.added-contact-left { width: 77%;}
-.added-contact-right {width: 14%;}
-.vedio-call-option {width: 16%;}
-.vedio-call-duration {width: 27%;}
-.vedio-icon-option ul li {padding: 0 4px 0 0;}
-.vedio-icon-option {width: 50%;}
-.vedio-call-option {width: 16%;}
-.vedio-call-image.maximum .vedio-icon-option ul {margin-left: 2%;}
-.middle-contact-bottom {width: 98%;}*/
-
+	.call-icons {
+    width: 27%;
 }
+.middle-contact-right {
+    width: 40%;
+}
+}
+
 @media only screen and (min-width: 769px) and (max-width: 979px) {
-/*	.top-left {
-    width: 26%;
-}*/
 }

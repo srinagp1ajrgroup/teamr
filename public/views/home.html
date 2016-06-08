@@ -2,9 +2,9 @@
 	<header>
 		<div class="main-top">
 			<div class="top-left">
-				<figure><img src="content/images/logo-home.png" alt="logo"> </figure>
+				<a href="" ng-click="redirectochat()"><figure><img src="content/images/logo-home.png" alt="logo"> </figure></a>
 				<a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
-        			<md-button class="md-icon-button md-primary md-button md-ink-ripple"> 
+        			<md-button class="md-icon-button md-button md-ink-ripple"> 
         				<i class="nc-icon-mini ui-2_menu-34"></i> 
         			</md-button>
         		</a>
@@ -15,7 +15,7 @@
 						<md-button>
 							<a ui-sref="home.callphones">
 								<span ng-class="{active: topMiddleIndex == 0}">
-									<span class="nc-icon-mini ui-3_phone top-icon"></span>CALL PHONES
+									<i class="nc-icon-mini ui-3_phone top-icon"></i>CALL PHONES
 								</span>
 							</a>
 						</md-button>
@@ -24,7 +24,7 @@
 						<md-button>
 							<a ui-sref="home.chat">
 								<span ng-class="{active: topMiddleIndex == 1}">
-									<span class="nc-icon-mini ui-2_chat-round top-icon"></span>CHAT
+									<i class="nc-icon-mini ui-2_chat-round top-icon"></i>CHAT
 								</span>
 							</a>
 						</md-button>
@@ -33,7 +33,7 @@
 						<md-button>
 							<a ui-sref="home.groupchat">
 								<span ng-class="{active: topMiddleIndex == 2}">
-									<span class="nc-icon-mini users_multiple-11 top-icon"></span>GROUP CHAT
+									<i class="nc-icon-mini users_multiple-11 top-icon"></i>GROUP CHAT
 								</span>
 							</a>
 						</md-button>
@@ -42,7 +42,7 @@
 						<md-button>
 							<a ui-sref="home.broadcast">
 								<span ng-class="{active: topMiddleIndex == 3}">
-									<span class="nc-icon-mini ui-3_signal top-icon"></span>BROADCAST
+									<i class="nc-icon-mini ui-3_signal top-icon"></i>BROADCAST
 								</span>
 							</a>
 						</md-button>
@@ -51,33 +51,52 @@
 			</div>
 			<div class="top-right">
 				<div class="user-details">
-					<a href="" ng-click="statusmenu=!statusmenu" click-outside="handleClick($event)">
-						<span id="userstatus" class="user-img user-online"><img src="content/images/11.jpg"></span>
-						<div class="dropdown-menu user-inner" ng-show="statusmenu">
-							<div class="user-status user-online" ng-click="setStatus('online')"><span class="user-icons "></span>
-								<md-tooltip md-direction="bottom"> Online </md-tooltip>
-							</div>
-							<div class="user-status user-away" ng-click="setStatus('away')"><span class="user-icons away1"></span>
-								<md-tooltip md-direction="bottom"> Away </md-tooltip>
-							</div>
-							<div class="user-status user-offline" ng-click="setStatus('busy')"><span class="user-icons offline1"></span>
-								<md-tooltip md-direction="bottom"> Busy </md-tooltip>
-							</div>
-							<div class="user-status user-invisible" ng-click="setStatus('invisible')"><span class="user-icons invisible1"></span>
-								<md-tooltip md-direction="bottom"> Invisible </md-tooltip>
-							</div>
-							<div class="user-status user-invisible" ng-click="setStatus('offline')"><span class="user-icons invisible1"></span>
-								<md-tooltip md-direction="bottom"> Offline </md-tooltip>
-							</div>
-						</div>
-					</a>
 					<md-menu>
-						<md-button class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+                       <div aria-label="Sample Menu" class="md-icon-button user-details" ng-click="$mdOpenMenu($event)">
+                      <span id="userstatus" class="user-img online"><img src="content/images/audio-call-1.jpg"></span>
+                       <md-icon class="user-icon-status"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
+                           
+                       </div>
+                       <md-menu-content class="dropdown-menu user-inner">
+                           <md-menu-item class="user-status user-online" ng-click="setStatus('online')">
+                               <md-button ng-click="ctrl.menuItemClick($index)">
+                              <span class="user-icons"></span>
+                               <span class="user-icons-name ">Online</span>
+                               </md-button>
+                           </md-menu-item>
+                          <md-menu-item class="user-status user-away" ng-click="setStatus('warning')">
+                               <md-button ng-click="ctrl.menuItemClick($index)">
+                              <span class="user-icons away1"></span>
+                               <span class="user-icons-name "> Away</span>
+                               </md-button>
+                           </md-menu-item>
+                           <md-menu-item class="user-status user-offline" ng-click="setStatus('busy')">
+                               <md-button ng-click="ctrl.menuItemClick($index)">
+                              <span class="user-icons offline1"></span>
+                               <span class="user-icons-name "> Busy</span>
+                               </md-button>
+                           </md-menu-item>
+                          <md-menu-item class="user-status user-invisible" ng-click="setStatus('offline')">
+                               <md-button ng-click="ctrl.menuItemClick($index)">
+                              <span class="user-icons invisible1"></span>
+                               <span class="user-icons-name"> Offline</span>
+                               </md-button>
+                           </md-menu-item>
+                          <md-menu-item class="user-status user-invisible" ng-click="setStatus('offline')">
+                               <md-button ng-click="ctrl.menuItemClick($index)">
+                              <span class="user-icons invisible1"></span>
+                               <span class="user-icons-name "> Invisible</span>
+                               </md-button>
+                           </md-menu-item>
+                       </md-menu-content>
+                   </md-menu>
+					<md-menu>
+						<div aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
 							<md-icon md-menu-origin>{{userdetails.username}}<i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
-						</md-button>
+						</div>
 						<md-menu-content class="menu-dropdown">
 							<md-menu-item>
-								<md-button>
+								<md-button ng-click="ctrl.menuItemClick($index)">
 									<div layout="row">
 										<p flex>Profile</p>
 									</div>
@@ -93,42 +112,14 @@
 							<md-menu-item>
 								<md-button ng-click="logout()">
 									<div layout="row">
-										<p flex>Signout</p>
+										<p flex>Sign out</p>
 									</div>
 								</md-button>
 							</md-menu-item>
 						</md-menu-content>
 					</md-menu>
-					<!-- <md-menu>
-						<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
-							<md-icon md-menu-origin>{{userdetails.username}}<i class="nc-icon-mini arrows-1_small-triangle-down"></i></md-icon>
-						</md-button>
-						<md-menu-content width="3" class="menu-dropdown">
-							<md-menu-item>
-								<md-button>
-									<div layout="row">
-										<p flex>Profile</p>
-									</div>
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button>
-									<div layout="row">
-										<p flex>Change Password</p>
-									</div>
-								</md-button>
-							</md-menu-item>
-							<md-menu-item>
-								<md-button ng-click="logout()">
-									<div layout="row">
-										<p flex>Signout</p>
-									</div>
-								</md-button>
-							</md-menu-item>
-						</md-menu-content>
-					</md-menu> -->
 				</div>
-			</div>
+      		</div>
 		</div>
 	</header>
 	<section>

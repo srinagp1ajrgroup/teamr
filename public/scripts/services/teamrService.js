@@ -1,4 +1,4 @@
-xenApp.factory('teamrService', function($rootScope) {
+xenApp.factory('teamrService', function($rootScope, localStorageService) {
     var teamrService = {};
     var comser = new ComSer();
 
@@ -12,6 +12,23 @@ xenApp.factory('teamrService', function($rootScope) {
 
     teamrService.subscribe = function (data, callback) {
         comser.subscribe(data, callback);
+    }
+
+    teamrService.sendstatus = function(username, status){
+        var contacts = localStorageService.get('user_contacts');
+        var filter;
+        if(contacts != null){
+            filter  = contacts.filter(function(contact){
+                if(contact.USERID1_BLOCKING == true || contact.USERID2_BLOCKING == true)
+                    return;
+
+                return contact;
+            });            
+        }
+
+        this.sendpresence(username, status, filter, function(response){
+            console.log(response);
+        })
     }
 
     teamrService.sendpresence = function (username, presence, cList, callback) {
@@ -46,8 +63,8 @@ xenApp.factory('teamrService', function($rootScope) {
         comser.sendContactreq(from, toname, toid, callback);
     }
 
-    teamrService.acceptContactreq = function (username, toname, recid, callback) {
-        comser.acceptContactreq(username, toname, recid, callback);
+    teamrService.acceptContactreq = function (username, toname, recid, status, callback) {
+        comser.acceptContactreq(username, toname, recid, status, callback);
     }
 
     teamrService.blockcontact = function (from, touser, recid, obj, callback) {
@@ -58,20 +75,44 @@ xenApp.factory('teamrService', function($rootScope) {
         comser.deletecontact(from, touser, recid, obj, callback);
     }
 
-    teamrService.createGroup = function (groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, from, callback) {
-        comser.creategroup(groupname, grouptype, expirydate, sendnotify, category, joingroup, invitationType, from, callback)
+    teamrService.creategroup = function (username, details, callback) {
+        comser.creategroup(username, details, callback)
     }
 
-    teamrService.getjoinedgroups = function (from, callback) {
-        comser.getjoinedgroups(from, callback)
+    teamrService.searchgroup = function (username, searchname, callback) {
+        comser.searchgroup(username, searchname, callback);
     }
 
-    teamrService.getgroupmemebers = function (groupname, from, callback) {
-        comser.getgroupmemebers(groupname, from, callback)
+    teamrService.getjoinedgroups = function (username, callback) {
+        comser.getjoinedgroups(username, callback)
     }
 
-    teamrService.exitgroup = function (groupname, from, callback) {
-        comser.exitgroup(groupname, from, callback)
+    teamrService.getgroupmemebers = function (username, groupid, callback) {
+        comser.getgroupmemebers(username, groupid, callback)
+    }
+
+    teamrService.groupmessage = function (chat, callback) {
+        comser.groupmessage(chat, callback)
+    }
+
+    teamrService.getgrouphistory = function (username, group_id, callback) {
+        comser.getgrouphistory(username, group_id, callback)
+    }
+
+    teamrService.addmemberstogroup = function (username, groupid, groupname, list, callback) {
+        comser.addmemberstogroup(username, groupid, groupname, list, callback)
+    }
+
+    teamrService.instantadd = function (username, groupid, groupname, list, callback) {
+        comser.instantadd(username, groupid, groupname, list, callback)
+    }
+
+    teamrService.delmembersfromgroup = function (username, groupid, list, callback) {
+        comser.delmembersfromgroup(username, groupid, list, callback);
+    }
+
+    teamrService.exitgroup = function (username, groupid, list, callback) {
+        comser.exitgroup(username, groupid, list, callback)
     }
 
     teamrService.makeadmin = function (groupname, from, contact, callback) {
@@ -80,6 +121,10 @@ xenApp.factory('teamrService', function($rootScope) {
 
     teamrService.deletegroup = function (groupname, from, callback) {
         comser.getgroupmemebers(groupname, from, callback)
+    }
+
+    teamrService.subscribegroups = function (username, list) {
+        comser.subscribegroups(username, list)
     }
 
     teamrService.listen = function()
@@ -131,6 +176,31 @@ xenApp.factory('teamrService', function($rootScope) {
                 case 'deletecontact':
                 {
                     // $rootScope.$broadcast('deletecontact', obj);
+                }
+                break;
+                case 'updategroup':
+                {
+                    $rootScope.$broadcast('updategroup', obj);
+                }
+                break;
+                case 'groupchat':
+                {
+                    $rootScope.$broadcast('groupchat', obj);
+                }
+                break;
+                case 'addmemberstogroup':
+                {
+                    $rootScope.$broadcast('addmemberstogroup', obj);
+                }
+                break;
+                case 'delmembersfromgroup':
+                {
+                    $rootScope.$broadcast('delmembersfromgroup', obj);
+                }
+                break;
+                case 'exitgroup':
+                {
+                    $rootScope.$broadcast('exitgroup', obj);
                 }
                 break;
             }

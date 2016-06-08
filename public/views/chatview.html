@@ -3,19 +3,22 @@
 		<div class="middle-contact-top">
 			<div class="middle-contact-left"> 
 				<span class="user-img1">
-				<img src="content/images/11.jpg"></span> 
+				<img src="content/images/01.jpg"></span> 
 				<span>{{seluser}}</span> 
+			</div>
+			<div class="active-user" ng-if="isTyping == true">
+				<p>{{seluser}} is typing ...</p>
 			</div>
 			<div class="call-icons">
 				<ul>
-					<li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
-					<li><a href=""><i class="nc-icon-mini media-1_video-67"></i></a></li>
+					<li><a href="" class="phn-icon-bg"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+                    <li><a href="" class="video-icon-bg"><i class="nc-icon-mini media-1_video-64"></i></a></li>
 					<li>
 						<md-menu>
-							<md-button aria-label="Sample Menu" class="md-icon-button  md-button md-ink-ripple md-button" ng-click="$mdOpenMenu($event)">
+							<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
 	                      		<md-icon md-menu-origin> <a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></md-icon>
 	                    	</md-button>
-							<md-menu-content class="menu-dropdown">
+							<md-menu-content class="menu-dropdown menu-options">
 								<md-menu-item>
 									<md-button ng-click="blockcontact($event)">
 										<div layout="row">
@@ -37,15 +40,27 @@
 			</div>
 			<div class="clear clearfix"></div>
 		</div>
-		<div class="middle-contact-middle" ng-if="selobj.WAITING_APPROVAL == false" mb-scrollbar="scrollbar('vertical', true)">
-			<div class="user-chat-area">
-				<!-- <h4>YESTERDAY</h4> -->
-				<div ng-class="chat.chatclass" ng-repeat="chat in chats" ng-if="chat.seluser == seluser">
-					<div class="chat-icon-img"><span><img src="content/images/11.jpg"></span></div>
-					<div class="chat-content">
+		<div class="middle-contact-middle" ng-if="selobj.WAITING_APPROVAL == false">
+			<!-- <md-content>
+				<md-list ng-repeat="chats in chatdate">	
+					<md-subheader class="md-no-sticky">{{chats.date}}</md-subheader>
+					<md-list-item class="chat-content" ng-repeat="chat in chats.chats" ng-click="null">
+						<div class="chat-icon-img" ng-show="chat.from != chats.chats[$index-1].from"><img src="content/images/01.jpg" class="md-avatar"/></div>
+						<div class="md-list-item-text" layout="column">
+							<h3 ng-if="chat.from != chats.chats[$index-1].from">{{ chat.from }}</h3>
+							<p>{{ chat.message }}</p>
+						</div>
+			        </md-list-item>
+				</md-list>
+			</md-content> -->
+			<div class="chat-area" ng-repeat="chats in chatdate">
+				<h4>{{chats.date}}</h4>
+				<div ng-class="chat.chatclass" ng-repeat="chat in chats.chats" ng-if="chat.seluser == seluser">
+					<div class="chat-icon-img" ng-if="chat.from != chats.chats[$index-1].from"><span><img src="content/images/01.jpg"></span></div>
+					<div class="chat-content" ng-class="{chatcontent: chat.from == chats.chats[$index-1].from}">
 						<div class="chat-content-text">
 							<div class="chat-username">
-								<span>{{chat.from}}</span>
+								<span  ng-if="chat.from != chats.chats[$index-1].from">{{chat.from}}</span>
 								<div class="messageview text-right">
 									<span class="time">{{chat.time}}</span>
 									<span ng-show="chat.sent == true && chat.delivered == false" class="un-seen">
@@ -60,6 +75,15 @@
 							<div class="video-download" ng-if="chat.filetransfer == true"> 
 								<ul class="video-img">
 									<li ng-if="chat.audio == true"><a href=""><img src="content/images/mp3.png" alt="mp3"></a></li>
+									<li ng-if="chat.video == true">
+										<div class="send-images"> 
+											<div class="chat-data"> <img src="content/images/nature1.jpg" alt=""/>
+												<div class="video-icon"> 
+													<a href="" class="button" ng-click="playvideo(chat.message, $event)"><i class="nc-icon-mini arrows-1_triangle-right-17"></i></a> 
+												</div>
+											</div>
+										</div>
+									</li>
 									<li ng-if="chat.media == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
 								</ul>
 								<div class="progress-status">
@@ -69,7 +93,7 @@
 								</div>
 								<div class="clear"></div>
 								<div class="loading-status">
-									<p>Sending file.rar</p>
+									<p>{{chat.filename}}</p>
 								</div>
 							</div>
 						</div>
@@ -92,12 +116,12 @@
 	          	</span>
 			</div>
 			<div class="user-chat-area request-sent">
-				<h4 class="pad15">TODAY</h4>
+				<h4 class="pad15">Today</h4>
 				<div class="chat-content-text">
 					<div class="pad15">
 						<span>Hi {{seluser}}, I'd like to add you as a contact.</span>
 						<div class="messageview text-right">
-							<span class="time">12:21 AM</span>
+							<span class="time"></span>
 							<span class="un-seen">
 								<i class="nc-icon-mini ui-1_eye-19"></i>
 							</span>
@@ -131,12 +155,12 @@
 					</a>
 				</div>
 				<div class="chat-input" ng-disabled="isblock">
-					<input type="text" placeholder="enter here" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();" ng-disabled="isblock">
+					<input type="text" placeholder="Type your message here" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();" ng-disabled="isblock">
 				</div>
 				<div class="chatbox-icons" ng-disabled="isblock">
-					<a href="" ng-click="sendMessageOnSubmit()" ng-disabled="isblock"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
+					<a href="" ng-disabled="isblock"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
 				</div>
-              	<div class="chatbox-icons"><a href="" ng-disabled="isblock"><i class="nc-icon-mini ui-3_send"></i></a></div>
+              	<div class="chatbox-icons"><a href="" ng-click="sendMessageOnSubmit()" ng-disabled="isblock"><i class="nc-icon-mini ui-3_send"></i></a></div>
 				 
 				<!-- <a href="" class="chatbox-icons" ng-click="sendMessageOnSubmit()">
 					<i class="nc-icon-outline emoticons_satisfied"></i> <i class="nc-icon-mini ui-3_send"></i> 

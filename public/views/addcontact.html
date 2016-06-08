@@ -1,8 +1,10 @@
 <div class="middle-contact" ng-class="{slide:!showmenu,close:showmenu}">
 	<div class="middle-contact-middle add-contact">
 		<div class="add-contact-search">
-			<input type="text" placeholder="Charles Morgan" ng-model="searchContact">
-			<i class="nc-icon-mini ui-1_zoom" ng-click="getcontact()"></i> 
+			<input type="text" placeholder="Search" ng-model="searchContact" ng-keypress="getcontactkeypress($event)">
+			<i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false" ng-click="getcontact()"></i> 
+			<md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="30px" ng-show="isLoading == true"></md-progress-circular>
+			<div class="clear"></div>
 		</div>
 		<div class="add-contact-list">
 			<div class="left-list">
@@ -14,10 +16,11 @@
 								<p class="added-contact-text">{{item.username}}</p>
 								<p>Cincinatti, Oh, United States</p>
 							</div>
-							<div class="added-contact-right" ng-click="sendcontactreq($index)">
+							<div class="added-contact-right" ng-click="sendcontactreq($index)" ng-if="isSeinding == false">
 								<i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i>
-								<i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i>
+								<i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i>							
 							</div>
+							<md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSeinding == true"></md-progress-circular>
 						</a>
 					</li>
 				</ul>

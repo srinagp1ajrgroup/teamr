@@ -1,0 +1,85 @@
+<md-dialog class="search-group sgroup scroll-div">
+			<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h4>Search Group</h4>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+	<div class="add-contact-list group-search">
+		<div class="add-contact-search">
+			<input type="text" placeholder="Enter group name" ng-model="searchvalue" ng-keypress="searchgrouplistkeypress($event)">
+			<a href="" ng-click="searchgrouplist()" ng-if="isLoading == false">
+				<i class="nc-icon-mini ui-1_zoom"></i> 
+			</a>
+			<md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="30px" ng-if="isLoading == true"></md-progress-circular>
+			<div class="clear"></div>
+		</div>		
+		<div class="left-list">
+			<ul>
+				<li class="" role="presentation" ng-repeat="sgroup in groupsearch"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">{{sgroup.name}}</p>
+							<!-- <p>10 members, Admin: Raj</p> -->
+						</div>
+						<div class="added-contact-right" ng-click="joingroup($index)"><i class="nc-icon-mini ui-1_simple-add"></i></div>
+					</a>
+				</li>
+				<!-- <li class="" role="presentation"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">Bachpan Mates</p>
+							<p>10 members, Admin: Raj</p>
+						</div>
+						<div class="added-contact-right"><i class="nc-icon-mini ui-1_check"></i></div>
+					</a>
+				</li>
+				<li class="" role="presentation"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">Bachpan Mates</p>
+							<p>10 members, Admin: Raj</p>
+						</div>
+						<div class="added-contact-right"><i class="nc-icon-mini ui-1_check"></i></div>
+					</a>
+				</li>
+				<li class="" role="presentation"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">Bachpan Mates</p>
+							<p>10 members, Admin: Raj</p>
+						</div>
+						<div class="added-contact-right"><i class="nc-icon-mini ui-1_check"></i></div>
+					</a>
+				</li>
+				<li class="" role="presentation"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">Bachpan Mates</p>
+							<p>10 members, Admin: Raj</p>
+						</div>
+						<div class="added-contact-right"><i class="nc-icon-mini ui-1_check"></i></div>
+					</a>
+				</li>
+				<li class="" role="presentation"> 
+					<a href="">
+						<div class="added-contact-left"> 
+							<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+							<p class="added-contact-text">Bachpan Mates</p>
+							<p>10 members, Admin: Raj</p>
+						</div>
+						<div class="added-contact-right"><i class="nc-icon-mini ui-1_check"></i></div>
+					</a>
+				</li> -->
+			</ul>
+		</div>
+	</div>
+</md-dialog>

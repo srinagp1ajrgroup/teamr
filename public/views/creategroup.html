@@ -1,0 +1,125 @@
+<md-dialog class="create-group cgroup">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Create Group</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="create-group-form">
+				<div class="create-group-list">
+					<div class="create-group-fields">
+						<div class="group-fields">
+							<div class="left">Group Name</div>
+							<div class="right">
+								<md-input-container class="md-block flex-gt-sm" flex-gt-sm="">
+									<label for="">Enter Group Name</label>
+									<input ng-model="groupdetails.groupname" class="ng-pristine ng-valid md-input ng-touched" aria-invalid="false" style="">
+									<div class="md-errors-spacer"></div>
+								</md-input-container>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Group Desc</div>
+							<div class="right">
+								<md-input-container>
+									<label>Description</label>
+									<input ng-model="groupdetails.description">
+								</md-input-container>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Add Category</div>
+							<div class="right">
+								<md-input-container>
+									<md-select ng-model="groupdetails.category">
+									<md-option ng-repeat="state in states"> {{state}} </md-option>
+									</md-select>
+								</md-input-container>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Expiry Date</div>
+								<div class="right">
+									<md-datepicker ng-model="groupdetails.expdate" md-placeholder="Enter date"></md-datepicker>
+								</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Group Type</div>
+							<div class="right">
+								<md-radio-group ng-model="groupdetails.type">
+									<md-radio-button value="unicast" class="md-primary">Unicast </md-radio-button>
+									<md-radio-button value="multicast" class="md-primary"> Multicast </md-radio-button>
+								</md-radio-group>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Allow Invitation</div>
+							<div class="right">
+								<md-checkbox value="Apple" class="md-primary"></md-checkbox> 
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Invitation Type</div>
+							<div class="right">
+								<md-radio-group ng-model="groupdetails.invitation">
+									<md-radio-button value="instant" class="md-primary">Instant Add </md-radio-button>
+									<md-radio-button value="approval" class="md-primary"> By Approval </md-radio-button>
+								</md-radio-group>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Max Limit.</div>
+							<div class="right">
+								<md-input-container class="md-block flex-gt-sm max-limit" flex-gt-sm="">
+									<input ng-model="groupdetails.maxlimit" class="ng-pristine ng-valid md-input ng-touched" type="number" aria-invalid="false" style="">
+									<div class="md-errors-spacer"></div>
+								</md-input-container>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Who Can Join Group</div>
+							<div class="right">
+								<md-radio-group ng-model="groupdetails.joingroup">
+									<md-radio-button value="internet" class="md-primary">Anyone </md-radio-button>
+									<md-radio-button value="organization" class="md-primary"> Organization </md-radio-button>
+								</md-radio-group>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="group-fields">
+							<div class="left">Send Notifications</div>
+							<div class="right">
+								<md-radio-group ng-model="groupdetails.notification">
+									<md-radio-button value="yes" class="md-primary">Yes </md-radio-button>
+									<md-radio-button value="no" class="md-primary"> No </md-radio-button>
+								</md-radio-group>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</md-dialog-content>		
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<div class="buttons">			
+                 <md-button class="teamr-btn" type="button" ng-click="create()">Create Group</md-button>
+                 <md-button class="teamr-btn teamr-cancel" type="button" ng-click="cancel()">Cancel</md-button>
+                 <div class="clear"></div>
+               </div>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

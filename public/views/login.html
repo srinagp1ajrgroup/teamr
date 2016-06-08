@@ -1,15 +1,17 @@
 <div layout="row">
-    <div flex="50">
-        <div class="tr-logo">
-            <img src="content/images/logo.png" alt="teamR logo"/>
-        </div>
+    <div class="login-left">
+        <a ng-click="reload()" href="">
+            <div class="tr-logo">
+                <img src="content/images/logo.png" alt="teamR logo"/>
+            </div>
+        </a>
     </div>
-    <div flex="50">
+    <div class="login-right">
         <div class="user-login-page" ng-if="isForgotpwd == false">
             <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
                 <i class="nc-icon-mini users_single-05"></i>
                 <label for="input_27">Username</label>
-                <input ng-model="credentials.username" class="ng-pristine ng-valid md-input ng-touched" id="input_27" aria-invalid="false" style="" ng-keypress="loginkeypress($event)"><div class="md-errors-spacer"></div>
+                <input id="username" ng-model="credentials.username" class="ng-pristine ng-valid md-input ng-touched" id="input_27" aria-invalid="false" style="" ng-keypress="loginkeypress($event)"><div class="md-errors-spacer"></div>
             </md-input-container>
             <md-input-container class="md-block flex-gt-sm user-input" flex-gt-sm="">
                 <i class="nc-icon-mini ui-1_lock-open"></i>
@@ -19,7 +21,7 @@
             <div class="error-msg" ng-if="loginAlert != '' "><p>{{loginAlert}}</p></div>
             <div class="submit-btn">
                 <md-button class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Primary" ng-click="loginformsubmit()" ng-disabled="isLoading">
-                    <span class="ng-scope">Login</span>
+                    <span class="ng-scope">L<span class="tolowercase">ogin</span></span>
                     <div class="md-ripple-container">
                         <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isLoading == true"></md-progress-circular>
                     </div>

@@ -1,0 +1,138 @@
+<div class="middle-contact padt50" ng-class="{slide:!showmenu,close:showmenu}" ng-init="groupchatinit()">
+	<div class="middle-contact-inner">
+		<div class="middle-contact-top">
+			<div class="middle-contact-left"> 
+				<span class="user-img1">
+				<img src="content/images/01.jpg"></span> 
+				<span>{{selgroup}}</span> 
+			</div>
+			<div class="middle-contact-right">
+				<!-- <div class="active-user"><p>Daniel is typing fdgfhg</p></div> -->
+				<div class="group-chat">
+					<ul>
+	            		<li class="group-user-online" ng-repeat="member in groupmembers"><a href=""><img src="content/images/11.jpg" alt="homepageimg1"></a><md-tooltip md-direction="bottom"> {{member.USERNAME}} </md-tooltip></li>
+	            	</ul>
+				</div>
+			</div>
+			<div class="call-icons add-group">
+				<ul>
+					<li><a href="" ng-click="addmemberstogroup($event)"><i class="nc-icon-mini ui-1_simple-add"></i></a></li>
+					<li><a href="" class="phn-icon-bg"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+					<li><a href="" class="video-icon-bg"><i class="nc-icon-mini media-1_video-67"></i></a></li>
+					<li>
+						<md-menu>
+							<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+	                      		<md-icon md-menu-origin> <a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></md-icon>
+	                    	</md-button>
+							<md-menu-content class="menu-dropdown menu-options">
+								<!-- <md-menu-item>
+									<md-button>
+										<div layout="row">
+											<p flex>Group Members</p>
+										</div>
+									</md-button>
+								</md-menu-item> -->
+								<md-menu-item>
+									<md-button ng-click="delmemberstogroup($event)">
+										<div layout="row">
+											<p flex>Delete Members</p>
+										</div>
+									</md-button>
+								</md-menu-item>
+								<md-menu-item>
+									<md-button ng-click="exitgroup($event)">
+										<div layout="row">
+											<p flex>Exit Group</p>
+										</div>
+									</md-button>
+								</md-menu-item>
+								<!-- <md-menu-item>
+									<md-button>
+										<div layout="row">
+											<p flex>Delete Group</p>
+										</div>
+									</md-button>
+								</md-menu-item> -->
+							</md-menu-content>
+						</md-menu>
+	                </li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="middle-contact-middle" mb-scrollbar="scrollbar('vertical', true)">
+			<div class="chat-area">
+				<div ng-class="chat.class" ng-repeat="chat in groupchats">
+					<div class="chat-icon-img"><span><img src="../content/images/01.jpg"></span></div>
+					<div class="chat-content">
+						<div class="chat-content-text">
+							<div class="chat-username">
+								<span>{{chat.USERNAME}}</span>
+								<div class="messageview text-right">
+									<!-- <span class="time">{{chat.time}}</span> -->
+									<span ng-show="chat.sent == true && chat.delivered == false" class="un-seen">
+										<i class="nc-icon-mini ui-1_eye-19"></i>
+									</span>
+									<span class="seen" ng-if="chat.delivered == true">
+										<i class="nc-icon-mini ui-1_eye-19"></i>
+									</span>
+								</div> 
+							</div>
+							<p>{{chat.MESSAGE}}</p>
+							<!-- <div class="video-download" ng-if="chat.filetransfer == true"> 
+								<ul class="video-img">
+									<li ng-if="chat.audio == true"><a href=""><img src="content/images/mp3.png" alt="mp3"></a></li>
+									<li ng-if="chat.video == true">
+										<div class="send-images"> 
+											<div class="chat-data"> <img src="content/images/nature1.jpg" alt=""/>
+												<div class="video-icon"> 
+													<a href="" class="button" ng-click="playvideo(chat.message)"><i class="nc-icon-mini arrows-1_triangle-right-17"></i></a> 
+												</div>
+											</div>
+										</div>
+									</li>
+									<li ng-if="chat.media == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
+								</ul>
+								<div class="progress-status">
+									<a href="" class="download-btn" ng-click="download(chat.message)">
+										<i class="nc-icon-mini arrows-2_hit-down"></i>
+									</a>
+								</div>
+								<div class="clear"></div>
+								<div class="loading-status">
+									<p>{{chat.filename}}</p>
+								</div>
+							</div> -->
+						</div>
+					</div>
+				</div>	
+				<!-- <div class="buttons">
+                  <md-button class="teamr-btn" type="button">Join Group</md-button>
+                  <div class="clear"></div>
+                </div>			 -->
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="middle-contact-bottom">
+			<div class="bottom-fix" ng-if="(selgroupobj.TYPE == 'unicast' && selgroupobj.ADMIN == true) || selgroupobj.TYPE == 'multicast'">
+				<div class="attach-file">
+					<a href="">
+						<i class="nc-icon-mini ui-1_attach-86"></i>
+					</a>
+				</div>
+				<div class="chat-input">
+					<input id="gMessage" type="text" placeholder="enter here" ng-keypress="sendgroupmessage($event)" ng-model="message">
+				</div>
+				<div class="chatbox-icons">
+					<a href="" ><i class="nc-icon-outline emoticons_satisfied"></i> </a>
+				</div>
+              	<div class="chatbox-icons"><a href="" ng-click="sendgroupMessageOnSubmit()"><i class="nc-icon-mini ui-3_send"></i></a></div>
+
+				<input type="file" id="choose" multiple=true class="file-loading" style="display:none;">
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

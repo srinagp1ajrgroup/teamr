@@ -1,12 +1,8 @@
 
-var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial']);
+var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'vjs.video']);
 
     xenApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider)
     {
-        // $locationProvider.html5Mode({
-        //     enabled: true,
-        //     requireBase: false
-        // });
         $urlRouterProvider.otherwise("/login");
 
         $stateProvider.state('login',
@@ -22,7 +18,8 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
         })
         .state('home.chat', {
             url: '/chat',
-            templateUrl: '../views/chat.html'
+            templateUrl: '../views/chat.html',
+            controller: 'chatController'
         })
         .state('home.callphones', {
             url: '/callphones',
@@ -30,8 +27,9 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
         })
         .state('home.groupchat', {
             url: '/groupchat',
-            templateUrl: '../views/groupchat.html'
-        })
+            templateUrl: '../views/groupchat.html',
+            controller:'groupController'
+        })  
         .state('home.broadcast', {
             url: '/broadcast',
             templateUrl: '../views/broadcast.html'
@@ -45,6 +43,11 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
             url: '/chatview:?user',
             templateUrl: '../views/chatview.html',
             controller: 'chatviewController'
+        })
+        .state('home.groupchat.groupchatview', {
+            url: '/chatview:?group',
+            templateUrl: '../views/groupchatview.html',
+            controller: 'groupchatController'
         })
     })
 

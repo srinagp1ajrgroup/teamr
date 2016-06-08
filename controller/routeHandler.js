@@ -41,9 +41,15 @@ module.exports 		= function(app, utils, scocu, redis){
 
 	app.post('/logout', function(req, res){
 		utils.getUserData(req.body.username, function(err,doc){
-			if(err)
-				res.send({success: false, data: err.body});
-			else{
+			if(err || doc == null){
+				if(err)
+					res.send({success: false, data: err.body});
+				else
+					res.send({success: false, data: "No Token"});
+			}
+			else
+			{
+
 				scocu.senddata('app_users/logout', 'POST',  null, doc.token, function(err,data){
 					if(err)
 						res.send({success: false, data: err.body});
@@ -201,69 +207,61 @@ module.exports 		= function(app, utils, scocu, redis){
 				res.send({status:"error"},{data:err})
 			}
 			else{
-				// var groupreq = {"name":data.groupname, "type":data.grouptype, "expiredate":data.expirydate, 
-				// "notification":data.notification, "category":data.category, "joingroup":data.joingroup, "invitation":data.invitation};
-				// var obj = {"formName":"group", "data":groupreq};
-				var groupreq = {};
+				var groupreq = {"name":req.body.details.groupname, 
+								"description":req.body.details.description, 
+								"category":req.body.details.category, 
+								"expire_date":req.body.details.expdate, 
+								"type":req.body.details.type, 								
+								"invitation":req.body.details.invitation,
+								"notification": req.body.details.notification, 
+								"joingroup":req.body.details.joingroup,
+								"max_limit":req.body.details.maxlimit
+								};
 
 				var group = {group:groupreq};
 
-				scocu.senddata('', 'POST', group, doc.token, function(err, result){
+				scocu.senddata('comserv/groups', 'POST', group, doc.token, function(err, result){
 					if(err){
 						res.send({success:false, data:err.body})
 					}
 					else{
-						res.send({success:true, data:result})
+						var resp = JSON.parse(result);
+						if(resp.status == 'success'){
+							var list = [{user_id:doc.user_id, admin:true, exit:false, is_delete:false}];
+							var groupuser = {data:list}
+							scocu.senddata('comserv/groups/'+resp.data.id+'/users', 'POST', groupuser, doc.token, function(err, result){
+								var groupobj = {"NAME":resp.data.name, "GROUP_ID":resp.data.id, "ADMIN":true, "TYPE":resp.data.type};
+								res.send({success:true, data:JSON.stringify(groupobj)});
+							});
+						}
+						else{
+							res.send({success:false, data:result});
+						}
+						
 					}
 				})
-
-				// scocu.createRecord("groups", obj, doc.token, function(err, resp){
-				// 	if(err){
-				// 		res.send(err, resp);
-				// 	}
-				// 	else{
-				// 		var rsp = JSON.parse(resp);
-				// 		if(rsp.status == "success"){
-				// 			var useringroup = {"isadmin":true, "user_id":doc.user_id, "group_id":rsp.data.id};
-				// 			var userobj = {"formName":"usersingroup", "data":useringroup};
-				// 			scocu.createRecord("usersingroups", userobj, doc.token, function(err, resp){
-				// 				res.send(err, resp);
-				// 			});
-				// 		}
-				// 		else{
-				// 			res.send(err, resp);
-				// 		}
-				// 	}
-				// });
 			}
 		});
 	});
 
-	app.post("/exitGroup", function(req, res){
-		var data = req.body;
-		utils.getUserData(data.username, function(err, doc){
+	app.post("/searchgroup", function(req, res){
+		utils.getUserData(req.body.username, function(err, doc){
 			if(err || doc == null){
 				console.log('err @ getToken : '+err);
 				err = "Invalid ID";
-				res.send({status:"error"},{data:err})
+				res.send({success:false, data:err})
 			}
 			else{
-				var filter = {
-					"fields": {
-						"only": []
-					},
-					"filters":{
-						"and":[{"and": [{"field": "user_id","cond": "eq","val": doc.user_id}, 
-						{"field": "group_id","cond": "eq","val": data.groupid}]}]
-					}
-				}
-				scocu.search('usersingroups', filter, doc.token, function(err, resp){
-					var rsp = JSON.parse(resp);
-					if(rsp.status == "success"){
-						var obj = {"formName":"usersingroup", "data":{isexit: true}};
-						scocu.update("usersingroups", obj, rsp.data[0].id, doc.token, function(err, rsp){
-							res.send(err, rsp);	
-						});
+				scocu.senddata("comserv/groups/"+req.body.searchname+"/search", "GET", null, doc.token, function(err, result){
+					if(err)
+						res.send({success: false, data: err.body});
+					else{
+						var resp = JSON.parse(result);
+						if(resp.data.length > 0 && resp.data[0].invitation == 'instant'){
+							res.send({success: true, list:resp.data});
+						}else{
+							res.send({success: false});
+						}							
 					}
 				});
 			}
@@ -305,55 +303,55 @@ module.exports 		= function(app, utils, scocu, redis){
 		});
 	});
 
-	app.post('/getJoinedgroups', function(req, res){
+	app.post('/getgroupmembers', function(req, res){
 		var data = req.body;
 		utils.getUserData(req.body.username, function(err,doc){
-			if(err)
-				res.send({'status':'error'});
+			if(err || doc == null){
+				console.log('err @ getToken : '+err);
+				err = "Invalid ID";
+				res.send({success:false, data:err})
+			}
 			else{
-				var filter = {
-				    "fields": {
-				        "only": [
-				            "name", "description", "id", "type"
-				        ]
-				    },
-				    "filter": 
-				          { "related": {"usersingroup" :[{"field": "user_id","cond": "eq","val": doc.user_id} ] } }
-				}
+				scocu.senddata("comserv/groups/"+req.body.groupid+"/users", 'GET', null, doc.token, function(err, result){
+					if(err){
+						res.send({success:false, data:err.body})
+					}
+					else{
+						var resp = JSON.parse(result);
+						if(resp.status == "success"){
+							var filter = resp.data.filter(function(item){
+								return (item.EXIT == false && item.IS_DELETE == false)
+							});
 
-				scocu.search('groups', filter, doc.token, function(err, resp){
-					var rsp = JSON.parse(resp);
-					if(rsp.status == "success"){
-						res.status(200).send(resp);						
+							res.send({success:true, data:filter})
+						}
+						else
+							res.send({success:true, data:result})
 					}
 				});
 			}
 		})
 	});
 
-	app.post('/getGroupMembers', function(req, res){
+	app.post('/grouphistory', function(req, res){
 		var data = req.body;
-		utils.getUserData(data.username, function(err, doc){
+		utils.getUserData(req.body.username, function(err,doc){
 			if(err || doc == null){
 				console.log('err @ getToken : '+err);
 				err = "Invalid ID";
-				res.send({status:"error"},{data:err})
+				res.send({success:false, data:err})
 			}
 			else{
-				var filter = {
-					"fields": {
-						"only": []
-					},
-					"filters":{
-						"and":{"field": "group_id","cond": "eq","val": data.groupId}
+				scocu.senddata('comserv/'+data.group_id+'/groupmessages?limit=2&offset=0', 'GET', null, doc.token, function(err, result){
+					if(err){
+						res.send({success:false, data:err.body})
 					}
-				}
-
-				scocu.search('usersingroups', filter, doc.token, function(err, resp){
-					res.send(err, resp)
+					else{
+						res.send({success:true, data:result})
+					}
 				});
 			}
-		});
+		})
 	});
 
 	app.post('/makeAdmin', function(req, res){

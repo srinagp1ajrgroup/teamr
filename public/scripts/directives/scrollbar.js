@@ -85,7 +85,7 @@ xenApp.directive('mbScrollbar', function() {
             scrollbar.css( config.position , config.scrollbar.margin +'px' );
             scrollbarContainer.css( config.rPosition , '0' );
             scrollbarContainer.css( config.position , '0' );
-            scrollbarContainer.css( config.dimension , '100%' );
+            // scrollbarContainer.css( config.dimension , '100%' );
             scrollbarContainer.css( config.rDimension , config.scrollbarContainer.width +'px' );
 
             // Reusable scroll function

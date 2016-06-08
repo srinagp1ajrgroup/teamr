@@ -55,8 +55,9 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 		socket.on('subscribe',function (data, callback){
 			if (data.username != null && data.devType != null && data.username != undefined && data.devType != undefined) {
 				console.log('subscribe: '+data.devType+'_'+data.username);
-				setSocketId(data.devType+'_'+data.username,socket.id);
-				socket.username = data.devType+'_'+data.username,socket.id;
+				setSocketId(data.devType+'_'+data.username, socket.id);
+				io.sockets.sockets[data.devType+'_'+data.username] = socket.id;
+				socket.username = data.devType+'_'+data.username;
 				/*adding all users to main room*/
 				socket.join("allXenChatUsers");
 				callback({success:true, status:"success"})
@@ -75,7 +76,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 				}
 				else{
 					var presence = {"user" : {"user_id" : doc.user_id, "presence" : data.status}}					
-					scocu.senddata("comservusers/presence", "POST", presence, doc.token, function(err, result){
+					scocu.senddata("comserv/users/"+doc.user_id+"/presence", "POST", presence, doc.token, function(err, result){
 						if(err){
 							callback({success:false, data:err.body})
 						}
@@ -207,11 +208,11 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 							callback({success:false, data:err.body})
 						}
 						else{
-							var resp = {recid:data.recid, WAITING_APPROVAL:false};
-							emitMsg(data.toname, resp, "acceptcontactreq", function(flag){
-								console.log( ' is available ? : '+flag);
-							});
-							callback({success:true, data:resp});
+								var resp = {recid:data.recid, WAITING_APPROVAL:false, status:data.status};
+								emitMsg(data.toname, resp, "acceptcontactreq", function(flag){
+									console.log( ' is available ? : '+flag);
+								});
+								callback({success:true, data:resp});
 						}
 					});
 				}
@@ -239,7 +240,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 						"delivered":data.delivered,
 						"read":data.read,
 						"audio":data.audio,
-						"`transfer":data.file_transfer,
+						"file_transfer":data.file_transfer,
 						"timestamp":data.timestamp,
 						"message_id":data.message_id,
 						"file_name":data.file_name
@@ -265,7 +266,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 		});
 
 		socket.on('chatack',function (data, callback){
-			utils.getUserData(data.fromuser, function(err, doc)
+			utils.getUserData(data.touser, function(err, doc)
 			{
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
@@ -273,7 +274,7 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 					callback({success:false, data:err.body})
 				}
 				else{
-					getSocketId(data.devType+'_'+data.touser, function(sockid)
+					getSocketId(data.devType+'_'+data.fromuser, function(sockid)
 					{
 						if(sockid)
 							emitToUser("chatack", data, sockid);
@@ -310,131 +311,293 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 			});
 		})
 
-		socket.on('addMembers',function (data, callback){
-			utils.getUserData(data.username, function(err, doc){
-				
+		socket.on('getjoinedgroups', function(data, callback){
+			utils.getUserData(data.username, function(err,doc){
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
 					err = "Invalid ID";
-					callback({status:"error"})
+					callback({success:false, data:err})
 				}
-
 				else{
-					var filter = {
-						"fields": {
-							"only": []
-						},
-						"filters":{
-							"and":[{"and": [{"field": "user_id","cond": "eq","val": doc.user_id}, 
-							{"field": "group_id","cond": "eq","val": data.groupid}]}]
+					scocu.senddata("comserv/groups/users/"+doc.user_id, 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
 						}
+						else{
+							var resp = JSON.parse(result)
+							if(resp.status == "success"){
+								var filter = resp.data.filter(function(item){
+									return (item.EXIT == false && item.IS_DELETE == false)
+								});
+
+								for(var i =0; i < filter.length; i++){
+									socket.join(resp.data[i].GROUP_ID);
+								}
+							}
+							callback({success:true, data:filter})
+						}
+					});
+				}
+			})
+		});
+
+		socket.on('subscribegroups', function(data, callback){
+			utils.getUserData(data.username, function(err,doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					res.send({success:false, data:err})
+				}
+				else{
+					for(var i =0; i < data.list.length; i++){
+						socket.join(data.list[i].GROUP_ID);
 					}
-					scocu.search('usersingroups', filter, doc.token, function(err, resp){
-						var rsp = JSON.parse(resp);
-						if(rsp.status == "success"){
-							if(rsp.data[0].isadmin == "True"){
-								for(var i = 0; i < data.mList.length; i++){
-									var useringroup = {"isadmin":false, "user_id":data.mList[i], "group_id":res.data.id};
-									var userobj = {"formName":"usersingroup", "data":useringroup};
-									scocu.createRecord("usersingroups", userobj, doc.token, function(err, resp){
-										callback(resp);
+				}
+			})
+		})
+
+		socket.on('addmemberstogroup',function (data, callback){
+			utils.getUserData(data.username, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({success:false, data:err})
+				}
+				else{
+					scocu.senddata("comserv/groups/"+data.groupid+"/users", 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
+						}
+						else{
+							var resp = JSON.parse(result);
+							var admin = false;
+							if(resp.status == "success"){
+								console.log(resp.data);
+								for(var i = 0; i < resp.data.length; i++){
+									if(resp.data[i].USERNAME == data.username &&  resp.data[i].ADMIN == true){
+										admin = true;
+										break;
+									}
+								}
+								if(admin == true){
+									var groupobj = {data:data.list}
+									scocu.senddata('comserv/groups/'+data.groupid+'/users', 'POST', groupobj, doc.token, function(err, result1){
+										if(err){
+											callback({success:false, data:err.body})
+										}
+										else{
+											var resp1 = JSON.parse(result1);
+											if(resp1.status == 'success'){
+												callback({success:true, data:result1});	
+												socket.broadcast.to(data.groupid).emit('addmemberstogroup', data);
+												var groupobj = {GROUP_ID:data.groupid, NAME:data.groupname}
+												for (var i = 0; i < data.list.length; i++) {
+													emitMsg(data.list[i].username, groupobj, 'updategroup',function(flag){
+														console.log( ' is available ? : '+flag);
+													});										
+													var sockid = io.sockets.sockets[data.devType+'_'+data.list[i].username];
+													io.sockets.connected[sockid].join(data.groupid);
+												}	
+											}else{												
+												callback({success:false, data:result1});	
+											}
+										}
+									});
+								}
+								else
+									callback({success:false, data:"You Dont have enough permissinos"})
+							}
+							else{
+								callback({success:false, data:result})
+							}
+						}
+					});
+				}
+			});
+		});
+
+		socket.on('instantadd', function(data, callback){
+			utils.getUserData(data.username, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({success:false, data:err})
+				}
+				else{
+					scocu.senddata("comserv/groups/"+data.groupid, 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
+						}
+						else{
+							var resp = JSON.parse(result);
+							if(resp.status == "success"){
+								if(resp.data.invitation == 'instant'){
+									var groupobj = {data:data.list}
+									scocu.senddata('comserv/groups/'+data.groupid+'/users', 'POST', groupobj, doc.token, function(err, result1){
+										if(err){
+											callback({success:false, data:err.body})
+										}
+										else{
+											var resp1 = JSON.parse(result1);
+											if(resp1.status == 'success'){
+												callback({success:true, data:result1});	
+												socket.broadcast.to(data.groupid).emit('addmemberstogroup', data);
+												for (var i = 0; i < data.list.length; i++) {
+													var groupobj = {GROUP_ID:data.groupid, NAME:data.groupname}
+													emitMsg(data.list[i].username, groupobj, 'updategroup',function(flag){
+														console.log( ' is available ? : '+flag);
+													});
+													socket.join(data.groupid);
+												}
+											}else{												
+												callback({success:false, data:result1});	
+											}
+										}
 									});
 								}
 							}
-						}else{
-							callback({status:"error"});
+							else{
+								callback({success:false, data:result})
+							}
 						}
 					});
 				}
 			});
 		});
 
-		socket.on('groupChat',function (data, callback){
+		socket.on('delmembersfromgroup',function (data, callback){
 			utils.getUserData(data.username, function(err, doc){
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
 					err = "Invalid ID";
-					callback({status:"error"})
+					callback({success:false, data:err})
 				}
 				else{
-					var filter = {
-						"fields": {
-							"only": []
-						},
-						"filters":{
-							"and":[{"and": [{"field": "user_id","cond": "eq","val": doc.user_id}, 
-							{"field": "group_id","cond": "eq","val": data.groupid}]}]
+					scocu.senddata("comserv/groups/"+data.groupid+"/users", 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
 						}
-					}
-					scocu.search('usersingroups', filter, doc.token, function(err, resp){
-						var rsp = JSON.parse(resp);
-						if(rsp.status == "success"){
-							var groupMsgObj = {  "message":data.message, 
-									"from_user_id":data.from_user_id, 
-									"group_id":data.groupid
-							};
-							emitGroupMsg(data.groupId, groupMsgObj, "groupChat");
-							var obj = {"formName":"groupmsg", "data":groupMsgObj};
-
-							scocu.createRecord("groupmsgs", obj, doc.token, function(err, resp){
-								var res = JSON.parse(resp);
-								if(res.status == "success")
-								{
+						else{
+							var resp = JSON.parse(result);
+							var admin = false;
+							if(resp.status == "success"){
+								console.log(resp.data);
+								for(var i = 0; i < resp.data.length; i++){
+									if(resp.data[i].USERNAME == data.username &&  resp.data[i].ADMIN == true){
+										admin = true;
+										break;
+									}
 								}
-							});
-							callback(data);
-						}else{
-							callback({status:"error"});
+								if(admin == true){
+									updategroupmembers(data, doc.token, function(result1){
+										if(result1.success == true){
+											socket.broadcast.to(data.groupid).emit('delmembersfromgroup', data);
+											for(var i = 0; i < data.list.length; i++){
+												var sockid = io.sockets.sockets[data.devType+'_'+data.list[i].USERNAME];
+												// io.sockets.connected[sockid].emit('delmembersfromgroup', data)
+												io.sockets.connected[sockid].leave(data.groupid);
+											}											
+											callback({success:true, data:result1})											
+										}
+										else{
+											callback({success:false, data:result1});	
+										}
+									});
+								}
+							}
 						}
 					});
 				}
 			});
-			
 		});
 
-		socket.on('unicastGroupChat',function (data, callback){
+		socket.on('exitgroup',function (data, callback){
 			utils.getUserData(data.username, function(err, doc){
-				if(err || doc == null ){
+				if(err || doc == null){
 					console.log('err @ getToken : '+err);
 					err = "Invalid ID";
-					callback({status:"error"})
+					callback({success:false, data:err})
 				}
 				else{
-					var filter = {
-						"fields": {
-							"only": []
-						},
-						"filters":{
-							"and":[{"and": [{"field": "user_id","cond": "eq","val": doc.user_id}, 
-							{"field": "group_id","cond": "eq","val": data.groupid},
-							{"field": "isadmin","cond": "eq","val": "True"}]}]
+					scocu.senddata("comserv/groups/"+data.groupid+"/users", 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
 						}
-					}
-					scocu.search('usersingroups', filter, doc.token, function(err, resp){
-						var rsp = JSON.parse(resp);
-						if(rsp.status == "success" && rsp.data.length > 0)
-						{
-							var groupMsgObj = {  "message":data.message, 
-									"from_user_id":data.from_user_id, 
-									"group_id":data.groupid
-							};
-							emitGroupMsg(data.groupId, groupMsgObj, "unicastGroupChat");
-							var obj = {"formName":"groupmsg", "data":groupMsgObj};
-
-							scocu.createRecord("groupmsgs", obj, doc.token, function(err, resp){
-								var res = JSON.parse(resp);
-								if(res.status == "success")
-								{
+						else{
+							var resp = JSON.parse(result);
+							var admin = false;
+							var anotheradmin = false;
+							if(resp.status == "success"){
+								console.log(resp.data);
+								for(var i = 0; i < resp.data.length; i++){
+									if(resp.data[i].USERNAME == data.username && resp.data[i].ADMIN == true){
+										admin = true;
+									}
+									else if(resp.data[i].ADMIN == true){
+										anotheradmin = true;
+										break;
+									}
 								}
-							});
-							callback(data);
-						}else{
-							callback({status:"error"});
+								if(anotheradmin == true || resp.data.length == 1){
+									updategroupmembers(data, doc.token, function(result1){
+										callback({success:true, data:result1})
+										socket.broadcast.to(data.groupid).emit('exitgroup', data);	
+									});
+									
+								}
+								else
+									callback({success:false, data:"make another person admin to the group"})
+							}
+							else{
+								callback({success:false, data:result})
+							}
 						}
-					});
+					});		
 				}
 			});
-			
+		});
+
+		socket.on('groupchat',function (data, callback){
+			utils.getUserData(data.USERNAME, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({success:false, data:err})
+				}
+				else{
+
+					scocu.senddata("comserv/groups/"+data.group_id, 'GET', null, doc.token, function(err, result){
+						if(err){
+							callback({success:false, data:err.body})
+						}
+						else{
+							var resp = JSON.parse(result);
+							if(resp.status == 'success'){
+								var groupmsg = {"from_user_id":doc.user_id, "username":data.USERNAME, "group_id":data.group_id, "type":data.type, "media":data.media, 
+								"video":data.video, "audio":data.audio, "file_transfer":data.file_transfer, "message":data.MESSAGE, "message_id":data.message_id, 
+								"file_name":data.file_name, "file_ext":data.file_ext};
+
+								if(resp.data.type == 'multicast'){
+									var groupMsgObj = {"MESSAGE":data.message, "USERNAME":data.USERNAME, "group_id":data.group_id, "time":data.time};
+									var groupmessage = {group_message:groupmsg}
+									socket.broadcast.to(data.group_id).emit('groupchat', groupMsgObj)
+									scocu.senddata('comserv/'+data.group_id+'/groupmessages', 'POST', groupmessage, doc.token, function(err, result1){
+										console.log(result1);
+									})
+								}
+								else if(resp.data.type == 'unicast' && resp.data.created_by == data.USERNAME){
+									var groupMsgObj = {"MESSAGE":data.message, "USERNAME":data.USERNAME, "group_id":data.group_id, "time":data.time};
+									var groupmessage = {group_message:groupmsg}
+									socket.broadcast.to(data.group_id).emit('groupchat', groupMsgObj)
+									scocu.senddata('comserv/'+data.group_id+'/groupmessages', 'POST', groupmessage, doc.token, function(err, result1){
+										console.log(result1);
+									})
+								}								
+							}
+						}
+					});					
+				}
+			});
 		});
 	
 		socket.on('getOfflineMsgs',function (data,callback){	
@@ -452,5 +615,16 @@ module.exports = function(io, app, utils ,scocu, redis, ioEmitter)
 	       	socket.disconnect();
 	    });
 
+	    function updategroupmembers(data, token, callback){
+    		var groupuser = {data:data.list}
+    		scocu.senddata('comserv/groups/'+data.groupid+'/users', 'PUT', groupuser, token, function(err, result){
+    			if(err){
+					callback({success:false, data:err.body})
+				}
+				else{			
+					callback({success:true, data:result});
+				}
+    		});
+	    }
 	});
 }
