@@ -1,3 +1,4 @@
+"use strict";
 var express         = require('express')
 var expressSession  = require('express-session');
 var bodyParser      = require("body-parser");
@@ -6,10 +7,30 @@ var mongoose 		= require('mongoose');
 var routes			= require('./config/routes');
 var mongo           = require('./config/mongo');
 var globals			= require('./config/global');
+var requestIp 		= require('request-ip');
 
+var http 			= require('http');
 
 var app = express();
-app.use(express.static(__dirname + '/public'));
+
+var ipMiddleware = function(req, res, next) {
+    var clientIp = requestIp.getClientIp(req); 
+    next();
+};
+
+var httpServer = http.createServer(app);
+httpServer.listen(80);
+
+function ensureSecure(req, res, next){
+  if(req.secure){
+    return next();
+  };
+  res.redirect('https://'+req.host+':' + 443 + req.url);
+};
+
+app.all('*', ensureSecure);
+
+app.use(requestIp.mw())
 
 var session = expressSession({
 	secret: globals.secret,
@@ -19,6 +40,7 @@ var session = expressSession({
 })
 
 app.use(session);
+app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());

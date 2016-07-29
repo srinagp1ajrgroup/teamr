@@ -1,0 +1,468 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Green color code starts */
+.copy-right, .user-login-page md-input-container.md-input-focused label:not(.md-no-float), 
+.user-login-page md-input-container.md-input-has-placeholder label:not(.md-no-float), 
+.user-login-page md-input-container.md-input-has-value label:not(.md-no-float), .copy-right, 
+.top-right .md-menu i, .side-bar-search input:focus+a i, .chatbox-icons a i:hover, .attach-file a i:hover, .add-contact-search input:focus+i, 
+.group-fields md-input-container.md-input-focused label:not(.md-no-float), .group-fields md-input-container.md-input-has-placeholder label:not(.md-no-float), 
+.group-fields md-input-container.md-input-has-value label:not(.md-no-float) {
+	color: #7b7de5 !important;
+}
+
+
+.tr-logo, .menu-dropdown .md-button:not([disabled]):hover,  
+.call-icons .phn-icon-bg, .chatlist-right i:hover, .chatlist-right i.active, .chatlist-right i:focus, 
+.chatlist-right span:hover, .chatlist-right span.active, .chatlist-right span:focus, .badge, .ngscroll-scrollbar, .added-contact-right i, 
+.send-request-btn a, .send-request-btn1 i, .group-fields md-radio-button:not([disabled]).md-primary .md-on, 
+.group-fields md-checkbox:not([disabled]).md-primary.md-checked .md-icon, .teamr-btn.md-button.md-ink-ripple, 
+body .md-default-theme .md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator, 
+.md-calendar-date.md-calendar-selected-date .md-calendar-date-selection-indicator, 
+.md-default-theme .md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator, 
+.md-calendar-date.md-focus.md-calendar-selected-date .md-calendar-date-selection-indicator, .audiojs .progress, .submit-btn button, .password-reset-btn .btn-submit {
+	background: #7b7de5 !important;
+}
+.top-middle ul li a span:hover, .top-middle ul li a span.active, .top-middle ul li a span:focus{
+	background: #f0f1fc !important;
+	color:#7b7de5;
+	}
+
+.call-icons .phn-icon-bg, .chatlist-right i:hover, .chatlist-right i.active, .chatlist-right i:focus, 
+.chatlist-right span:hover, .chatlist-right span.active, .chatlist-right span:focus, .bottom-fix, .send-request-btn a, .send-request-btn1, 
+.middle-contact-middle.add-group .cont-add:hover, body .md-default-theme .md-calendar-date.md-calendar-date-today .md-calendar-date-selection-indicator, 
+.md-calendar-date.md-calendar-date-today .md-calendar-date-selection-indicator, .user-login-page md-input-container .md-input.ng-invalid.ng-dirty, 
+md-input-container.md-input-focused .md-input {
+	border-color: #7b7de5 !important;
+}
+
+.middle-contact-middle.add-group .add-contact-search, md-select.md-default-theme:not([disabled]):focus .md-select-value, 
+md-select:not([disabled]):focus .md-select-value, .create-group .md-datepicker-input-container.md-datepicker-focused, .add-contact-search {
+	border-bottom: 1px solid #7b7de5;
+}
+/* Green color code ends */
+
+.sidenav .nav-list li.active, .side-chat-box {
+	background: #51576d;
+}
+header, .top-left{
+	background: #7b7de5;
+	} 
+.hide_panel .nav-list li a:hover span, md-tooltip .md-content, .sidenav .nav-list li {
+	background: #3b404f;
+}
+.sidenav-inner{
+	background: #3b404f;
+	}
+.user-login-page, .user-login-page md-input-container.md-default-theme label, md-input-container label,
+ md-input-container.md-default-theme .md-placeholder, md-input-container .md-placeholder, 
+ .user-login-page md-input-container.md-default-theme .md-input, md-input-container .md-input, md-menu-item > .md-button p, 
+ .top-middle ul li:hover a, .top-middle a.md-button.md-default-theme:hover:not([disabled]), .top-middle a.md-button:hover:not([disabled]), 
+ .top-middle .md-button.md-default-theme:hover:not([disabled]), 
+ .top-middle .md-button:hover:not([disabled]), .call-icons .phn-icon-bg, .call-icons .video-icon-bg, .chatlist-right i, .chatlist-right span, .chat-user i, 
+ .hide_panel .nav-list li a:hover span, .added-contact-right i, .send-request-btn a, .send-request-btn1 i, .content textarea, .added-contact-ok i, 
+ .send-request-btn1.request-accept .ui-1_check, .send-request-accept-button button, .welcome-page-arrow i, 
+ .welcome-call-icons li:nth-child(2) a:hover i, .welcome-call-icons li:nth-child(3) a:hover i, .welcome-call-icons li:nth-child(1) a:hover i, 
+ .welcome-hover-text span, .audio-call-bottom ul li:nth-child(3) a:hover i, .audio-call-bottom ul li:nth-child(1) a:hover i, .audio-call-bottom ul li:nth-child(4) a:hover i, 
+ .audio-call-bottom ul li:nth-child(5) a:hover i, .audio-call-bottom ul li:nth-child(2) a:hover i, .audio-call-bottom ul li.active a i, 
+ .audio-call-icons ul li:nth-child(1) a:hover i, .audio-call-icons li:nth-child(2) a:hover i, .vedio-icon-option ul li:nth-child(5) i, 
+ .vedio-icon-option ul li:nth-child(6) i, .cancel-btn, .remove-btn, .content p, .delete-contact, .delete-contact:hover, .create-grp-btn button, .video-time,
+ .header-profile h4, .group-notifications p, .group-admin p, .users-details-list p button:hover, .teamr-btn.md-button.md-ink-ripple, .progressbar, 
+ .progressbarclose:hover, .top-middle ul li a, .sidenav .nav-list li.active a, .sidenav .nav-list li:hover a, .chatlist span {
+	color: #fff !important;
+}
+body, html, html.md-default-theme, html, body.md-default-theme, body, .user-img1, .middle-contact.close .middle-contact-inner, 
+.middle-contact.slide .middle-contact-inner, .chat-icon-img span, .middle-contact-bottom, .bottom-fix, .send-request-popup, 
+.send-request-accept-button .ui-1_check, .send-request-accept-button .ui-1_simple-remove, .middle-contact-middle.add-group, .video-popup, 
+.video-load-icon, .add-contact, md-dialog-actions, .group-notifications input[type="checkbox"] + label::before, .video-js .vjs-load-progress, 
+.send-request {
+	background-color: #fff;
+}
+menu-dropdown a.md-button.md-default-theme:hover:not([disabled]), .menu-dropdown a.md-button:hover:not([disabled]), 
+.menu-dropdown .md-button.md-default-theme:hover:not([disabled]), 
+.content textarea, .send-request-accept-button button, .welcome-call-icons li:nth-child(3) a:hover i, .welcome-call-icons li:nth-child(1) a:hover i, 
+.audio-call-bottom ul li:nth-child(3) a:hover i, .audio-call-bottom ul li:nth-child(1) a:hover i, .audio-call-bottom ul li:nth-child(4) a:hover i, 
+.audio-call-bottom ul li:nth-child(5) a:hover i, .group-caller, .windows_max_panel .group-caller, 
+.audio-caller-pic, .vedio-icon-option ul li:nth-child(5) i, .remove-btn, .content p, .delete-contact:hover, 
+.create-grp-btn button, .video-optionright li span, .video-optionright .volume-active, .video-running, .create-group-btn button, 
+.create-group-btn .md-button:not([disabled]):hover, md-dialog md-dialog-actions .md-button, .video-js .vjs-play-progress, .video-js .vjs-volume-level {
+	background-color: #9698e3 !important;
+}
+.call-icons .video-icon-bg, .welcome-call-icons li:nth-child(3) a:hover i, .welcome-call-icons li:nth-child(1) a:hover i, 
+.audio-call-bottom ul li:nth-child(3) a:hover i, .audio-call-bottom ul li:nth-child(1) a:hover i, .audio-call-bottom ul li:nth-child(4) a:hover i, 
+.audio-call-bottom ul li:nth-child(5) a:hover i, .create-grp-btn button, .group-user-online {
+	border: 1px solid #9698e3;
+}
+.dropdown-menu li:hover, .top-right .dropdown .dropdown-menu:hover span, .chatlist a, .middle-contact-bottom a.attach-file i:hover, 
+.send-request-accept-button .ui-1_check, .send-request-accept-button .ui-1_simple-remove, .added-request, .video-optionleft span, 
+.quality_asist-list li:first-child a, .cont-remove:hover .right i, .vjs-menu li:focus, .vjs-menu li:hover {
+	color: #9698e3;
+}
+.vjs-icon-play:before, .video-js .vjs-big-play-button:before, .video-js .vjs-play-control:before, 
+.vjs-icon-volume-high:before, .video-js .vjs-mute-control:before, .video-js .vjs-volume-menu-button:before, 
+.vjs-icon-fullscreen-enter:before, .video-js .vjs-fullscreen-control:before, .vjs-playback-rate .vjs-playback-rate-value  {
+	color: #606568 !important;
+}
+.menu-options a.md-button.md-default-theme:hover:not([disabled]), .menu-options a.md-button:hover:not([disabled]), 
+.menu-options .md-button.md-default-theme:hover:not([disabled]), .menu-options .md-button:hover:not([disabled]), .top-right .dropdown, 
+.top-right .dropdown.active .dropdown-menu, .call-icons ul li a:nth-child(2), .group-fields md-datepicker, .md-datepicker-input {
+	background: none;
+}
+.send-request-popup .close, .added-contact-ok i, .welcome-page-arrow i, .online-dot, 
+.top-middle a.md-button.md-default-theme:hover:not([disabled]), .top-middle a.md-button:hover:not([disabled]), .top-middle .md-button.md-default-theme:hover:not([disabled]), .top-middle .md-button:hover:not([disabled]) {
+	background-color: #9698e3;
+}
+.audio-call-bottom ul li:nth-child(2) a:hover i, .audio-call-icons ul li:nth-child(1) a:hover i, .call-icons .video-icon-bg, 
+.welcome-call-icons li:nth-child(2) a:hover i, .audio-caller, .windows_max_panel .audio-caller {
+	background: #7b7de5 none repeat scroll 0 0;
+}
+.welcome-call-icons li:nth-child(2) a:hover i, .audio-call-bottom ul li:nth-child(2) a:hover i, .audio-call-icons ul li:nth-child(1) a:hover i, 
+.call-icons .video-icon-bg, .call-icons .video-icon-bg:hover {
+	border: 1px solid #7b7de5 !important;
+}
+.added-contact-left .added-contact-text, .send-request-btn1 a, .add-group-top .right, .middle-contact-middle.add-group .cont-add, .cont-add:hover i, 
+.group-contact-left label.active i, .group-contact-left .cont-add.active, .create-group-form, md-toolbar:not(.md-menu-toolbar) {
+	color: #525a5d;
+}
+.chat-area.request-sent h4, .send-request-accept, .send-request-box {
+	border-bottom: 1px solid #e8e8e8;
+}
+.chatlist-right i, .chatlist-right span {
+	border: 1px solid #6A6E71;
+}
+.middle-contact.close .middle-contact-inner, .middle-contact.slide .middle-contact-inner {
+	border-right: 1px solid #e0e0e0;
+}
+.add-group .left-list li.active, .add-group .add-contact-list .right-list li:hover, .cont-remove:hover, .add-contact-list .left-list li:hover, .add-contact-list .right-list li:hover {
+	background-color: #f4f5f5;
+}
+.add-group .left-list.left-right {
+	border-left: 1px solid #e0e0e0;
+}
+.user-login-page md-input-container.md-default-theme .md-input, md-input-container .md-input {
+	border-bottom: 1px solid #fff;
+}
+.group-fields .right md-input-container, .group-fields .right label {
+	color: #abb0b1;
+}
+.group-fields .right input, .group-fields .right textarea, .create-group .md-datepicker-input-container {
+	border-bottom: 1px solid #e2e5e7;
+}
+.added-contact, .added-contact-right.active i {
+	background-color: #e86933 !important;
+}
+.middle-contact-middle.add-group .cont-add {
+	border: 1px solid #e2e5e7;
+}
+.sidenav ul.nav-list{
+	background:#3b404f;
+}
+.sidenav .nav-list li:hover {
+    background-color: #78819a;
+}
+.group-contact-left i {
+	color: #a8a8a8;
+}
+.send-request p {
+	color: #636a6d;
+}
+
+.group-contact-left .cont-add.active {
+	border: 1px solid #58d8cf;
+}
+.chat-user i {
+	border: 1px solid #4a5153;
+}
+.user-inner {
+	border: 1px solid #e2e3e3;
+}
+.user-status .user-icons.invisible1 {
+	background: #c3c3c3;
+}
+.user-status .user-icons.offline1 {
+	background: #e81425;
+}
+.user-offline .user-icons {
+	box-shadow: 1px 1px 5px -1px #e81425;
+}
+
+.user-invisible .user-icons {
+	box-shadow: 1px 1px 5px -1px #c3c3c3;
+}
+
+.top-middle ul li:last-child {
+	border-right: 1px solid #7375d5;
+}
+.top-middle ul li {
+	border-left: 1px solid #7375d5;
+}
+.left-btn, .cont-remove .right i {
+	color: #ccc;
+}
+.video-optionright .volume, .create-group-top {
+	background: #ccc;
+}
+.cont-remove {
+	border-bottom: 1px solid #ccc;
+}
+.progressbar-bg, .progressbarclose {
+	border: 1px solid #ccc;
+}
+.sucess-icon i, .call-icons ul li a:nth-child(2), .progress-status i:hover {
+	color: #000;
+}
+.user-img img, .video-icon i:hover, .welcome-hover-text, .welcome-hover-text.active {
+	background-color: #000;
+}
+.video-load-icon {
+	border: 3px solid #00c4b6;
+}
+
+.progressbarclose:hover, .progressbar {
+	background-color: #00b8a9;
+}
+.welcome-page-content h3 {
+	color: #0bc4b6;
+}
+.audio-profile-img {
+	border: 3px solid #0bc4b6;
+}
+
+.audio-caller-name, .windows_max_panel .audio-caller-name {
+	border: 3px solid #f1a33c;
+}
+.forgot-pw a {
+	color: #d2d5d5;
+}
+.user-input i {
+	color: #697376;
+}
+.password-reset-btn .btn-cancel {
+	background: #dd4b39 !important;
+}
+.sucess-icon i {
+	background: #12db8a;
+}
+body, .menu-dropdown md-menu-item, .chat-username, .middle-contact-bottom textarea {
+	color: #626b6f;
+}
+a, .add-contact-search > i, .add-group-top .right i, .add-contact-list.group-search .add-contact-search > i {
+	color: #828d91;
+}
+.chat-icon-img span {
+	border: 1px solid #828d91;
+}
+.chat-time, .time, .loading-status p {
+	color: #80888b;
+}
+body, .contact, .user-status .md-button:not([disabled]):hover {
+	background-color: #f9f9f9;
+}
+.user-status .md-button:not([disabled]):hover {
+	color:#3b404f;
+	}
+body, html, html.md-default-theme, html, body.md-default-theme, body {
+	color: rgba(0, 0, 0, 0.87);
+}
+.callduration, .user-list:hover, .top-right .dropdown .dropdown-menu {
+	background-color: #293235 !important;
+}
+.user-name, .user-name md-icon, .sidenav .nav-list li {
+	color: #f6f5ee;
+}
+.contact-name p, .left-profile-user-details span, .about-contact p, .left-profile-user-details select, .users-details-list span input[type="text"] {
+	color: #9ca2a4;
+}
+.create-group-btn .md-button:not([disabled]):hover, .create-group-btn button, md-dialog md-dialog-actions .md-button {
+	color: #eefbfa;
+}
+.group-fields md-checkbox:not([disabled]).md-primary .md-icon, .group-fields md-radio-button:not([disabled]).md-primary.md-checked .md-off{
+	border: 1px solid #8d8d8d;
+}
+.group-fields .right input, .group-fields .right textarea, .error-field, .side-bar-search input  {
+	color: #444;
+	}
+.user-status .md-button:not([disabled]), .user-inner, .side-bar-search, .add-group-top {
+	background-color: #eff1f2;
+}
+.add-contact-search, .audio-call-chat, .audio-call-chat-bg, .vedio-call-chat, .middle-contact-middle.add-group .add-contact-search {
+	background-color: #fdfefe;
+}
+.call-icons ul li a:hover, .vedio-calling-active a {
+	color: #fdfefe;
+}
+.audio-call-icons li:nth-child(2) a:hover i, .vedio-icon-option ul li:nth-child(6) i, .audio-call-bottom ul li.active a i {
+	background: #f55353 none repeat scroll 0 0;
+}
+.audio-call-bottom ul li.active a i, .audio-call-icons li:nth-child(2) a:hover i {
+	border: 1px solid #f55353;
+}
+.contact-name .group p, .contact-name p strong {
+	color: #c3c7c9;
+}
+.about-contact h3, .users-details-list p.active i {
+	color: #07c3b5;
+}
+.header-profile, .users-details-list p button:hover, .progress-bar, .vedio-calling-active a {
+	background: #07c3b5;
+}
+.users-details-list p.active span, .profile-contact-content  {
+	border-bottom: 1px solid #07c3b5;
+}
+.un-seen i, .welcome-page-content p, .welcome-page-content h4 {
+	color: #9ea2a1;
+}
+.sidenav .nav-list li a{
+	color:#a2add4;
+	}
+.send-request-btn1.request-accept .ui-1_check, .badge.request-pending {
+	background: #7b7de5 none repeat scroll 0 0 !important;
+}
+.audio-call-icons ul li i, .vedio-icon-option ul li i, .welcome-call-icons li a i, .audio-icon-option ul li i {
+	color: #b1b5b7;
+}
+.group-audio-calling li, .caller-name.username, .windows_max_panel .caller-name.username {
+	color: #959595;
+}
+.sidenav .nav-list li.active a, .sidenav .nav-list li a {
+	border-bottom: 1px solid #414657;
+}
+.side-bar-search, .side-chat-box {
+	color: #a7acb5;
+}
+.vedio-calling-active a {
+	border: 1px solid #07c3b5 !important;
+}
+.audio-full-width a .ui-2_menu-dots {
+	color: #353e41;
+}
+.not-send i {
+	color: #f55353;
+}
+.chat-content:hover, .chat-username:hover {
+	background: #f6f6f6;
+}
+.side-bar-search a i {
+	color: #6c7274;
+}
+.audiojs {
+	background: #1b1f20;
+}
+.audiojs .time em {
+	color: #bebebe;
+}
+.audiojs .loaded {
+	background: #686868;
+}
+.audiojs .scrubber {
+	background: #7d8285;
+}
+.video-js .vjs-control-bar {
+	background-color: #141819 !important;
+}
+.video-js .vjs-play-progress:before {
+	border: 4px solid #00b8a9;
+}
+.vjs-menu li:focus, .vjs-menu li:hover {
+	background-color: #1a2020 !important;
+}
+.vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+	background-color: #192221 !important;
+}
+md-tooltip .md-content {
+	border: 1px solid #50514E;
+}
+.file-error h1, .left sup  {
+	color: red;
+}
+.sidenav {
+	background: #20282b;
+}
+.welcome-call-icons li a i {
+	border: 1px solid #b1b5b7;
+}
+.call-icons .video-icon-bg:hover {
+	background: #6466c7;
+}
+.menu-dropdown {
+    background: #3b404f none repeat scroll 0 0;
+}
+.user-vedio-image {
+	border: 1px solid #a0a4a6;
+}
+.call-timing {
+	color: #c8cbcc;
+}
+.vedio-call-bottom {
+	background: #555e5b;
+}
+.calling-time {
+	color: #c1c2c2;
+}
+
+.middle-contact-middle .ngscroll-scrollbar {
+	background: #A9A9A9 !important;
+}
+.group-notifications input[type="checkbox"] + label::before {
+	border: 1px solid #A9A9A9;
+}
+.left-profile-user-details label {
+	color: #586164;
+}
+
+
+/*single styles*/
+.user-icon-status {
+	color: #293235;
+	border: 1px solid #186b67;
+	background: #eeeeee;
+}
+.call-icons ul li a:hover, .call-icons .phn-icon-bg:hover {
+	background: #6466c8 !important;
+	border: 1px solid #6466c8 !important;
+}
+.middle-contact-top {
+	background-color: #f3f5f6;
+	border-bottom: 1px solid #dedede;
+	border-left: 1px solid #dedede;
+	border-right: 1px solid #dedede;
+}
+.menu-dropdown::before {
+    border-bottom:7px solid #3b404f;
+}
+.tr-logo {
+	box-shadow: 0px 0px 3px 2px rgba(58,68,74,1);
+}
+.middle-contact-bottom .bottom-fix:hover, .middle-contact-bottom .bottom-fix:focus {
+	border: 1px solid rgba(102,105,231,0.5);
+	box-shadow: 0 0 4px 0 rgba(102,105,231,0.5);
+}
+.add-contact-search:focus, .add-contact-search:hover {
+	box-shadow: 0 0 4px 0 rgba(102,105,231,0.5);
+	border-bottom: 1px solid rgba(102,105,231,0.5);
+}
+.md-default-theme .md-datepicker-open .md-datepicker-calendar-icon, .md-datepicker-open .md-datepicker-calendar-icon {
+    fill: rgb(63,81,181);
+}
+.teamr-cancel.md-button.md-ink-ripple {
+    background: #f74545 !important;
+}
+.tr-bg-color {
+	background:url(../images/voilet-bg.jpg) no-repeat center center fixed;
+	width: 100%;
+   height: 100%;
+   background-size: cover;
+}
+#toggle-button {
+    background-color: #5a5cc7;
+}
+#toggle-button i {
+    color: #c4c5ff;
+}
+#demo-menu h4 {
+    color: #cfd0ff;
+    background: #5a5cc7;
+}
+
+
+

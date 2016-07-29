@@ -2,20 +2,27 @@
 ping:2,pong:3,message:4,upgrade:5,noop:6},b=c(m),v={type:"error",data:"parser error"},w=t("blob");n.encodePacket=function(t,n,i,a){"function"==typeof n&&(a=n,n=!1),"function"==typeof i&&(a=i,i=null);var c=void 0===t.data?void 0:t.data.buffer||t.data;if(e.ArrayBuffer&&c instanceof ArrayBuffer)return o(t,n,a);if(w&&c instanceof e.Blob)return s(t,n,a);if(c&&c.base64)return r(t,a);var p=m[t.type];return void 0!==t.data&&(p+=i?l.encode(String(t.data)):String(t.data)),a(""+p)},n.encodeBase64Packet=function(t,r){var o="b"+n.packets[t.type];if(w&&t.data instanceof e.Blob){var i=new FileReader;return i.onload=function(){var t=i.result.split(",")[1];r(o+t)},i.readAsDataURL(t.data)}var s;try{s=String.fromCharCode.apply(null,new Uint8Array(t.data))}catch(a){for(var c=new Uint8Array(t.data),p=new Array(c.length),u=0;u<c.length;u++)p[u]=c[u];s=String.fromCharCode.apply(null,p)}return o+=e.btoa(s),r(o)},n.decodePacket=function(t,e,r){if("string"==typeof t||void 0===t){if("b"==t.charAt(0))return n.decodeBase64Packet(t.substr(1),e);if(r)try{t=l.decode(t)}catch(o){return v}var i=t.charAt(0);return Number(i)==i&&b[i]?t.length>1?{type:b[i],data:t.substring(1)}:{type:b[i]}:v}var s=new Uint8Array(t),i=s[0],a=u(t,1);return w&&"blob"===e&&(a=new w([a])),{type:b[i],data:a}},n.decodeBase64Packet=function(t,n){var r=b[t.charAt(0)];if(!e.ArrayBuffer)return{type:r,data:{base64:!0,data:t.substr(1)}};var o=f.decode(t.substr(1));return"blob"===n&&w&&(o=new w([o])),{type:r,data:o}},n.encodePayload=function(t,e,r){function o(t){return t.length+":"+t}function i(t,r){n.encodePacket(t,s?e:!1,!0,function(t){r(null,o(t))})}"function"==typeof e&&(r=e,e=null);var s=p(t);return e&&s?w&&!g?n.encodePayloadAsBlob(t,r):n.encodePayloadAsArrayBuffer(t,r):t.length?void a(t,i,function(t,e){return r(e.join(""))}):r("0:")},n.decodePayload=function(t,e,r){if("string"!=typeof t)return n.decodePayloadAsBinary(t,e,r);"function"==typeof e&&(r=e,e=null);var o;if(""==t)return r(v,0,1);for(var i,s,a="",c=0,p=t.length;p>c;c++){var u=t.charAt(c);if(":"!=u)a+=u;else{if(""==a||a!=(i=Number(a)))return r(v,0,1);if(s=t.substr(c+1,i),a!=s.length)return r(v,0,1);if(s.length){if(o=n.decodePacket(s,e,!0),v.type==o.type&&v.data==o.data)return r(v,0,1);var f=r(o,c+i,p);if(!1===f)return}c+=i,a=""}}return""!=a?r(v,0,1):void 0},n.encodePayloadAsArrayBuffer=function(t,e){function r(t,e){n.encodePacket(t,!0,!0,function(t){return e(null,t)})}return t.length?void a(t,r,function(t,n){var r=n.reduce(function(t,e){var n;return n="string"==typeof e?e.length:e.byteLength,t+n.toString().length+n+2},0),o=new Uint8Array(r),i=0;return n.forEach(function(t){var e="string"==typeof t,n=t;if(e){for(var r=new Uint8Array(t.length),s=0;s<t.length;s++)r[s]=t.charCodeAt(s);n=r.buffer}e?o[i++]=0:o[i++]=1;for(var a=n.byteLength.toString(),s=0;s<a.length;s++)o[i++]=parseInt(a[s]);o[i++]=255;for(var r=new Uint8Array(n),s=0;s<r.length;s++)o[i++]=r[s]}),e(o.buffer)}):e(new ArrayBuffer(0))},n.encodePayloadAsBlob=function(t,e){function r(t,e){n.encodePacket(t,!0,!0,function(t){var n=new Uint8Array(1);if(n[0]=1,"string"==typeof t){for(var r=new Uint8Array(t.length),o=0;o<t.length;o++)r[o]=t.charCodeAt(o);t=r.buffer,n[0]=0}for(var i=t instanceof ArrayBuffer?t.byteLength:t.size,s=i.toString(),a=new Uint8Array(s.length+1),o=0;o<s.length;o++)a[o]=parseInt(s[o]);if(a[s.length]=255,w){var c=new w([n.buffer,a.buffer,t]);e(null,c)}})}a(t,r,function(t,n){return e(new w(n))})},n.decodePayloadAsBinary=function(t,e,r){"function"==typeof e&&(r=e,e=null);for(var o=t,i=[],s=!1;o.byteLength>0;){for(var a=new Uint8Array(o),c=0===a[0],p="",f=1;255!=a[f];f++){if(p.length>310){s=!0;break}p+=a[f]}if(s)return r(v,0,1);o=u(o,2+p.length),p=parseInt(p);var h=u(o,0,p);if(c)try{h=String.fromCharCode.apply(null,new Uint8Array(h))}catch(l){var d=new Uint8Array(h);h="";for(var f=0;f<d.length;f++)h+=String.fromCharCode(d[f])}i.push(h),o=u(o,p)}var y=i.length;i.forEach(function(t,o){r(n.decodePacket(t,e,!0),o,y)})}}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{"./keys":20,after:11,"arraybuffer.slice":12,"base64-arraybuffer":13,blob:14,"has-binary":21,utf8:29}],20:[function(t,e,n){e.exports=Object.keys||function(t){var e=[],n=Object.prototype.hasOwnProperty;for(var r in t)n.call(t,r)&&e.push(r);return e}},{}],21:[function(t,e,n){(function(n){function r(t){function e(t){if(!t)return!1;if(n.Buffer&&n.Buffer.isBuffer(t)||n.ArrayBuffer&&t instanceof ArrayBuffer||n.Blob&&t instanceof Blob||n.File&&t instanceof File)return!0;if(o(t)){for(var r=0;r<t.length;r++)if(e(t[r]))return!0}else if(t&&"object"==typeof t){t.toJSON&&(t=t.toJSON());for(var i in t)if(Object.prototype.hasOwnProperty.call(t,i)&&e(t[i]))return!0}return!1}return e(t)}var o=t("isarray");e.exports=r}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{isarray:24}],22:[function(t,e,n){try{e.exports="undefined"!=typeof XMLHttpRequest&&"withCredentials"in new XMLHttpRequest}catch(r){e.exports=!1}},{}],23:[function(t,e,n){var r=[].indexOf;e.exports=function(t,e){if(r)return t.indexOf(e);for(var n=0;n<t.length;++n)if(t[n]===e)return n;return-1}},{}],24:[function(t,e,n){e.exports=Array.isArray||function(t){return"[object Array]"==Object.prototype.toString.call(t)}},{}],25:[function(t,e,n){function r(t){if(t=""+t,!(t.length>1e4)){var e=/^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(t);if(e){var n=parseFloat(e[1]),r=(e[2]||"ms").toLowerCase();switch(r){case"years":case"year":case"yrs":case"yr":case"y":return n*f;case"days":case"day":case"d":return n*u;case"hours":case"hour":case"hrs":case"hr":case"h":return n*p;case"minutes":case"minute":case"mins":case"min":case"m":return n*c;case"seconds":case"second":case"secs":case"sec":case"s":return n*a;case"milliseconds":case"millisecond":case"msecs":case"msec":case"ms":return n}}}}function o(t){return t>=u?Math.round(t/u)+"d":t>=p?Math.round(t/p)+"h":t>=c?Math.round(t/c)+"m":t>=a?Math.round(t/a)+"s":t+"ms"}function i(t){return s(t,u,"day")||s(t,p,"hour")||s(t,c,"minute")||s(t,a,"second")||t+" ms"}function s(t,e,n){return e>t?void 0:1.5*e>t?Math.floor(t/e)+" "+n:Math.ceil(t/e)+" "+n+"s"}var a=1e3,c=60*a,p=60*c,u=24*p,f=365.25*u;e.exports=function(t,e){return e=e||{},"string"==typeof t?r(t):e["long"]?i(t):o(t)}},{}],26:[function(t,e,n){(function(t){var n=/^[\],:{}\s]*$/,r=/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,o=/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,i=/(?:^|:|,)(?:\s*\[)+/g,s=/^\s+/,a=/\s+$/;e.exports=function(e){return"string"==typeof e&&e?(e=e.replace(s,"").replace(a,""),t.JSON&&JSON.parse?JSON.parse(e):n.test(e.replace(r,"@").replace(o,"]").replace(i,""))?new Function("return "+e)():void 0):null}}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{}],27:[function(t,e,n){n.encode=function(t){var e="";for(var n in t)t.hasOwnProperty(n)&&(e.length&&(e+="&"),e+=encodeURIComponent(n)+"="+encodeURIComponent(t[n]));return e},n.decode=function(t){for(var e={},n=t.split("&"),r=0,o=n.length;o>r;r++){var i=n[r].split("=");e[decodeURIComponent(i[0])]=decodeURIComponent(i[1])}return e}},{}],28:[function(t,e,n){var r=/^(?:(?![^:@]+:[^:@\/]*@)(http|https|ws|wss):\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?((?:[a-f0-9]{0,4}:){2,7}[a-f0-9]{0,4}|[^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,o=["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"];e.exports=function(t){var e=t,n=t.indexOf("["),i=t.indexOf("]");-1!=n&&-1!=i&&(t=t.substring(0,n)+t.substring(n,i).replace(/:/g,";")+t.substring(i,t.length));for(var s=r.exec(t||""),a={},c=14;c--;)a[o[c]]=s[c]||"";return-1!=n&&-1!=i&&(a.source=e,a.host=a.host.substring(1,a.host.length-1).replace(/;/g,":"),a.authority=a.authority.replace("[","").replace("]","").replace(/;/g,":"),a.ipv6uri=!0),a}},{}],29:[function(e,n,r){(function(e){!function(o){function i(t){for(var e,n,r=[],o=0,i=t.length;i>o;)e=t.charCodeAt(o++),e>=55296&&56319>=e&&i>o?(n=t.charCodeAt(o++),56320==(64512&n)?r.push(((1023&e)<<10)+(1023&n)+65536):(r.push(e),o--)):r.push(e);return r}function s(t){for(var e,n=t.length,r=-1,o="";++r<n;)e=t[r],e>65535&&(e-=65536,o+=w(e>>>10&1023|55296),e=56320|1023&e),o+=w(e);return o}function a(t){if(t>=55296&&57343>=t)throw Error("Lone surrogate U+"+t.toString(16).toUpperCase()+" is not a scalar value")}function c(t,e){return w(t>>e&63|128)}function p(t){if(0==(4294967168&t))return w(t);var e="";return 0==(4294965248&t)?e=w(t>>6&31|192):0==(4294901760&t)?(a(t),e=w(t>>12&15|224),e+=c(t,6)):0==(4292870144&t)&&(e=w(t>>18&7|240),e+=c(t,12),e+=c(t,6)),e+=w(63&t|128)}function u(t){for(var e,n=i(t),r=n.length,o=-1,s="";++o<r;)e=n[o],s+=p(e);return s}function f(){if(v>=b)throw Error("Invalid byte index");var t=255&m[v];if(v++,128==(192&t))return 63&t;throw Error("Invalid continuation byte")}function h(){var t,e,n,r,o;if(v>b)throw Error("Invalid byte index");if(v==b)return!1;if(t=255&m[v],v++,0==(128&t))return t;if(192==(224&t)){var e=f();if(o=(31&t)<<6|e,o>=128)return o;throw Error("Invalid continuation byte")}if(224==(240&t)){if(e=f(),n=f(),o=(15&t)<<12|e<<6|n,o>=2048)return a(o),o;throw Error("Invalid continuation byte")}if(240==(248&t)&&(e=f(),n=f(),r=f(),o=(15&t)<<18|e<<12|n<<6|r,o>=65536&&1114111>=o))return o;throw Error("Invalid UTF-8 detected")}function l(t){m=i(t),b=m.length,v=0;for(var e,n=[];(e=h())!==!1;)n.push(e);return s(n)}var d="object"==typeof r&&r,y="object"==typeof n&&n&&n.exports==d&&n,g="object"==typeof e&&e;(g.global===g||g.window===g)&&(o=g);var m,b,v,w=String.fromCharCode,k={version:"2.0.0",encode:u,decode:l};if("function"==typeof t&&"object"==typeof t.amd&&t.amd)t(function(){return k});else if(d&&!d.nodeType)if(y)y.exports=k;else{var x={},A=x.hasOwnProperty;for(var B in k)A.call(k,B)&&(d[B]=k[B])}else o.utf8=k}(this)}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{}],30:[function(t,e,n){"use strict";function r(t){var e="";do e=a[t%c]+e,t=Math.floor(t/c);while(t>0);return e}function o(t){var e=0;for(f=0;f<t.length;f++)e=e*c+p[t.charAt(f)];return e}function i(){var t=r(+new Date);return t!==s?(u=0,s=t):t+"."+r(u++)}for(var s,a="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_".split(""),c=64,p={},u=0,f=0;c>f;f++)p[a[f]]=f;i.encode=r,i.decode=o,e.exports=i},{}],31:[function(t,e,n){function r(t,e){"object"==typeof t&&(e=t,t=void 0),e=e||{};var n,r=o(t),i=r.source,p=r.id,u=r.path,f=c[p]&&u in c[p].nsps,h=e.forceNew||e["force new connection"]||!1===e.multiplex||f;return h?(a("ignoring socket cache for %s",i),n=s(i,e)):(c[p]||(a("new io instance for %s",i),c[p]=s(i,e)),n=c[p]),n.socket(r.path)}var o=t("./url"),i=t("socket.io-parser"),s=t("./manager"),a=t("debug")("socket.io-client");e.exports=n=r;var c=n.managers={};n.protocol=i.protocol,n.connect=r,n.Manager=t("./manager"),n.Socket=t("./socket")},{"./manager":32,"./socket":34,"./url":35,debug:39,"socket.io-parser":47}],32:[function(t,e,n){function r(t,e){return this instanceof r?(t&&"object"==typeof t&&(e=t,t=void 0),e=e||{},e.path=e.path||"/socket.io",this.nsps={},this.subs=[],this.opts=e,this.reconnection(e.reconnection!==!1),this.reconnectionAttempts(e.reconnectionAttempts||1/0),this.reconnectionDelay(e.reconnectionDelay||1e3),this.reconnectionDelayMax(e.reconnectionDelayMax||5e3),this.randomizationFactor(e.randomizationFactor||.5),this.backoff=new h({min:this.reconnectionDelay(),max:this.reconnectionDelayMax(),jitter:this.randomizationFactor()}),this.timeout(null==e.timeout?2e4:e.timeout),this.readyState="closed",this.uri=t,this.connecting=[],this.lastPing=null,this.encoding=!1,this.packetBuffer=[],this.encoder=new a.Encoder,this.decoder=new a.Decoder,this.autoConnect=e.autoConnect!==!1,void(this.autoConnect&&this.open())):new r(t,e)}var o=t("engine.io-client"),i=t("./socket"),s=t("component-emitter"),a=t("socket.io-parser"),c=t("./on"),p=t("component-bind"),u=t("debug")("socket.io-client:manager"),f=t("indexof"),h=t("backo2"),l=Object.prototype.hasOwnProperty;e.exports=r,r.prototype.emitAll=function(){this.emit.apply(this,arguments);for(var t in this.nsps)l.call(this.nsps,t)&&this.nsps[t].emit.apply(this.nsps[t],arguments)},r.prototype.updateSocketIds=function(){for(var t in this.nsps)l.call(this.nsps,t)&&(this.nsps[t].id=this.engine.id)},s(r.prototype),r.prototype.reconnection=function(t){return arguments.length?(this._reconnection=!!t,this):this._reconnection},r.prototype.reconnectionAttempts=function(t){return arguments.length?(this._reconnectionAttempts=t,this):this._reconnectionAttempts},r.prototype.reconnectionDelay=function(t){return arguments.length?(this._reconnectionDelay=t,this.backoff&&this.backoff.setMin(t),this):this._reconnectionDelay},r.prototype.randomizationFactor=function(t){return arguments.length?(this._randomizationFactor=t,this.backoff&&this.backoff.setJitter(t),this):this._randomizationFactor},r.prototype.reconnectionDelayMax=function(t){return arguments.length?(this._reconnectionDelayMax=t,this.backoff&&this.backoff.setMax(t),this):this._reconnectionDelayMax},r.prototype.timeout=function(t){return arguments.length?(this._timeout=t,this):this._timeout},r.prototype.maybeReconnectOnOpen=function(){!this.reconnecting&&this._reconnection&&0===this.backoff.attempts&&this.reconnect()},r.prototype.open=r.prototype.connect=function(t){if(u("readyState %s",this.readyState),~this.readyState.indexOf("open"))return this;u("opening %s",this.uri),this.engine=o(this.uri,this.opts);var e=this.engine,n=this;this.readyState="opening",this.skipReconnect=!1;var r=c(e,"open",function(){n.onopen(),t&&t()}),i=c(e,"error",function(e){if(u("connect_error"),n.cleanup(),n.readyState="closed",n.emitAll("connect_error",e),t){var r=new Error("Connection error");r.data=e,t(r)}else n.maybeReconnectOnOpen()});if(!1!==this._timeout){var s=this._timeout;u("connect attempt will timeout after %d",s);var a=setTimeout(function(){u("connect attempt timed out after %d",s),r.destroy(),e.close(),e.emit("error","timeout"),n.emitAll("connect_timeout",s)},s);this.subs.push({destroy:function(){clearTimeout(a)}})}return this.subs.push(r),this.subs.push(i),this},r.prototype.onopen=function(){u("open"),this.cleanup(),this.readyState="open",this.emit("open");var t=this.engine;this.subs.push(c(t,"data",p(this,"ondata"))),this.subs.push(c(t,"ping",p(this,"onping"))),this.subs.push(c(t,"pong",p(this,"onpong"))),this.subs.push(c(t,"error",p(this,"onerror"))),this.subs.push(c(t,"close",p(this,"onclose"))),this.subs.push(c(this.decoder,"decoded",p(this,"ondecoded")))},r.prototype.onping=function(){this.lastPing=new Date,this.emitAll("ping")},r.prototype.onpong=function(){this.emitAll("pong",new Date-this.lastPing)},r.prototype.ondata=function(t){this.decoder.add(t)},r.prototype.ondecoded=function(t){this.emit("packet",t)},r.prototype.onerror=function(t){u("error",t),this.emitAll("error",t)},r.prototype.socket=function(t){function e(){~f(r.connecting,n)||r.connecting.push(n)}var n=this.nsps[t];if(!n){n=new i(this,t),this.nsps[t]=n;var r=this;n.on("connecting",e),n.on("connect",function(){n.id=r.engine.id}),this.autoConnect&&e()}return n},r.prototype.destroy=function(t){var e=f(this.connecting,t);~e&&this.connecting.splice(e,1),this.connecting.length||this.close()},r.prototype.packet=function(t){u("writing packet %j",t);var e=this;e.encoding?e.packetBuffer.push(t):(e.encoding=!0,this.encoder.encode(t,function(n){for(var r=0;r<n.length;r++)e.engine.write(n[r],t.options);e.encoding=!1,e.processPacketQueue()}))},r.prototype.processPacketQueue=function(){if(this.packetBuffer.length>0&&!this.encoding){var t=this.packetBuffer.shift();this.packet(t)}},r.prototype.cleanup=function(){u("cleanup");for(var t;t=this.subs.shift();)t.destroy();this.packetBuffer=[],this.encoding=!1,this.lastPing=null,this.decoder.destroy()},r.prototype.close=r.prototype.disconnect=function(){u("disconnect"),this.skipReconnect=!0,this.reconnecting=!1,"opening"==this.readyState&&this.cleanup(),this.backoff.reset(),this.readyState="closed",this.engine&&this.engine.close()},r.prototype.onclose=function(t){u("onclose"),this.cleanup(),this.backoff.reset(),this.readyState="closed",this.emit("close",t),this._reconnection&&!this.skipReconnect&&this.reconnect()},r.prototype.reconnect=function(){if(this.reconnecting||this.skipReconnect)return this;var t=this;if(this.backoff.attempts>=this._reconnectionAttempts)u("reconnect failed"),this.backoff.reset(),this.emitAll("reconnect_failed"),this.reconnecting=!1;else{var e=this.backoff.duration();u("will wait %dms before reconnect attempt",e),this.reconnecting=!0;var n=setTimeout(function(){t.skipReconnect||(u("attempting reconnect"),t.emitAll("reconnect_attempt",t.backoff.attempts),t.emitAll("reconnecting",t.backoff.attempts),t.skipReconnect||t.open(function(e){e?(u("reconnect attempt error"),t.reconnecting=!1,t.reconnect(),t.emitAll("reconnect_error",e.data)):(u("reconnect success"),t.onreconnect())}))},e);this.subs.push({destroy:function(){clearTimeout(n)}})}},r.prototype.onreconnect=function(){var t=this.backoff.attempts;this.reconnecting=!1,this.backoff.reset(),this.updateSocketIds(),this.emitAll("reconnect",t)}},{"./on":33,"./socket":34,backo2:36,"component-bind":37,"component-emitter":38,debug:39,"engine.io-client":1,indexof:42,"socket.io-parser":47}],33:[function(t,e,n){function r(t,e,n){return t.on(e,n),{destroy:function(){t.removeListener(e,n)}}}e.exports=r},{}],34:[function(t,e,n){function r(t,e){this.io=t,this.nsp=e,this.json=this,this.ids=0,this.acks={},this.receiveBuffer=[],this.sendBuffer=[],this.connected=!1,this.disconnected=!0,this.io.autoConnect&&this.open()}var o=t("socket.io-parser"),i=t("component-emitter"),s=t("to-array"),a=t("./on"),c=t("component-bind"),p=t("debug")("socket.io-client:socket"),u=t("has-binary");e.exports=n=r;var f={connect:1,connect_error:1,connect_timeout:1,connecting:1,disconnect:1,error:1,reconnect:1,reconnect_attempt:1,reconnect_failed:1,reconnect_error:1,reconnecting:1,ping:1,pong:1},h=i.prototype.emit;i(r.prototype),r.prototype.subEvents=function(){if(!this.subs){var t=this.io;this.subs=[a(t,"open",c(this,"onopen")),a(t,"packet",c(this,"onpacket")),a(t,"close",c(this,"onclose"))]}},r.prototype.open=r.prototype.connect=function(){return this.connected?this:(this.subEvents(),this.io.open(),"open"==this.io.readyState&&this.onopen(),this.emit("connecting"),this)},r.prototype.send=function(){var t=s(arguments);return t.unshift("message"),this.emit.apply(this,t),this},r.prototype.emit=function(t){if(f.hasOwnProperty(t))return h.apply(this,arguments),this;var e=s(arguments),n=o.EVENT;u(e)&&(n=o.BINARY_EVENT);var r={type:n,data:e};return r.options={},r.options.compress=!this.flags||!1!==this.flags.compress,"function"==typeof e[e.length-1]&&(p("emitting packet with ack id %d",this.ids),this.acks[this.ids]=e.pop(),r.id=this.ids++),this.connected?this.packet(r):this.sendBuffer.push(r),delete this.flags,this},r.prototype.packet=function(t){t.nsp=this.nsp,this.io.packet(t)},r.prototype.onopen=function(){p("transport is open - connecting"),"/"!=this.nsp&&this.packet({type:o.CONNECT})},r.prototype.onclose=function(t){p("close (%s)",t),this.connected=!1,this.disconnected=!0,delete this.id,this.emit("disconnect",t)},r.prototype.onpacket=function(t){if(t.nsp==this.nsp)switch(t.type){case o.CONNECT:this.onconnect();break;case o.EVENT:this.onevent(t);break;case o.BINARY_EVENT:this.onevent(t);break;case o.ACK:this.onack(t);break;case o.BINARY_ACK:this.onack(t);break;case o.DISCONNECT:this.ondisconnect();break;case o.ERROR:this.emit("error",t.data)}},r.prototype.onevent=function(t){var e=t.data||[];p("emitting event %j",e),null!=t.id&&(p("attaching ack callback to event"),e.push(this.ack(t.id))),this.connected?h.apply(this,e):this.receiveBuffer.push(e)},r.prototype.ack=function(t){var e=this,n=!1;return function(){if(!n){n=!0;var r=s(arguments);p("sending ack %j",r);var i=u(r)?o.BINARY_ACK:o.ACK;e.packet({type:i,id:t,data:r})}}},r.prototype.onack=function(t){var e=this.acks[t.id];"function"==typeof e?(p("calling ack %s with %j",t.id,t.data),e.apply(this,t.data),delete this.acks[t.id]):p("bad ack %s",t.id)},r.prototype.onconnect=function(){this.connected=!0,this.disconnected=!1,this.emit("connect"),this.emitBuffered()},r.prototype.emitBuffered=function(){var t;for(t=0;t<this.receiveBuffer.length;t++)h.apply(this,this.receiveBuffer[t]);for(this.receiveBuffer=[],t=0;t<this.sendBuffer.length;t++)this.packet(this.sendBuffer[t]);this.sendBuffer=[]},r.prototype.ondisconnect=function(){p("server disconnect (%s)",this.nsp),this.destroy(),this.onclose("io server disconnect")},r.prototype.destroy=function(){if(this.subs){for(var t=0;t<this.subs.length;t++)this.subs[t].destroy();this.subs=null}this.io.destroy(this)},r.prototype.close=r.prototype.disconnect=function(){return this.connected&&(p("performing disconnect (%s)",this.nsp),this.packet({type:o.DISCONNECT})),this.destroy(),this.connected&&this.onclose("io client disconnect"),this},r.prototype.compress=function(t){return this.flags=this.flags||{},this.flags.compress=t,this}},{"./on":33,"component-bind":37,"component-emitter":38,debug:39,"has-binary":41,"socket.io-parser":47,"to-array":51}],35:[function(t,e,n){(function(n){function r(t,e){var r=t,e=e||n.location;null==t&&(t=e.protocol+"//"+e.host),"string"==typeof t&&("/"==t.charAt(0)&&(t="/"==t.charAt(1)?e.protocol+t:e.host+t),/^(https?|wss?):\/\//.test(t)||(i("protocol-less url %s",t),t="undefined"!=typeof e?e.protocol+"//"+t:"https://"+t),i("parse %s",t),r=o(t)),r.port||(/^(http|ws)$/.test(r.protocol)?r.port="80":/^(http|ws)s$/.test(r.protocol)&&(r.port="443")),r.path=r.path||"/";var s=-1!==r.host.indexOf(":"),a=s?"["+r.host+"]":r.host;return r.id=r.protocol+"://"+a+":"+r.port,r.href=r.protocol+"://"+a+(e&&e.port==r.port?"":":"+r.port),r}var o=t("parseuri"),i=t("debug")("socket.io-client:url");e.exports=r}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{debug:39,parseuri:45}],36:[function(t,e,n){function r(t){t=t||{},this.ms=t.min||100,this.max=t.max||1e4,this.factor=t.factor||2,this.jitter=t.jitter>0&&t.jitter<=1?t.jitter:0,this.attempts=0}e.exports=r,r.prototype.duration=function(){var t=this.ms*Math.pow(this.factor,this.attempts++);if(this.jitter){var e=Math.random(),n=Math.floor(e*this.jitter*t);t=0==(1&Math.floor(10*e))?t-n:t+n}return 0|Math.min(t,this.max)},r.prototype.reset=function(){this.attempts=0},r.prototype.setMin=function(t){this.ms=t},r.prototype.setMax=function(t){this.max=t},r.prototype.setJitter=function(t){this.jitter=t}},{}],37:[function(t,e,n){var r=[].slice;e.exports=function(t,e){if("string"==typeof e&&(e=t[e]),"function"!=typeof e)throw new Error("bind() requires a function");var n=r.call(arguments,2);return function(){return e.apply(t,n.concat(r.call(arguments)))}}},{}],38:[function(t,e,n){function r(t){return t?o(t):void 0}function o(t){for(var e in r.prototype)t[e]=r.prototype[e];return t}e.exports=r,r.prototype.on=r.prototype.addEventListener=function(t,e){return this._callbacks=this._callbacks||{},(this._callbacks["$"+t]=this._callbacks["$"+t]||[]).push(e),this},r.prototype.once=function(t,e){function n(){this.off(t,n),e.apply(this,arguments)}return n.fn=e,this.on(t,n),this},r.prototype.off=r.prototype.removeListener=r.prototype.removeAllListeners=r.prototype.removeEventListener=function(t,e){if(this._callbacks=this._callbacks||{},0==arguments.length)return this._callbacks={},this;var n=this._callbacks["$"+t];if(!n)return this;if(1==arguments.length)return delete this._callbacks["$"+t],this;for(var r,o=0;o<n.length;o++)if(r=n[o],r===e||r.fn===e){n.splice(o,1);break}return this},r.prototype.emit=function(t){this._callbacks=this._callbacks||{};var e=[].slice.call(arguments,1),n=this._callbacks["$"+t];if(n){n=n.slice(0);for(var r=0,o=n.length;o>r;++r)n[r].apply(this,e)}return this},r.prototype.listeners=function(t){return this._callbacks=this._callbacks||{},this._callbacks["$"+t]||[]},r.prototype.hasListeners=function(t){return!!this.listeners(t).length}},{}],39:[function(t,e,n){arguments[4][17][0].apply(n,arguments)},{"./debug":40,dup:17}],40:[function(t,e,n){arguments[4][18][0].apply(n,arguments)},{dup:18,ms:44}],41:[function(t,e,n){(function(n){function r(t){function e(t){if(!t)return!1;if(n.Buffer&&n.Buffer.isBuffer&&n.Buffer.isBuffer(t)||n.ArrayBuffer&&t instanceof ArrayBuffer||n.Blob&&t instanceof Blob||n.File&&t instanceof File)return!0;if(o(t)){for(var r=0;r<t.length;r++)if(e(t[r]))return!0}else if(t&&"object"==typeof t){t.toJSON&&"function"==typeof t.toJSON&&(t=t.toJSON());for(var i in t)if(Object.prototype.hasOwnProperty.call(t,i)&&e(t[i]))return!0}return!1}return e(t)}var o=t("isarray");e.exports=r}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{isarray:43}],42:[function(t,e,n){arguments[4][23][0].apply(n,arguments)},{dup:23}],43:[function(t,e,n){arguments[4][24][0].apply(n,arguments)},{dup:24}],44:[function(t,e,n){arguments[4][25][0].apply(n,arguments)},{dup:25}],45:[function(t,e,n){arguments[4][28][0].apply(n,arguments)},{dup:28}],46:[function(t,e,n){(function(e){var r=t("isarray"),o=t("./is-buffer");n.deconstructPacket=function(t){function e(t){if(!t)return t;if(o(t)){var i={_placeholder:!0,num:n.length};return n.push(t),i}if(r(t)){for(var s=new Array(t.length),a=0;a<t.length;a++)s[a]=e(t[a]);return s}if("object"==typeof t&&!(t instanceof Date)){var s={};for(var c in t)s[c]=e(t[c]);return s}return t}var n=[],i=t.data,s=t;return s.data=e(i),s.attachments=n.length,{packet:s,buffers:n}},n.reconstructPacket=function(t,e){function n(t){if(t&&t._placeholder){var o=e[t.num];return o}if(r(t)){for(var i=0;i<t.length;i++)t[i]=n(t[i]);return t}if(t&&"object"==typeof t){for(var s in t)t[s]=n(t[s]);return t}return t}return t.data=n(t.data),t.attachments=void 0,t},n.removeBlobs=function(t,n){function i(t,c,p){if(!t)return t;if(e.Blob&&t instanceof Blob||e.File&&t instanceof File){s++;var u=new FileReader;u.onload=function(){p?p[c]=this.result:a=this.result,--s||n(a)},u.readAsArrayBuffer(t)}else if(r(t))for(var f=0;f<t.length;f++)i(t[f],f,t);else if(t&&"object"==typeof t&&!o(t))for(var h in t)i(t[h],h,t)}var s=0,a=t;i(a),s||n(a)}}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{"./is-buffer":48,isarray:43}],47:[function(t,e,n){function r(){}function o(t){var e="",r=!1;return e+=t.type,(n.BINARY_EVENT==t.type||n.BINARY_ACK==t.type)&&(e+=t.attachments,e+="-"),t.nsp&&"/"!=t.nsp&&(r=!0,e+=t.nsp),null!=t.id&&(r&&(e+=",",r=!1),e+=t.id),null!=t.data&&(r&&(e+=","),e+=f.stringify(t.data)),u("encoded %j as %s",t,e),e}function i(t,e){function n(t){var n=l.deconstructPacket(t),r=o(n.packet),i=n.buffers;i.unshift(r),e(i)}l.removeBlobs(t,n)}function s(){this.reconstructor=null}function a(t){var e={},r=0;if(e.type=Number(t.charAt(0)),null==n.types[e.type])return p();if(n.BINARY_EVENT==e.type||n.BINARY_ACK==e.type){for(var o="";"-"!=t.charAt(++r)&&(o+=t.charAt(r),r!=t.length););if(o!=Number(o)||"-"!=t.charAt(r))throw new Error("Illegal attachments");e.attachments=Number(o)}if("/"==t.charAt(r+1))for(e.nsp="";++r;){var i=t.charAt(r);if(","==i)break;if(e.nsp+=i,r==t.length)break}else e.nsp="/";var s=t.charAt(r+1);if(""!==s&&Number(s)==s){for(e.id="";++r;){var i=t.charAt(r);if(null==i||Number(i)!=i){--r;break}if(e.id+=t.charAt(r),r==t.length)break}e.id=Number(e.id)}if(t.charAt(++r))try{e.data=f.parse(t.substr(r))}catch(a){return p()}return u("decoded %s as %j",t,e),e}function c(t){this.reconPack=t,this.buffers=[]}function p(t){return{type:n.ERROR,data:"parser error"}}var u=t("debug")("socket.io-parser"),f=t("json3"),h=(t("isarray"),t("component-emitter")),l=t("./binary"),d=t("./is-buffer");n.protocol=4,n.types=["CONNECT","DISCONNECT","EVENT","BINARY_EVENT","ACK","BINARY_ACK","ERROR"],n.CONNECT=0,n.DISCONNECT=1,n.EVENT=2,n.ACK=3,n.ERROR=4,n.BINARY_EVENT=5,n.BINARY_ACK=6,n.Encoder=r,n.Decoder=s,r.prototype.encode=function(t,e){if(u("encoding packet %j",t),n.BINARY_EVENT==t.type||n.BINARY_ACK==t.type)i(t,e);else{var r=o(t);e([r])}},h(s.prototype),s.prototype.add=function(t){var e;if("string"==typeof t)e=a(t),n.BINARY_EVENT==e.type||n.BINARY_ACK==e.type?(this.reconstructor=new c(e),0===this.reconstructor.reconPack.attachments&&this.emit("decoded",e)):this.emit("decoded",e);else{if(!d(t)&&!t.base64)throw new Error("Unknown type: "+t);if(!this.reconstructor)throw new Error("got binary data when not reconstructing a packet");e=this.reconstructor.takeBinaryData(t),e&&(this.reconstructor=null,this.emit("decoded",e))}},s.prototype.destroy=function(){this.reconstructor&&this.reconstructor.finishedReconstruction()},c.prototype.takeBinaryData=function(t){if(this.buffers.push(t),this.buffers.length==this.reconPack.attachments){var e=l.reconstructPacket(this.reconPack,this.buffers);return this.finishedReconstruction(),e}return null},c.prototype.finishedReconstruction=function(){this.reconPack=null,this.buffers=[]}},{"./binary":46,"./is-buffer":48,"component-emitter":49,debug:39,isarray:43,json3:50}],48:[function(t,e,n){(function(t){function n(e){return t.Buffer&&t.Buffer.isBuffer(e)||t.ArrayBuffer&&e instanceof ArrayBuffer}e.exports=n}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{}],49:[function(t,e,n){arguments[4][15][0].apply(n,arguments)},{dup:15}],50:[function(e,n,r){(function(e){(function(){function o(t,e){function n(t){if(n[t]!==g)return n[t];var o;if("bug-string-char-index"==t)o="a"!="a"[0];else if("json"==t)o=n("json-stringify")&&n("json-parse");else{var s,a='{"a":[1,true,false,null,"\\u0000\\b\\n\\f\\r\\t"]}';if("json-stringify"==t){var c=e.stringify,u="function"==typeof c&&v;if(u){(s=function(){return 1}).toJSON=s;try{u="0"===c(0)&&"0"===c(new r)&&'""'==c(new i)&&c(b)===g&&c(g)===g&&c()===g&&"1"===c(s)&&"[1]"==c([s])&&"[null]"==c([g])&&"null"==c(null)&&"[null,null,null]"==c([g,b,null])&&c({a:[s,!0,!1,null,"\x00\b\n\f\r	"]})==a&&"1"===c(null,s)&&"[\n 1,\n 2\n]"==c([1,2],null,1)&&'"-271821-04-20T00:00:00.000Z"'==c(new p(-864e13))&&'"+275760-09-13T00:00:00.000Z"'==c(new p(864e13))&&'"-000001-01-01T00:00:00.000Z"'==c(new p(-621987552e5))&&'"1969-12-31T23:59:59.999Z"'==c(new p(-1))}catch(f){u=!1}}o=u}if("json-parse"==t){var h=e.parse;if("function"==typeof h)try{if(0===h("0")&&!h(!1)){s=h(a);var l=5==s.a.length&&1===s.a[0];if(l){try{l=!h('"	"')}catch(f){}if(l)try{l=1!==h("01")}catch(f){}if(l)try{l=1!==h("1.")}catch(f){}}}}catch(f){l=!1}o=l}}return n[t]=!!o}t||(t=c.Object()),e||(e=c.Object());var r=t.Number||c.Number,i=t.String||c.String,a=t.Object||c.Object,p=t.Date||c.Date,u=t.SyntaxError||c.SyntaxError,f=t.TypeError||c.TypeError,h=t.Math||c.Math,l=t.JSON||c.JSON;"object"==typeof l&&l&&(e.stringify=l.stringify,e.parse=l.parse);var d,y,g,m=a.prototype,b=m.toString,v=new p(-0xc782b5b800cec);try{v=-109252==v.getUTCFullYear()&&0===v.getUTCMonth()&&1===v.getUTCDate()&&10==v.getUTCHours()&&37==v.getUTCMinutes()&&6==v.getUTCSeconds()&&708==v.getUTCMilliseconds()}catch(w){}if(!n("json")){var k="[object Function]",x="[object Date]",A="[object Number]",B="[object String]",C="[object Array]",S="[object Boolean]",E=n("bug-string-char-index");if(!v)var _=h.floor,T=[0,31,59,90,120,151,181,212,243,273,304,334],O=function(t,e){return T[e]+365*(t-1970)+_((t-1969+(e=+(e>1)))/4)-_((t-1901+e)/100)+_((t-1601+e)/400)};if((d=m.hasOwnProperty)||(d=function(t){var e,n={};return(n.__proto__=null,n.__proto__={toString:1},n).toString!=b?d=function(t){var e=this.__proto__,n=t in(this.__proto__=null,this);return this.__proto__=e,n}:(e=n.constructor,d=function(t){var n=(this.constructor||e).prototype;return t in this&&!(t in n&&this[t]===n[t])}),n=null,d.call(this,t)}),y=function(t,e){var n,r,o,i=0;(n=function(){
 this.valueOf=0}).prototype.valueOf=0,r=new n;for(o in r)d.call(r,o)&&i++;return n=r=null,i?y=2==i?function(t,e){var n,r={},o=b.call(t)==k;for(n in t)o&&"prototype"==n||d.call(r,n)||!(r[n]=1)||!d.call(t,n)||e(n)}:function(t,e){var n,r,o=b.call(t)==k;for(n in t)o&&"prototype"==n||!d.call(t,n)||(r="constructor"===n)||e(n);(r||d.call(t,n="constructor"))&&e(n)}:(r=["valueOf","toString","toLocaleString","propertyIsEnumerable","isPrototypeOf","hasOwnProperty","constructor"],y=function(t,e){var n,o,i=b.call(t)==k,a=!i&&"function"!=typeof t.constructor&&s[typeof t.hasOwnProperty]&&t.hasOwnProperty||d;for(n in t)i&&"prototype"==n||!a.call(t,n)||e(n);for(o=r.length;n=r[--o];a.call(t,n)&&e(n));}),y(t,e)},!n("json-stringify")){var j={92:"\\\\",34:'\\"',8:"\\b",12:"\\f",10:"\\n",13:"\\r",9:"\\t"},P="000000",N=function(t,e){return(P+(e||0)).slice(-t)},R="\\u00",D=function(t){for(var e='"',n=0,r=t.length,o=!E||r>10,i=o&&(E?t.split(""):t);r>n;n++){var s=t.charCodeAt(n);switch(s){case 8:case 9:case 10:case 12:case 13:case 34:case 92:e+=j[s];break;default:if(32>s){e+=R+N(2,s.toString(16));break}e+=o?i[n]:t.charAt(n)}}return e+'"'},U=function(t,e,n,r,o,i,s){var a,c,p,u,h,l,m,v,w,k,E,T,j,P,R,q;try{a=e[t]}catch(L){}if("object"==typeof a&&a)if(c=b.call(a),c!=x||d.call(a,"toJSON"))"function"==typeof a.toJSON&&(c!=A&&c!=B&&c!=C||d.call(a,"toJSON"))&&(a=a.toJSON(t));else if(a>-1/0&&1/0>a){if(O){for(h=_(a/864e5),p=_(h/365.2425)+1970-1;O(p+1,0)<=h;p++);for(u=_((h-O(p,0))/30.42);O(p,u+1)<=h;u++);h=1+h-O(p,u),l=(a%864e5+864e5)%864e5,m=_(l/36e5)%24,v=_(l/6e4)%60,w=_(l/1e3)%60,k=l%1e3}else p=a.getUTCFullYear(),u=a.getUTCMonth(),h=a.getUTCDate(),m=a.getUTCHours(),v=a.getUTCMinutes(),w=a.getUTCSeconds(),k=a.getUTCMilliseconds();a=(0>=p||p>=1e4?(0>p?"-":"+")+N(6,0>p?-p:p):N(4,p))+"-"+N(2,u+1)+"-"+N(2,h)+"T"+N(2,m)+":"+N(2,v)+":"+N(2,w)+"."+N(3,k)+"Z"}else a=null;if(n&&(a=n.call(e,t,a)),null===a)return"null";if(c=b.call(a),c==S)return""+a;if(c==A)return a>-1/0&&1/0>a?""+a:"null";if(c==B)return D(""+a);if("object"==typeof a){for(P=s.length;P--;)if(s[P]===a)throw f();if(s.push(a),E=[],R=i,i+=o,c==C){for(j=0,P=a.length;P>j;j++)T=U(j,a,n,r,o,i,s),E.push(T===g?"null":T);q=E.length?o?"[\n"+i+E.join(",\n"+i)+"\n"+R+"]":"["+E.join(",")+"]":"[]"}else y(r||a,function(t){var e=U(t,a,n,r,o,i,s);e!==g&&E.push(D(t)+":"+(o?" ":"")+e)}),q=E.length?o?"{\n"+i+E.join(",\n"+i)+"\n"+R+"}":"{"+E.join(",")+"}":"{}";return s.pop(),q}};e.stringify=function(t,e,n){var r,o,i,a;if(s[typeof e]&&e)if((a=b.call(e))==k)o=e;else if(a==C){i={};for(var c,p=0,u=e.length;u>p;c=e[p++],a=b.call(c),(a==B||a==A)&&(i[c]=1));}if(n)if((a=b.call(n))==A){if((n-=n%1)>0)for(r="",n>10&&(n=10);r.length<n;r+=" ");}else a==B&&(r=n.length<=10?n:n.slice(0,10));return U("",(c={},c[""]=t,c),o,i,r,"",[])}}if(!n("json-parse")){var q,L,M=i.fromCharCode,I={92:"\\",34:'"',47:"/",98:"\b",116:"	",110:"\n",102:"\f",114:"\r"},H=function(){throw q=L=null,u()},z=function(){for(var t,e,n,r,o,i=L,s=i.length;s>q;)switch(o=i.charCodeAt(q)){case 9:case 10:case 13:case 32:q++;break;case 123:case 125:case 91:case 93:case 58:case 44:return t=E?i.charAt(q):i[q],q++,t;case 34:for(t="@",q++;s>q;)if(o=i.charCodeAt(q),32>o)H();else if(92==o)switch(o=i.charCodeAt(++q)){case 92:case 34:case 47:case 98:case 116:case 110:case 102:case 114:t+=I[o],q++;break;case 117:for(e=++q,n=q+4;n>q;q++)o=i.charCodeAt(q),o>=48&&57>=o||o>=97&&102>=o||o>=65&&70>=o||H();t+=M("0x"+i.slice(e,q));break;default:H()}else{if(34==o)break;for(o=i.charCodeAt(q),e=q;o>=32&&92!=o&&34!=o;)o=i.charCodeAt(++q);t+=i.slice(e,q)}if(34==i.charCodeAt(q))return q++,t;H();default:if(e=q,45==o&&(r=!0,o=i.charCodeAt(++q)),o>=48&&57>=o){for(48==o&&(o=i.charCodeAt(q+1),o>=48&&57>=o)&&H(),r=!1;s>q&&(o=i.charCodeAt(q),o>=48&&57>=o);q++);if(46==i.charCodeAt(q)){for(n=++q;s>n&&(o=i.charCodeAt(n),o>=48&&57>=o);n++);n==q&&H(),q=n}if(o=i.charCodeAt(q),101==o||69==o){for(o=i.charCodeAt(++q),(43==o||45==o)&&q++,n=q;s>n&&(o=i.charCodeAt(n),o>=48&&57>=o);n++);n==q&&H(),q=n}return+i.slice(e,q)}if(r&&H(),"true"==i.slice(q,q+4))return q+=4,!0;if("false"==i.slice(q,q+5))return q+=5,!1;if("null"==i.slice(q,q+4))return q+=4,null;H()}return"$"},J=function(t){var e,n;if("$"==t&&H(),"string"==typeof t){if("@"==(E?t.charAt(0):t[0]))return t.slice(1);if("["==t){for(e=[];t=z(),"]"!=t;n||(n=!0))n&&(","==t?(t=z(),"]"==t&&H()):H()),","==t&&H(),e.push(J(t));return e}if("{"==t){for(e={};t=z(),"}"!=t;n||(n=!0))n&&(","==t?(t=z(),"}"==t&&H()):H()),(","==t||"string"!=typeof t||"@"!=(E?t.charAt(0):t[0])||":"!=z())&&H(),e[t.slice(1)]=J(z());return e}H()}return t},X=function(t,e,n){var r=F(t,e,n);r===g?delete t[e]:t[e]=r},F=function(t,e,n){var r,o=t[e];if("object"==typeof o&&o)if(b.call(o)==C)for(r=o.length;r--;)X(o,r,n);else y(o,function(t){X(o,t,n)});return n.call(t,e,o)};e.parse=function(t,e){var n,r;return q=0,L=""+t,n=J(z()),"$"!=z()&&H(),q=L=null,e&&b.call(e)==k?F((r={},r[""]=n,r),"",e):n}}}return e.runInContext=o,e}var i="function"==typeof t&&t.amd,s={"function":!0,object:!0},a=s[typeof r]&&r&&!r.nodeType&&r,c=s[typeof window]&&window||this,p=a&&s[typeof n]&&n&&!n.nodeType&&"object"==typeof e&&e;if(!p||p.global!==p&&p.window!==p&&p.self!==p||(c=p),a&&!i)o(c,a);else{var u=c.JSON,f=c.JSON3,h=!1,l=o(c,c.JSON3={noConflict:function(){return h||(h=!0,c.JSON=u,c.JSON3=f,u=f=null),l}});c.JSON={parse:l.parse,stringify:l.stringify}}i&&t(function(){return l})}).call(this)}).call(this,"undefined"!=typeof self?self:"undefined"!=typeof window?window:"undefined"!=typeof global?global:{})},{}],51:[function(t,e,n){function r(t,e){var n=[];e=e||0;for(var r=e||0;r<t.length;r++)n[r-e]=t[r];return n}e.exports=r},{}]},{},[31])(31)});
 
+!function(t){function n(){var t=0,n=0;for(i=0;i<a.length&&a[i];i++)t+=a[i].offset,n+=a[i].round_trip_time;l=t/i,f=n/i,c=localStorage.ntpLastSync=e.time(),localStorage.ntpLastOffset=l,localStorage.ntpLastRoundTrip=f}var e={},r=500,o=5,a=new Array,c=localStorage.ntpLastSync||0,l=localStorage.ntpLastOffset||0,f=localStorage.ntpLastRoundTrip||1/0,u=null,_=null;e.resync=function(){a=[],clearInterval(_),_=setInterval(function(){a.length<o?u.emit("kinda:get_time",Date.now()):clearInterval(_)},r)},e.init=function(t,i,c){u=t,r=i||r,o=c||o,u.on("kinda:time",function(t){t.client_receive_time=(new Date).getTime(),t.round_trip_time=t.client_receive_time-t.client_transmit_time,t.offset=t.server_transmit_time-(t.client_transmit_time+t.round_trip_time/2),a.push(t),a.length>=o&&n()}),e.resync()},e.time=function(){return Date.now()+l},e.offset=function(){return l},e.round_trip=function(){return f},"function"==typeof define&&define.amd?define("kinda_ntp",[],function(){return e}):t.kinda_ntp=e}(window);
+
 var JOIN_GROUP = {
     INTERNET: "internet",
     ORGANIZATION: "organization"
 };
 
-var INVITATION_TYPE = {
-    INSTANT_ADD: "instantadd",
-    BY_APPROVAL: "byapproval"
+var GROUP_NOTIFICATION = {
+    YES : "yes",
+    NO  : "no"
 };
+
+var GROUP_DEFAULT_MAXLIMIT = 10;
 
 var FILE_UPLOAD_LIMIT = 100000;
 
-var ip = "216.117.82.233"
-var url = 'http://'+ip+':8081'
+var ip = "teamr.ajrgroup.in"
+var port = 443;
+var url = 'https://'+ip+':'+port
+
+var filexmlhttp;
 
 function ComSer(){
 	this.socket = null;
@@ -24,7 +31,6 @@ function ComSer(){
 function sendxmlhttp(data, url, method, callback)
 {
 	var xmlhttp;
-
 	if (window.XMLHttpRequest) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp = new XMLHttpRequest();
@@ -35,44 +41,58 @@ function sendxmlhttp(data, url, method, callback)
     if(xmlhttp){
     	xmlhttp.open(method, url, true);
 		xmlhttp.setRequestHeader('Content-type','application/json; charset=utf-8');
-		xmlhttp.onreadystatechange = function() {
+		xmlhttp.onreadystatechange = function() 
+		{
+			// if (xmlhttp.readyState != 4) {
+			// 	return;
+			// }
 			if (xmlhttp.readyState === 4 && xmlhttp.status === 200){
-				callback(xmlhttp.response);
+				if(xmlhttp.response != "")
+					callback(xmlhttp.response);
 			}
 		}
+		
 		xmlhttp.send(JSON.stringify(data));
     }
 }
 
-function sendfile(formdata, url, callback){
-	var xmlhttp;
-
+function sendfile(formdata, url, callback, progresscallback){	
 	if (window.XMLHttpRequest) {
         // code for IE7+, Firefox, Chrome, Opera, Safari
-        xmlhttp = new XMLHttpRequest();
+        filexmlhttp = new XMLHttpRequest();
     } else {
         // code for IE6, IE5
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        filexmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    if(xmlhttp){
-    	xmlhttp.open('POST', url, true);
-    	xmlhttp.setRequestHeader("enctype", "multipart/form-data");
-		xmlhttp.upload.onprogress = uploadprogress(event);
-		xmlhttp.onreadystatechange = function() {
-			if (xmlhttp.readyState === 4 && xmlhttp.status === 200){
-				callback(xmlhttp.response);
+    if(filexmlhttp){
+    	filexmlhttp.open('POST', url, true);
+    	filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
+		filexmlhttp.upload.addEventListener("progress", function(e){
+			var percent = Math.round((event.loaded / event.total) * 100);
+			progresscallback(e, percent);
+		}, false);
+		filexmlhttp.onreadystatechange = function() {
+			if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200){
+				callback(filexmlhttp.response);
 			}
 		}
     }
-    xmlhttp.send(formdata)
+    filexmlhttp.send(formdata)
 }
 
 function uploadprogress(e){
+	var pc = parseInt(100 - (e.loaded / e.total * 100));
 	if (e.lengthComputable) {
 		var percentComplete = (e.loaded / e.total) * 100;
 		console.log(percentComplete + '% uploaded');
 	}
 }
+
+window.addEventListener('beforeunload', function () 
+{
+	localStorage.removeItem("ls.user_contacts");
+	localStorage.removeItem("ls.user_groups");
+})
 
 ComSer.prototype.login = function (credentials, callback){
 	if(credentials == null || credentials.username == null || credentials.password == null){
@@ -91,7 +111,8 @@ ComSer.prototype.logout = function (username, callback){
 		return "Invalid Username"
 	}
 
-	var data = {username:username}
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken}
 	data['devType'] = 'w';
 
 	sendxmlhttp(data, url+'/logout', 'POST', function(response){
@@ -102,11 +123,13 @@ ComSer.prototype.logout = function (username, callback){
 
 ComSer.prototype.connect = function (){
 	var options = {
-		protocol: 'http',
+		protocol: 'https',
 		hostname: ip,
-		port: 8081
+		port: port
 	};
-	this.socket = io.connect(options, {'forceNew': true}, {'sync disconnect on unload' : true});
+	// this.socket = io.connect(options, {'forceNew': true}, {'sync disconnect on unload' : true}, {'secure': true});	
+	this.socket = io.connect('https://teamr.ajrgroup.in:443');
+	kinda_ntp.init(this.socket);
 }
 
 ComSer.prototype.isConnected = function(){
@@ -119,7 +142,8 @@ ComSer.prototype.subscribe = function (username, callback)
 {
 	if(username == undefined || username == null || username == "")
 		return "Invalid Username"
-	var data = {username:username, devType:'w'};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, devType:'w'};
 	this.socket.emit("subscribe", data, function(err, ackData){
 		callback(err, ackData);
 	});
@@ -133,11 +157,42 @@ ComSer.prototype.sendpresence = function (username, presence, cList, callback)
 	if(presence == undefined || presence == null || presence == "")
 		return "Invalid status"
 
-	var data = {username:username, status:presence, list:cList};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, status:presence, list:cList};
 
 	this.socket.emit("sendpresence", data, function(ackData){
 		callback(ackData);
 	});
+}
+
+ComSer.prototype.changepassword = function(details, callback){
+	if(details == undefined || details == null || details == "")
+		return "Invalid Details"
+
+	if(details.cnfpass == undefined || details.cnfpass == null || details.cnfpass == "")
+		return "Invalid cnfpass";
+
+	if(details.newpass == undefined || details.newpass == null || details.newpass == "")
+		return "Invalid newpass";
+
+	if(details.cnfpass == undefined || details.cnfpass == null || details.cnfpass == "")
+		return "Invalid cnfpass";
+
+	if(details.newpass != details.cnfpass)
+		return "New password and Confirm password are not same"
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, currpass:details.currpass, newpass:details.newpass, 
+		cnfpass:details.cnfpass};
+
+	data['devType'] = 'w';
+	sendxmlhttp(data, url+'/changepassword', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
+
 }
 
 ComSer.prototype.emit = function (eventType, data){
@@ -148,6 +203,8 @@ ComSer.prototype.emit = function (eventType, data){
 }
 ComSer.prototype.emitwithcallback = function (eventType, data ,callback){
 	if(this.socket != null){
+		var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+		data['sessiontoken'] = userdetails.sessiontoken;		
 		data['devType'] = 'w';
 		this.socket.emit(eventType, data , function (err, ackData){
 			callback(ackData);
@@ -179,6 +236,8 @@ ComSer.prototype.listen = function(callback){
 
 		this.socket.on("contactreq", function(data){
 			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			if(usercontacts == null)
+				usercontacts = [];
 			usercontacts.push(data);
 			localStorage.setItem('ls.user_contacts', JSON.stringify(usercontacts));
 			callback("contactreq", data);
@@ -198,7 +257,53 @@ ComSer.prototype.listen = function(callback){
 		});
 
 		this.socket.on("blockcontact", function(data){
+			if(data.success == true){
+				var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+				for(var i = 0; i < usercontacts.length; i++){
+            		if(usercontacts[i].ID == data.data.recid){
+            			usercontacts[i].USERID1_BLOCKING = data.data.obj.USERID1_BLOCKING;
+            			usercontacts[i].USERID2_BLOCKING = data.data.obj.USERID2_BLOCKING;
+
+            	    	usercontacts[i].PRESENCE = 'offline'
+            	    	break;
+	            	}
+	        	}
+	        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+			}
 			callback("blockcontact", data);
+		});
+
+		this.socket.on("unblockcontact", function(data){
+			if(data.success == true){
+				var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+				var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+				for(var i = 0; i < usercontacts.length; i++){
+            		if(usercontacts[i].ID == data.data.recid){
+            			usercontacts[i].USERID1_BLOCKING = data.data.obj.USERID1_BLOCKING;
+            			usercontacts[i].USERID2_BLOCKING = data.data.obj.USERID2_BLOCKING;
+            	    	if(data.data.list[0].USER_ID == userdetails.user_id)
+        	    			usercontacts[i].PRESENCE = data.data.list[1].PRESENCE;
+        	    		else if(data.data.list[1].USER_ID == userdetails.user_id)
+        	    			usercontacts[i].PRESENCE = data.data.list[0].PRESENCE;
+            	    	break;
+	            	}
+	        	}
+	        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+			}
+			callback("unblockcontact", data);
+		});
+
+		this.socket.on("deletecontact", function(data){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+	            if(usercontacts[i].ID == data.recid){
+	                if(data.obj.USERID1_REMOVING == true || data.obj.USERID2_REMOVING == true)
+	                    usercontacts.splice(i, 1);
+	                break;
+	            }
+	        }
+	        localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+			callback("deletecontact", data);
 		});
 
 		this.socket.on("updategroup", function(data){
@@ -214,10 +319,10 @@ ComSer.prototype.listen = function(callback){
 
 		this.socket.on("delmembersfromgroup", function(data){
 			var isdelgroup = false;
-			var user = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')));
+			var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
 			var usergroups = JSON.parse(localStorage.getItem('ls.user_groups'));
 			for(var i = 0; i < data.list.length; i++){
-				if(data.list[i].USERNAME == user.username){
+				if(data.list[i].USERNAME == userdetails.username){
 					for(var j = 0; j < usergroups.length; j++){
 						if(usergroups[j].GROUP_ID == data.groupid){
 							isdelgroup = true;
@@ -245,7 +350,7 @@ ComSer.prototype.listen = function(callback){
 	}		
 }
 
-ComSer.prototype.chathistory = function (username, fromid, toid, callback){
+ComSer.prototype.chathistory = function (username, fromid, toid, offset, callback){
 	if(username == null || username == '' || username == undefined)
 		return ("Please Enter Valid username");
 
@@ -255,7 +360,9 @@ ComSer.prototype.chathistory = function (username, fromid, toid, callback){
 	if(toid == null || toid == '' || toid == undefined)
 		return ("Please Enter Valid toid");
 
-	var data = {username:username, fromid:fromid, toid:toid};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, fromid:fromid, toid:toid, offset:offset};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/getchathistory', 'POST', function(response){
 		var res = JSON.parse(response);
@@ -263,15 +370,18 @@ ComSer.prototype.chathistory = function (username, fromid, toid, callback){
 	});
 }
 
-ComSer.prototype.fileupload = function(username, file, callback) {
+ComSer.prototype.fileupload = function(username, file, callback, progresscallback) {
 	if(username == null || username == '' || username == undefined)
 		return ("Please Enter Valid username");
 
-	// if(file.size > FILE_UPLOAD_LIMIT)
-	// 	return "File Size is big";
+	if(file.size > FILE_UPLOAD_LIMIT)
+		return "File Size is big";
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')));
 
 	var formdata    = new FormData();
     formdata.append('username', username);
+    formdata.append('sessiontoken', userdetails.sessiontoken);
     formdata.append('file', file);
     formdata.processData = false;
     formdata.contentType = false;
@@ -279,7 +389,14 @@ ComSer.prototype.fileupload = function(username, file, callback) {
 	sendfile(formdata, url+"/fileupload", function(response){
 		var res = JSON.parse(response);
 		callback(res);		
-	});
+	}, progresscallback);
+
+	return '';
+}
+
+ComSer.prototype.cancelxmlreq = function(callback){
+	// filexmlhttp.abort();
+	callback();
 }
 
 ComSer.prototype.disconnect = function (){
@@ -302,9 +419,27 @@ ComSer.prototype.searchuser = function (username, searchname, callback)
 		return "Invalid Search Name";
 	}
 
-	var data = {username:username, searchname:searchname};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, searchname:searchname};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/searchuser', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);		
+	});
+}
+
+ComSer.prototype.search = function (searchname, callback)
+{	
+	if(searchname == null || searchname == undefined || searchname == ""){
+		return "Invalid Search Name";
+	}
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, query:searchname};
+	data['devType'] = 'w';
+	sendxmlhttp(data, url+'/search', 'POST', function(response){
 		var res = JSON.parse(response);
 		callback(res);		
 	});
@@ -314,7 +449,9 @@ ComSer.prototype.getcontacts = function (username, callback){
 	if(username == null || username == undefined || username == ""){
 		return "Invalid Username"
 	}
-	var data = {username:username};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/getcontacts', 'POST', function(response){
 		var res = JSON.parse(response);
@@ -323,10 +460,10 @@ ComSer.prototype.getcontacts = function (username, callback){
 	return;
 }
 
-ComSer.prototype.sendContactreq = function (username, toname, toid, callback)
+ComSer.prototype.sendContactreq = function (userdetails, toname, toid, callback)
 {
 	var errStatment = null;
-	if(username == null || username == '' || username == undefined)
+	if(userdetails == null || userdetails == '' || userdetails == undefined)
 		return "please enter valid fromid";
 
 	if(toname == null || toname == '' || toname == undefined)
@@ -335,7 +472,10 @@ ComSer.prototype.sendContactreq = function (username, toname, toid, callback)
 	if(toid == null || toid == '' || toid == undefined)
 		return "please enter valid toid";
 
-	this.socket.emit("sendContactreq", {userdetails:username, toname:toname, contactid:toid}, function(ackData){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	this.socket.emit("sendContactreq", {userdetails:userdetails, sessiontoken:userdetails.sessiontoken, 
+		toname:toname, contactid:toid}, function(ackData){
 		callback(ackData);
 	});
 
@@ -351,15 +491,17 @@ ComSer.prototype.acceptContactreq = function (username, toname, recid, status, c
 		return errAlert;
 	}
 
-	var data = {username:username, toname:toname, recid:recid, status:status};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken,toname:toname, recid:recid, status:status};
 	data['devType'] = 'w';
 
 	this.socket.emit("acceptContactreq", data, function(ackData){
 		if(ackData.success == true){
 			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
 			for(var i = 0; i < usercontacts.length; i++){
-            	if(usercontacts[i].ID == data.recid){
-            	    usercontacts[i].WAITING_APPROVAL = data.WAITING_APPROVAL;
+            	if(usercontacts[i].ID == ackData.data.recid){
+            	    usercontacts[i].WAITING_APPROVAL = ackData.data.WAITING_APPROVAL;
             	    usercontacts[i].PRESENCE = data.status;
                 	break;
             	}
@@ -373,14 +515,48 @@ ComSer.prototype.acceptContactreq = function (username, toname, recid, status, c
 	return;
 }
 
+ComSer.prototype.rejectContactreq = function (username, toname, recid, obj, callback){
+	if(recid == null || recid == '' || recid == undefined)
+		return "please enter valid recid";
+
+	else if(username == null || username == '' || username == undefined)
+		return "Username is not valid";
+
+	else if(toname == null || toname == '' || toname == undefined)
+		return "toname is not valid";
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken,toname:toname, recid:recid, obj:obj};
+	
+	data['devType'] = 'w';
+	this.socket.emit("declinecontact", data, function(ackData){
+		callback(ackData);
+	});
+
+	return;
+}
+
 ComSer.prototype.deletecontact = function (from, touser, recid, obj, callback){
 	if(recid == null || recid == '')
 		return "please enter valid recid";
 
-	var data = {username:from, touser:touser, recid:recid, obj:obj};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:from, sessiontoken:userdetails.sessiontoken,touser:touser, recid:recid, obj:obj};
 
 	data['devType'] = 'w';
 	this.socket.emit("deletecontact", data, function(ackData){
+		if(ackData.success == true){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+				if(usercontacts[i].ID == ackData.data.recid){
+					if(ackData.data.obj.USERID1_REMOVING != undefined || ackData.data.obj.USERID2_REMOVING != undefined)
+						usercontacts.splice(i, 1)
+					break;
+				}
+			}
+			localStorage.setItem('ls.user_contacts', JSON.stringify(usercontacts));
+		}
 		callback(ackData);
 	});
 
@@ -391,20 +567,71 @@ ComSer.prototype.blockcontact = function (from, touser, recid, obj, callback){
 	if(recid == null || recid == '')
 		return "please enter valid recid";
 
-	var data = {username:from, touser:touser, recid:recid, obj:obj};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
 
+	var data = {username:from, sessiontoken:userdetails.sessiontoken,touser:touser, recid:recid, obj:obj};
 	data['devType'] = 'w';
 	this.socket.emit("blockcontact", data, function(ackData){
+		if(ackData.success == true){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+        		if(usercontacts[i].ID == ackData.data.recid){
+        	    		usercontacts[i].USERID1_BLOCKING = ackData.data.obj.USERID1_BLOCKING;
+        	    		usercontacts[i].USERID2_BLOCKING = ackData.data.obj.USERID2_BLOCKING;
+
+        	    	usercontacts[i].PRESENCE = 'offline'
+        	    	break;
+            	}
+        	}
+        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+		}
 		callback(ackData);
 	});
 
 	return;
 }
 
+ComSer.prototype.unblockcontact = function (from, touser, recid, obj, callback){
+	if(recid == null || recid == '')
+		return "please enter valid recid";
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:from, sessiontoken:userdetails.sessiontoken,touser:touser, recid:recid, obj:obj};
+	data['devType'] = 'w';
+	this.socket.emit("unblockcontact", data, function(ackData){
+		if(ackData.success == true){
+			var usercontacts = JSON.parse(localStorage.getItem('ls.user_contacts'));
+			for(var i = 0; i < usercontacts.length; i++){
+        		if(usercontacts[i].ID == ackData.data.data.recid){
+        			usercontacts[i].USERID1_BLOCKING = ackData.data.data.obj.USERID1_BLOCKING;
+        			usercontacts[i].USERID2_BLOCKING = ackData.data.data.obj.USERID2_BLOCKING;
+
+        	    	if(ackData.data.data.list[0].USER_ID == userdetails.user_id)
+        	    		usercontacts[i].PRESENCE = ackData.data.data.list[1].PRESENCE;
+        	    	else if(ackData.data.data.list[1].USER_ID == userdetails.user_id)
+        	    		usercontacts[i].PRESENCE = ackData.data.data.list[0].PRESENCE;
+
+        	    	break;
+            	}
+        	}        	
+        	// usercontacts[i].PRESENCE = ackData.data.data.presence;
+        	localStorage.setItem("ls.user_contacts", JSON.stringify(usercontacts));
+		}
+		callback(ackData);
+	});
+
+	return;
+}
+
+
 ComSer.prototype.sendMessage = function (obj, callback)
 {
-	obj['devType'] = 'w';
-	this.socket.emit("privateChat", obj, function(ackData)
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, chatobj:obj};
+	data['devType'] = 'w';
+
+	this.socket.emit("privateChat", data, function(ackData)
 	{
 		callback(ackData);
 	});
@@ -412,7 +639,9 @@ ComSer.prototype.sendMessage = function (obj, callback)
 
 ComSer.prototype.notifyuser = function (username, touser, callback)
 {
-	var obj = {username:username, touser:touser};
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var obj = {username:username, sessiontoken:userdetails.sessiontoken, touser:touser};
 	obj['devType'] = 'w';
 	this.socket.emit("isTyping", obj, function(ackData){
 		// callback(ackData);
@@ -425,7 +654,10 @@ ComSer.prototype.getfileurl = function(username, msg, callback){
 
 	if(msg == null || msg == '' || msg == undefined)
 		return "please enter valid msg";
-	var data = {username:username, fileid:msg};
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, fileid:msg};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/getfileurl', 'POST', function(response){
 		var res = JSON.parse(response);
@@ -437,18 +669,41 @@ ComSer.prototype.getfileurl = function(username, msg, callback){
 
 ComSer.prototype.creategroup = function(username, details, callback)
 {
+	var self = this;
 	if(username == null || username == '' || username == undefined)
-		return "please enter valid username";
+		return "Please enter valid username";
 
-	if(details == null || details == "" || details == undefined){
-		return "please enter valid details";
-
+	if(details == null || details == undefined || typeof details != "object" ){
+		return "Please enter valid details";
 	}
-	// else if(joingroup == null || joingroup == ""){
-	// 	invitationType = INVITATION_TYPE.BY_APPROVAL;
-	// 	joingroup = JOIN_GROUP.ORGANIZATION;
-	// }
-	var data = {username:username, details:details}
+
+	if(details.groupname == '' || details.groupname == null || details.groupname == undefined){
+		return "Please enter group name";
+    }
+    else if(details.type == '' || details.type == null || details.type == undefined){
+        return "Please select group type"
+    }
+    else if(details.invitation == '' || details.invitation == null || details.invitation == undefined){
+        return "Please select invitation type";
+    }
+    else if(details.invitation == '' || details.invitation == null || details.invitation == undefined){
+        return "Please select invitation type";
+    }
+    if(details.maxlimit == '' || details.maxlimit == null || details.maxlimit == undefined){
+        details.maxlimit = GROUP_DEFAULT_MAXLIMIT;
+    }
+    else if(details.maxlimit > 100)
+    	return "Max limit should be less than 100";
+
+    if(details.joingroup == '' || details.joingroup == null || details.joingroup == undefined){
+        details.joingroup = JOIN_GROUP.ORGANIZATION;
+    }
+    if(details.notification == '' || details.notification == null || details.notification == undefined){
+        details.notification = GROUP_NOTIFICATION.NO;
+    }
+
+    var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, details:details}
 	data['devType'] = 'w';
 
 	sendxmlhttp(data, url+'/creategroup', 'POST', function(response){
@@ -456,9 +711,61 @@ ComSer.prototype.creategroup = function(username, details, callback)
 		if(res.success == true){
 			var resp = JSON.parse(res.data);
 			var groups = JSON.parse(localStorage.getItem("ls.user_groups"));
+			if(groups == null)
+				groups = [];
+
 			groups.push(resp);
 			localStorage.setItem('ls.user_groups', JSON.stringify(groups));
 		}
+		callback(res);		
+	});
+
+	return '';
+}
+
+ComSer.prototype.createdirectteam = function(groupname, groupmembers, message, callback)
+{
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var groupdetails = {"groupname":groupname, "description":'', 
+						"category":'', "expire_date":'', 
+						"type":'multicast', "invitation":'instantadd',
+						"notification": 'no', "joingroup":'organization',
+						"maxlimit":100};
+
+	var self = this;
+
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, details:groupdetails, 
+		groupmembers:groupmembers, messages: message}
+	data['devType'] = 'w';
+
+	sendxmlhttp(data, url+'/creategroup', 'POST', function(response)
+	{
+		var res = JSON.parse(response);
+		if(res.success == true)
+		{
+			var resp = JSON.parse(res.data);
+			var groups = JSON.parse(localStorage.getItem("ls.user_groups"));
+			if(groups == null)
+				groups = [];
+
+			groups.push(resp);
+			localStorage.setItem('ls.user_groups', JSON.stringify(groups));
+		}
+		callback(res);		
+	});
+}
+
+ComSer.prototype.updategroupname = function(groupobj, groupmembers, callback){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var self = this;
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, details:groupobj, 
+		groupmembers:groupmembers}
+	data['devType'] = 'w';
+
+	sendxmlhttp(data, url+'/updategroupname', 'POST', function(response)
+	{
+		var res = JSON.parse(response);
 		callback(res);		
 	});
 }
@@ -473,7 +780,8 @@ ComSer.prototype.searchgroup = function (username, searchname, callback)
 		return "Invalid Search Name";
 	}
 
-	var data = {username:username, searchname:searchname};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, searchname:searchname};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/searchgroup', 'POST', function(response){
 		var res = JSON.parse(response);
@@ -483,14 +791,16 @@ ComSer.prototype.searchgroup = function (username, searchname, callback)
 
 ComSer.prototype.deletegroup = function(groupname, username)
 {
-	this.socket.emit("deleteGroup", {username:username, groupname:groupname}, function(err, ackData){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	this.socket.emit("deleteGroup", {username:username, sessiontoken:userdetails.sessiontoken, groupname:groupname}, function(err, ackData){
 		callback(ackData);
 	});
 }
 
 ComSer.prototype.exitgroup = function(username, groupid, list, callback)
 {
-	var data = {username:username, groupid:groupid, list:list};
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupid:groupid, list:list};
 	data['devType'] = 'w';
 
 	this.socket.emit("exitgroup", data, function(ackData){
@@ -498,8 +808,9 @@ ComSer.prototype.exitgroup = function(username, groupid, list, callback)
 	});
 }
 
-ComSer.prototype.addmemberstogroup = function(username, groupid, groupname, members, callback){
-	var data = {username:username, groupid:groupid, groupname:groupname, list:members}
+ComSer.prototype.addmemberstogroup = function(username, groupobj, members, callback){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupobj:groupobj, list:members}
 	data['devType'] = 'w';
 	this.socket.emit("addmemberstogroup", data, function(ackData){
 		callback(ackData);
@@ -507,15 +818,23 @@ ComSer.prototype.addmemberstogroup = function(username, groupid, groupname, memb
 }
 
 ComSer.prototype.instantadd = function(username, groupid, groupname, members, callback){
-	var data = {username:username, groupid:groupid, groupname:groupname, list:members}
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupid:groupid, groupname:groupname, list:members}
 	data['devType'] = 'w';
 	this.socket.emit("instantadd", data, function(ackData){
+		if(ackData.success == true){
+			var usergroups = JSON.parse(localStorage.getItem('ls.user_groups'));
+			usergroups.push(ackData.data);
+			localStorage.setItem('ls.user_groups', JSON.stringify(usergroups));
+		}
+
 		callback(ackData);
 	});
 }
 
 ComSer.prototype.delmembersfromgroup = function(username, groupid, members, callback){
-	var data = {username:username, groupid:groupid, list:members}
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupid:groupid, list:members}
 	data['devType'] = 'w';
 	this.socket.emit("delmembersfromgroup", data, function(ackData){
 		callback(ackData);
@@ -529,9 +848,10 @@ ComSer.prototype.getgroupmemebers = function(username, groupid, callback)
 
 	if(groupid == null || groupid == "" || groupid == undefined){
 		return "please enter valid groupid";
-
 	}
-	var data = {username:username, groupid:groupid}
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupid:groupid}
 	data['devType'] = 'w';
 
 	sendxmlhttp(data, url+'/getgroupmembers', 'POST', function(response){
@@ -545,13 +865,9 @@ ComSer.prototype.getjoinedgroups = function(username, callback)
 	if(username == null || username == '' || username == undefined)
 		return "please enter valid username";
 
-	var data = {username:username}
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken}
 	data['devType'] = 'w';
-
-	// sendxmlhttp(data, url+'/getjoinedgroups', 'POST', function(response){
-	// 	var res = JSON.parse(response);
-	// 	callback(res);		
-	// });
 
 	this.socket.emit("getjoinedgroups", data, function(ackData){
 		callback(ackData);
@@ -560,46 +876,82 @@ ComSer.prototype.getjoinedgroups = function(username, callback)
 
 ComSer.prototype.subscribegroups = function(username, list)
 {
-	var data = {username:username, list:list}
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, list:list}
 	data['devType'] = 'w';
 	this.socket.emit("subscribegroups", data);
 }
 
-ComSer.prototype.makeadmin = function(groupname, from, contactid, callback)
-{
-	this.socket.emit("makeAdmin", {groupid:groupname, username:from, contact:contactid}, function(err, ackData){
+ComSer.prototype.makeadmin = function(username, groupid, list, callback){
+
+	if(username == null || username == '' || username == undefined)
+		return "please enter valid username";
+
+	if(groupid == null || groupid == "" || groupid == undefined){
+		return "please enter valid groupid";
+	}
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, groupid:groupid, list:list}
+	data['devType'] = 'w';
+
+	this.socket.emit("makeAdmin", data, function(err, ackData){
 		callback(ackData);
 	});
 }
 
 ComSer.prototype.getgroupmessages = function(groupname, from)
 {
-	this.socket.emit("groupmessages", {groupname:groupname, from:from}, function(err, ackData){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	this.socket.emit("groupmessages", {groupname:groupname, from:from, sessiontoken:userdetails.sessiontoken}, function(err, ackData){
 		callback(ackData);
 	});
 }
 
 ComSer.prototype.deletemessages = function(groupname, from, messageList)
 {
-	this.socket.emit("deletemessages", {groupname:groupname, from:from, msgList:messageList}, function(err, ackData){
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	this.socket.emit("deletemessages", {groupname:groupname, sessiontoken:userdetails.sessiontoken, from:from, msgList:messageList}, function(err, ackData){
 		callback(ackData);
 	});
 }
 
 ComSer.prototype.groupmessage = function(chat, callback)
 {
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
 	var data = chat;
+	data['sessiontoken'] = userdetails.sessiontoken;
 	data['devType'] = 'w';
 	this.socket.emit("groupchat", data, function(err, ackData){
 		callback(ackData);
 	});
 }
 
-ComSer.prototype.getgrouphistory = function (username, group_id, callback) {
-    var data = {username:username, group_id:group_id};
+ComSer.prototype.getgrouphistory = function (username, group_id, offset, callback) {
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+    var data = {username:username, sessiontoken:userdetails.sessiontoken, group_id:group_id, offset:offset};
 	data['devType'] = 'w';
 	sendxmlhttp(data, url+'/grouphistory', 'POST', function(response){
 		var res = JSON.parse(response);
 		callback(res);		
+	});
+}	
+
+ComSer.prototype.getservertime = function(callback){
+	return Math.round(kinda_ntp.time());
+}
+
+
+ComSer.prototype.getsharedfiles = function (username, toid, callback) {
+	
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:username, sessiontoken:userdetails.sessiontoken, toid:toid};
+	data['devType'] = 'w';
+
+	sendxmlhttp(data, url + '/getFiles', 'POST', function (response) {
+		var res = JSON.parse(response);
+		callback(res);
 	});
 }

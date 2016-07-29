@@ -1,41 +1,112 @@
-<div class="contact" ng-init="chat_init()">
-	<div class="sidenav">
-		<div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
-			<div class="side-bar-search text-center">
-				<div class="clearfix"></div>
-				<input type="text" placeholder="search">
-				<a href="" ng-click="toggleMenu()"><i class="nc-icon-mini ui-1_zoom"></i></a>
-			</div>
-			<!-- <div class="side-chat-box">
-				<div class="clearfix"></div>
-				<div class="chatlist">
-					<span>Contacts</span>
-					<span class="chatlist-right"><a ui-sref="home.chat.addcontact"><i class="nc-icon-mini users_add-29"></i></a></span>
-				</div>
-			</div> -->
 
-			<div class="side-chat-box">
-                <div class="chatlist">
-                    <span>Contacts</span>
+<div class="contact" ng-init="chat_init()">
+  <div class="sidenav">
+    <div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
+      <div ng-if="searchNewClist == true" class="main"> 
+        <!-- <ul>
+                    <li class="" role="presentation" ng-repeat="item in searchList">
+                        <a href="">
+                            <div class="added-contact-left">
+                                <span><img alt="" class="added-contact-bg" src="content/images/01.jpg" /></span>
+                                <p class="added-contact-text">{{item.username}}</p>
+                            </div>
+                            <div class="added-contact-right" ng-click="sendcontactreq($index)" ng-if="isSeinding == false">
+                                <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i>
+                                <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i>
+                            </div>
+                            <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSeinding == true"></md-progress-circular>
+                        </a>
+                    </li>
+                </ul> -->
+        <ul class="nav-list list">
+          <li class="" role="presentation" ng-repeat="item in searchList" ng-if="item.exist == false"> <a href="">
+            <div class="offline"> <img src="content/images/01.jpg" class="" alt=""> </div>
+            <span>{{item.username}}</span>
+            <div class="added-contact-right" ng-click="sendcontactreq($index)" ng-if="isSending == false"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+            <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+            </a> </li>
+        </ul>
+      </div>
+      <div class="main">
+        <div class="top-left"> <a href="" ng-click="redirectochat()">
+          <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
+          </a> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+          <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+            <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
+            <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+          </a> </div>
+        <div class="clear"></div>
+        <div class="clear"></div>
+        <div class="small-navbar">
+          <ul>
+            <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
+            <li> <a href="#"><i class="nc-icon-mini gestures_pin"></i></a> </li>
+            <li> <a href="#"> <i class="nc-icon-mini envir_home"></i></a> </li>
+            <li> <a href="#"> <i class="nc-icon-mini users_add-27"></i></a> </li>
+          </ul>
+          <div class="side-bar-search text-center">
+            <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
+              <li>
+                <div class="inputsearch">
+                  <input type="text" placeholder="search...">
                 </div>
-               <div class="addgroup-icons"><div class="chatlist-right"><a ui-sref="home.chat.addcontact"><i class="nc-icon-mini users_add-29"></i></a></div></div>
-               <div class="clear"></div>
-            </div>
-			<div class="main">
-				<ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)">
-					<li role="presentation" ng-repeat="contact in contacts" ng-click="getSeluser($index)" ng-class="{active: $index == selected}">
-						<a ui-sref="home.chat.chatview({user:contact.USERNAME })">
-							<div ng-class="contact.PRESENCE">
-								<img src="content/images/01.jpg" class="" alt="">
-							</div>
-							<span>{{contact.USERNAME}}</span> 
-						</a>
-						<div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-              		</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div ui-view style="height:100%;"></div>
-	<div class="middle-right"></div>
+              </li>
+              <li class="left-btn" ng-click="searchtoggle()"> <i class="nc-icon-mini ui-1_zoom"></i> </li>
+            </ul>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div ng-if="searchNewClist == false" class="side-chat-box">
+          <div class="chatlist"> <span>Contacts</span> </div>
+          <div class="addgroup-icons hide-icon">
+            <div class="chatlist-right"> 
+              <!-- <md-tooltip md-direction="right">Add Contact</md-tooltip> --> 
+              <a> <i class="nc-icon-mini users_single-01"></i> </a> </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div ng-if="searchNewClist == false" class="scrollbar" id="style-3"> 
+          <!-- <ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)"> -->
+          <div class="side-nav-main force-overflow" >
+            <ul class="nav-list list" >
+              <li role="presentation" ng-repeat="contact in contacts | filter:searchContact" ng-click="getSeluser($index);" ng-class="{active: $index == selected}"> <a ui-sref="home.chat.chatview({user:contact.USERNAME })">
+                <div ng-class="contact.PRESENCE"> </div>
+                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+              </li>
+            </ul>
+            <div class="sidenav-more" ><span><a href="#"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <div ng-if="searchNewClist == false" class="side-chat-box">
+          <div class="chatlist"> <span>Contacts</span> </div>
+          <div class="addgroup-icons hide-icon">
+            <div class="chatlist-right"> 
+              <!-- <md-tooltip md-direction="right">Add Contact</md-tooltip> --> 
+              <a> <i class="nc-icon-mini users_single-01"></i> </a> </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div ng-if="searchNewClist == false"> 
+          <!-- <ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)"> -->
+          <div class="side-nav-main">
+            <ul class="nav-list list">
+              <li role="presentation" ng-repeat="contact in contacts | filter:searchContact" ng-click="getSeluser($index);" ng-class="{active: $index == selected}"> <a ui-sref="home.chat.chatview({user:contact.USERNAME })">
+                <div ng-class="contact.PRESENCE"> </div>
+                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+              </li>
+            </ul>
+            <div class="sidenav-more"><span><a href="#"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ui-view style="height:100%;"></div>
+  <div class="middle-right"></div>
 </div>

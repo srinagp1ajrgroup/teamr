@@ -17,10 +17,10 @@
 				</div>
 				<div class="addmember-scroll">
 					<ul>
-						<li class="" role="presentation" ng-repeat="contact in contacts1"> 
+						<li class="" role="presentation" ng-repeat="contact in updatedcontacts"> 
 							<a href="">
 								<div class="added-contact-left"> 
-									<span> <img alt="" class="added-contact-bg" src="content/images/11.jpg"></span>
+									<span> <img alt="" class="added-contact-bg" src="content/images/01.jpg"></span>
 									<p class="added-contact-text">{{contact.USERNAME}}</p>
 									<p>Cincinatti, Oh, United States</p>
 								</div>
@@ -45,62 +45,22 @@
 							<div class="left">{{member.username}} </div>
 							<div class="right" ng-click="removemember($index)"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
 						</div>
-						<!-- <div class="cont-add active">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div> -->
 					</div>
-					<!-- <div class="group-contact-left group-added-right">
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-						<div class="cont-add">
-						<div class="left">Charles Morgan </div>
-						<div class="right"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
-						</div>
-					</div> -->
 					<div class="clear"></div>
 				</div>
 				<div class="clear"></div>
-				<div class="buttons">
-					<md-button class="teamr-btn" type="button" ng-click="add()">Add</md-button>
-					<div class="clear"></div>
-				</div>
+				
 			</div>
 		</div>
 	</div>
-	<div class="clear"></div>
+	<md-dialog-actions layout="row">
+      				<span flex></span>
+					<div class="buttons">
+						<md-button class="teamr-btn" type="button" ng-click="add()" ng-disabled="isSending">
+							Add
+							<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="isSending == true"></md-progress-circular>
+						</md-button>
+						<div class="clear"></div>
+					</div>
+				</md-dialog-actions>
 </md-dialog>

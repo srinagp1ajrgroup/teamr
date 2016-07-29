@@ -1,8 +1,9 @@
 
-var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'vjs.video']);
+var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'luegg.directives', 'monospaced.elastic', 'angular.css.injector']);
 
-    xenApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider)
+    xenApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, cssInjectorProvider)
     {
+        cssInjectorProvider.setSinglePageMode(true);
         $urlRouterProvider.otherwise("/login");
 
         $stateProvider.state('login',
@@ -16,38 +17,38 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
             templateUrl: '../views/home.html',
             controller: 'homeController'
         })
-        .state('home.chat', {
-            url: '/chat',
-            templateUrl: '../views/chat.html',
-            controller: 'chatController'
-        })
+        // .state('home.chat', {
+        //     url: '/chat',
+        //     templateUrl: '../views/chat.html',
+        //     controller: 'chatController'
+        // })
         .state('home.callphones', {
             url: '/callphones',
             templateUrl: '../views/callphones.html'
         })
-        .state('home.groupchat', {
-            url: '/groupchat',
-            templateUrl: '../views/groupchat.html',
-            controller:'groupController'
-        })  
+        // .state('home.groupchat', {
+        //     url: '/groupchat',
+        //     templateUrl: '../views/groupchat.html',
+        //     controller:'groupController'
+        // })
         .state('home.broadcast', {
             url: '/broadcast',
             templateUrl: '../views/broadcast.html'
         })
-        .state('home.chat.addcontact', {
-            url: '/addcontact',
-            templateUrl: '../views/addcontact.html',
-            controller: 'addcontactController'
-        })
-        .state('home.chat.chatview', {
+        .state('home.chatview', {
             url: '/chatview:?user',
             templateUrl: '../views/chatview.html',
             controller: 'chatviewController'
         })
-        .state('home.groupchat.groupchatview', {
+        .state('home.groupchatview', {
             url: '/chatview:?group',
             templateUrl: '../views/groupchatview.html',
             controller: 'groupchatController'
+        })
+        .state('changepassword', {
+            url: '/changepassword',
+            templateUrl: '../views/changepassword.html',
+            controller: 'changepasswordController'
         })
     })
 
@@ -66,27 +67,25 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
         }
     })
 
-    xenApp.run(['$state', '$rootScope', 'teamrService', '$location', 'localStorageService', 
-     function ($state, $rootScope, teamrService, $location, localStorageService) {
+    xenApp.run(function ($state, $rootScope, teamrService, $location, $window, localStorageService) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            // event.preventDefault(); 
-            // transitionTo() promise will be rejected with 
-            // a 'transition prevented' error
-            // var loginSuccess = localStorageService.get('loginSuccess')
-            // if(loginSuccess == false || fromState.name == ''){
-            //     console.log("stop back event")
-            //     $location.path('/login')
-            // }
-
-            // else if(loginSuccess == true){
-            //     console.log("stop back event")
-            //     $location.path('/'+toState.name)
-            // }
-
             if ((fromState.name == 'home') || (fromState.name == 'home.chat'))
                 teamrService.removeAllListeners();
+
+            $rootScope.netConnectionStat = navigator.onLine;
+            $window.addEventListener("offline", function () {
+                    $rootScope.$apply(function () {
+                    $rootScope.netConnectionStat = false;
+                });
+            }, false);
+
+            $window.addEventListener("online", function () {
+                $rootScope.$apply(function () {
+                    $rootScope.netConnectionStat = true;
+                });
+            }, false);
         });
-    }]);
+    });
 
     xenApp.filter('capitalize', function () {
         return function (input) {
@@ -130,3 +129,5 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
             updateLater(); // kick off the UI update process.
         }
     });
+
+

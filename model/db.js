@@ -1,3 +1,4 @@
+"use strict";
 var assert = require('assert');
 function mongoDB(db){
 	this.insertRecord = function(collectionName,data,callback){

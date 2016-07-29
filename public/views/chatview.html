@@ -1,100 +1,144 @@
 <div class="middle-contact padt50" ng-class="{slide:!showmenu,close:showmenu}" ng-init="chatviewinit()">
-	<div class="middle-contact-inner">
+	<voice-call ng-show="isoutboundcall || isinboundcall" isoutboundcall=isoutboundcall isinboundcall=isinboundcall callback-fn="acceptcall()" callback-fn1="rejectcall()"> </voice-call>
+	<div class="file_progress">
+		<div class="progressbar-bg" ng-show="showprogress == true">
+			<div id="progressBar" class="progressbar" max="100">
+				<div class="progressbartext"><span>{{filename}}</span></div>
+				<!-- <div class="progressbarpercent"><span>{{progresspercent}}%</span></div> -->
+			</div>
+			<div class="progressbarclose" ng-click="cancelFileUpload(event)"><span>x</span></div>
+		</div>
+	</div>
+
+	<div class="middle-contact-inner" ng-class="{audioinner: isoutboundcall == true}">
 		<div class="middle-contact-top">
 			<div class="middle-contact-left"> 
-				<span class="user-img1">
-				<img src="content/images/01.jpg"></span> 
-				<span>{{seluser}}</span> 
+				<!-- <span class="user-img1" ng-class="selobj.PRESENCE">
+					<img src="content/images/01.jpg">
+				</span> -->
+				<div ng-class="selobj.PRESENCE" class="user-img1">
+					<img src="content/images/profile_icon.jpg" class="" alt="">
+				</div>
+
+				<span>{{selobj.FIRSTNAME+' '+selobj.LASTNAME}}</span> 
 			</div>
 			<div class="active-user" ng-if="isTyping == true">
-				<p>{{seluser}} is typing ...</p>
+				<p>{{selobj.FIRSTNAME+' '+selobj.LASTNAME}} is typing ...</p>
 			</div>
 			<div class="call-icons">
 				<ul>
-					<li><a href="" class="phn-icon-bg"><i class="nc-icon-mini ui-3_phone"></i></a></li>
-                    <li><a href="" class="video-icon-bg"><i class="nc-icon-mini media-1_video-64"></i></a></li>
+					<!-- <li><a href="" ng-click="createteam($event)"><md-tooltip md-direction="bottom">Add members</md-tooltip><i class="nc-icon-mini ui-1_simple-add"></i></a></li> -->
+					<li ng-disabled="isoutboundcall"><md-tooltip md-direction="bottom">Audio Call</md-tooltip><a href="" class="phn-icon-bg" ng-click="outboundvoicecall()"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+                    <li><md-tooltip md-direction="bottom">Video Call</md-tooltip><a href="" class="video-icon-bg"><i class="nc-icon-mini media-1_video-64"></i></a></li>
 					<li>
-						<md-menu>
-							<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
-	                      		<md-icon md-menu-origin> <a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></md-icon>
-	                    	</md-button>
-							<md-menu-content class="menu-dropdown menu-options">
-								<md-menu-item>
-									<md-button ng-click="blockcontact($event)">
-										<div layout="row">
-											<p flex>Block Contact</p>
-										</div>
-									</md-button>
-								</md-menu-item>
-								<md-menu-item>
-									<md-button ng-click="deletecontact($event)">
-										<div layout="row">
-											<p flex>Delete Contact</p>
-										</div>
-									</md-button>
-								</md-menu-item>
-							</md-menu-content>
-						</md-menu>
+						<md-menu-bar>
+							<md-menu>
+								<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+		                      		<md-icon md-menu-origin> <a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></md-icon>
+		                    	</md-button>
+		                    	<md-menu-content class="teamr-dropdown">
+	                                <md-menu-item ng-if="iscontactblock == false">
+	                                    <md-button ng-click="blockcontact($event)">Block Contact</md-button>
+	                                </md-menu-item>
+	                                <md-menu-item ng-if="iscontactblock == true">
+	                                    <md-button ng-click="unblockcontact($event)">Unblock Contact</md-button>
+	                                </md-menu-item>
+	                                <md-menu-item>
+	                                    <md-button ng-click="deletecontact($event)">Delete Contact</md-button>
+	                                </md-menu-item>
+                            	</md-menu-content>
+							</md-menu>
+						</md-menu-bar>
 					</li>
 				</ul>
 			</div>
 			<div class="clear clearfix"></div>
 		</div>
-		<div class="middle-contact-middle" ng-if="selobj.WAITING_APPROVAL == false">
-			<!-- <md-content>
-				<md-list ng-repeat="chats in chatdate">	
-					<md-subheader class="md-no-sticky">{{chats.date}}</md-subheader>
-					<md-list-item class="chat-content" ng-repeat="chat in chats.chats" ng-click="null">
-						<div class="chat-icon-img" ng-show="chat.from != chats.chats[$index-1].from"><img src="content/images/01.jpg" class="md-avatar"/></div>
-						<div class="md-list-item-text" layout="column">
-							<h3 ng-if="chat.from != chats.chats[$index-1].from">{{ chat.from }}</h3>
-							<p>{{ chat.message }}</p>
-						</div>
-			        </md-list-item>
-				</md-list>
-			</md-content> -->
-			<div class="chat-area" ng-repeat="chats in chatdate">
+		<div class="middle-contact-middle" ng-if="selobj.WAITING_APPROVAL == false" scroll-glue chatmessagestatus=chatMessageStatus callback-fn="getchathistory()" topmiddleindex=topMiddleIndex>
+			<div class="page-loader" ng-if="showSpinner==true">
+  				<div class="page-animate"><img src="../content/images/loader-logo.png" alt=""/> </div>
+			</div>
+			<div class="chat-area" ng-repeat="chats in chatdate | orderBy:'timestamp' ">
 				<h4>{{chats.date}}</h4>
-				<div ng-class="chat.chatclass" ng-repeat="chat in chats.chats" ng-if="chat.seluser == seluser">
-					<div class="chat-icon-img" ng-if="chat.from != chats.chats[$index-1].from"><span><img src="content/images/01.jpg"></span></div>
+				<div ng-class="chat.chatclass" ng-repeat="chat in chats.chats | orderBy:'timestamp' " ng-if="chat.seluser == seluser">
+					<!-- <div class="chat-icon-img" ng-if="chat.from != chats.chats[$index-1].from"><span><img src="content/images/01.jpg"></span></div> -->
+					<div class="chat-icon-img"><span><img src="content/images/01.jpg"></span></div>
 					<div class="chat-content" ng-class="{chatcontent: chat.from == chats.chats[$index-1].from}">
 						<div class="chat-content-text">
+							<!-- <div class="chat-username" ng-if="chat.from != chats.chats[$index-1].from"> -->
 							<div class="chat-username">
-								<span  ng-if="chat.from != chats.chats[$index-1].from">{{chat.from}}</span>
-								<div class="messageview text-right">
+								<div>
+									<span class="chat-head">{{chat.from}}</span>									
+								</div>								
+								<div class="chat-time-left">
 									<span class="time">{{chat.time}}</span>
-									<span ng-show="chat.sent == true && chat.delivered == false" class="un-seen">
+									<span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
 										<i class="nc-icon-mini ui-1_eye-19"></i>
 									</span>
 									<span class="seen" ng-if="chat.delivered == true">
 										<i class="nc-icon-mini ui-1_eye-19"></i>
 									</span>
-								</div> 
+								</div>
 							</div>
-							<p ng-if="chat.filetransfer == false">{{chat.message}}</p>
+							<div class="chat-message" ng-if="chat.filetransfer == false">
+								<pre><p class="chat-message-text">{{chat.message}}</p></pre>
+
+								<!-- <span class="chatmessage-timeinfo" ng-if="chat.from == chats.chats[$index-1].from"> -->
+								<span class="chatmessage-timeinfo">									
+									<!-- <span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
+										<i class="nc-icon-mini ui-1_eye-19"></i>
+									</span>
+									<span class="seen" ng-if="chat.delivered == true">
+										<i class="nc-icon-mini ui-1_eye-19"></i>
+									</span>
+									<span class="time">{{chat.time}}</span> -->
+								</span>
+							</div>
 							<div class="video-download" ng-if="chat.filetransfer == true"> 
 								<ul class="video-img">
-									<li ng-if="chat.audio == true"><a href=""><img src="content/images/mp3.png" alt="mp3"></a></li>
-									<li ng-if="chat.video == true">
+									<li ng-if="chat.audio == true">
 										<div class="send-images"> 
 											<div class="chat-data"> <img src="content/images/nature1.jpg" alt=""/>
 												<div class="video-icon"> 
-													<a href="" class="button" ng-click="playvideo(chat.message, $event)"><i class="nc-icon-mini arrows-1_triangle-right-17"></i></a> 
+													<a href="" class="button" ng-click="audioplayer(chat.message, $event)"><i class="nc-icon-mini arrows-1_triangle-right-17"></i></a> 
 												</div>
 											</div>
 										</div>
 									</li>
-									<li ng-if="chat.media == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
+									<li ng-if="chat.video == true">
+										<div class="send-images"> 
+											<div class="chat-data"> <img src="content/images/nature1.jpg" alt=""/>
+												<div class="video-icon"> 
+													<a href="" class="button" ng-click="videplayer(chat.message, $event)"><i class="nc-icon-mini arrows-1_triangle-right-17"></i></a> 
+												</div>
+											</div>
+										</div>
+									</li>
+									<li ng-if="chat.ext == 'pdf'"><a href=""><img src="content/images/pdf.png" alt="mp3"></a></li>
+									<li ng-if="chat.ext == 'rar'"><a href=""><img src="content/images/rar.png" alt="mp3"></a></li>
+									<li ng-if="chat.ext == 'zip'"><a href=""><img src="content/images/zip-file.png" alt="mp3"></a></li>
+									<li ng-if="chat.ext != 'pdf' && chat.ext != 'zip' && chat.ext != 'rar' && chat.audio == false && chat.video == false"><a href=""><img src="content/images/text.png" alt="mp3"></a></li>
 								</ul>
 								<div class="progress-status">
 									<a href="" class="download-btn" ng-click="download(chat.message)">
+										<md-tooltip md-direction="bottom">Download</md-tooltip>								
 										<i class="nc-icon-mini arrows-2_hit-down"></i>
 									</a>
+									<!-- <span class="messageview text-right" ng-if="chat.from == chats.chats[$index-1].from">
+										<span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
+											<i class="nc-icon-mini ui-1_eye-19"></i>
+										</span>
+										<span class="seen" ng-if="chat.delivered == true">
+											<i class="nc-icon-mini ui-1_eye-19"></i>
+										</span>
+										<span class="time">{{chat.time}}</span>
+									</span> -->
 								</div>
-								<div class="clear"></div>
+								<div class="clear" ng-if="chat.media == true"></div>
 								<div class="loading-status">
 									<p>{{chat.filename}}</p>
-								</div>
+								</div>								
+								<div class="clear" ng-if="chat.media == false"></div>
 							</div>
 						</div>
 					</div>
@@ -104,28 +148,26 @@
 
 		<div class="middle-contact-middle send-request" ng-if="selobj.incomingreq == false && selobj.WAITING_APPROVAL == true">
 			<div class="send-request-box">
-				<p>This person isn't in your Contact list.  |  Telangana, India</p>
-				<span class="send-request-btn1">
-					<button>
-						<span>Contact Request</span>  
-						<i class="nc-icon-mini ui-1_check"></i>
-					</button>
-	          	</span>
-	          	<span class="send-request-btn">
-	          		<button>Resend Request</button>
-	          	</span>
+				<p>Contact Request sent</p>
+				<p>This person is not in your Contact list.</p>
+				<div class="send-requset-main">
+					<button class="teamr-btn send-request-btn md-button md-ink-ripple" type="button">
+						<span>Resend Contact Request</span><div class="md-ripple-container"></div>
+                    </button>
+		          	<div class="clear"></div>
+	          	</div>
 			</div>
 			<div class="user-chat-area request-sent">
 				<h4 class="pad15">Today</h4>
 				<div class="chat-content-text">
 					<div class="pad15">
 						<span>Hi {{seluser}}, I'd like to add you as a contact.</span>
-						<div class="messageview text-right">
-							<span class="time"></span>
-							<span class="un-seen">
+						<span class="messageview text-right">
+							<span class="seen" ng-if="chat.delivered == true">
 								<i class="nc-icon-mini ui-1_eye-19"></i>
 							</span>
-						</div> 
+							<span class="time">{{chat.time}}</span>
+						</span> 
 					</div>
 				</div>
 			</div>
@@ -136,36 +178,38 @@
 				<p>{{seluser}}, is not in your contacts</p>
 				<p>{{seluser}} would like to add you in TeamR</p>
 				<div class="send-request-accept-button">
-					<span class="send-request-btn1 pad15">
-						<button>
-							<a href="" ng-click="acceptcontactreq()"><i class="nc-icon-mini ui-1_check"> </i></a>
-							<span>Add to Contacts</span>
-							<i class="nc-icon-mini ui-1_simple-remove"></i> 
-						</button>
-					</span>
+					<div class="send-requset-main">
+						<div class="send-request-btn1">
+							<a href="" ng-click="acceptcontactreq()">
+								<button class="teamr-btn md-button md-ink-ripple" type="button">
+                            	<span class="ng-scope">Accept</span><div class="md-ripple-container"></div></button>
+							</a>							
+							<a href="" ng-click="rejectcontactreq()">
+								<button class="teamr-btn teamr-cancel md-button md-ink-ripple" type="button"><span>Decline</span><div class="md-ripple-container"></div></button>
+							</a>
+						</div>
+						<div class="clear"></div>				
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="clear"></div>
-		<div class="middle-contact-bottom" ng-disabled="isblock">
+		<div class="middle-contact-bottom" ng-disabled="isblock || !netConnectionStat">
 			<div class="bottom-fix">
 				<div class="attach-file">
 					<a href="" ng-click="uploadfile()">
+						<md-tooltip md-direction="top">Upload File</md-tooltip>
 						<i class="nc-icon-mini ui-1_attach-86"></i>
 					</a>
 				</div>
-				<div class="chat-input" ng-disabled="isblock">
-					<input type="text" placeholder="Type your message here" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();" ng-disabled="isblock">
+				<div class="chatbox-icons" ng-disabled="isblock || !netConnectionStat">
+					<a href="" ng-disabled="isblock || !netConnectionStat"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
 				</div>
-				<div class="chatbox-icons" ng-disabled="isblock">
-					<a href="" ng-disabled="isblock"><i class="nc-icon-outline emoticons_satisfied"></i> </a>
-				</div>
-              	<div class="chatbox-icons"><a href="" ng-click="sendMessageOnSubmit()" ng-disabled="isblock"><i class="nc-icon-mini ui-3_send"></i></a></div>
-				 
-				<!-- <a href="" class="chatbox-icons" ng-click="sendMessageOnSubmit()">
-					<i class="nc-icon-outline emoticons_satisfied"></i> <i class="nc-icon-mini ui-3_send"></i> 
-				</a> -->
-				<input type="file" id="choose" multiple=true class="file-loading" style="display:none;">
+              	<div class="chatbox-icons chatbox-icons1" ng-disabled="isblock || !netConnectionStat"><md-tooltip md-direction="top">Send message</md-tooltip><a href="" ng-click="sendMessageOnSubmit()" ng-disabled="isblock || !netConnectionStat"><i class="nc-icon-mini ui-3_send"></i></a></div>				
+				<div class="chat-input" ng-disabled="isblock || !netConnectionStat">
+					<textarea id="chat_msg" ng-init="focusChatBox()" class="msd-elastic" placeholder="Type your message here" ng-blur="sessionStorageMessage()" ng-model="message" ng-keypress="sendmessage($event)" ng-keyup="notifyTyping();" ng-disabled="isblock || !netConnectionStat"></textarea>
+				</div>				
+				<input type="file" id="choose" class="file-loading" style="display:none;">
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
@@ -173,3 +217,61 @@
 		<div class="clear"></div>
 	</div>
 </div>
+<div class="middle-right">
+  <!-- <div class="select-options">
+    <div class="dropdown"> <i class="nc-icon-mini ui-2_menu-dots dropbtn" ng-click="myFunction()"></i>
+      <div id="myDropdown" class="dropdown-content"> <a href="" ng-click="allfiles()">All Files</a></div>
+    </div>
+  </div> -->
+  <div class="files-upload-panel" id="allfiles" ><!--ng-class="{rightviewshow:!filemenu,rightviewhide:filemenu}"-->
+    
+    <div class="right-heading">
+      <h4>All Your files </h4>
+      <!-- <span ng-click="closeWindow()"><i class="nc-icon-outline ui-1_simple-remove"></i></span> -->
+      <div class="dropdown"> 
+      	<i class="nc-icon-mini ui-2_menu-dots dropbtn" ng-click="myFunction()"></i>
+      </div>
+      <div class="clear"></div>
+       </div>
+    <div class="upload-files">
+           <div class="recently-files" ng-repeat="file in files" ng-click="readfile(file)">
+               <div class="file-img" ng-class="(file.ext == 'pdf')?'filetype-pdf':(file.ext == 'rar')?'filetype-rar':(file.ext == 'zip')?'filetype-zip':(file.audio == true)? 'filetype-mp3':(file.ext == 'txt')?'filetype-text':'filetype-unknown'">
+                   <img ng-if="file.ext == 'pdf'" src="../content/images/pdf.png"  alt=""/>
+                   <img ng-if="file.ext == 'rar'" src="../content/images/rar.png" alt=""/>
+                   <img ng-if="file.ext == 'zip'" src="../content/images/zip-file.png" alt=""/>
+                   <img ng-if="file.ext == 'txt'" src="../content/images/text.png" alt=""/>
+                   <img ng-if="file.audio == true" src="../content/images/mp3.png" alt=""/>
+                   <img ng-if="file.video == true" src="../content/images/nature1.jpg" alt=""/>
+                   <img ng-if="file.media == false && file.audio == false && file.video == false   && file.ext != 'pdf' && file.ext != 'rar' && file.ext != 'zip' && file.ext != 'txt' " src="../content/images/unknown_white.png" alt=""/>
+                   <img ng-if="file.media == true" src="../content/images/audio-call.jpg" alt=""/>
+               </div>
+                <div class="file-details">
+                    <span>{{file.created_by}}</span>
+                    <h4>{{file.file_name}}</h4>
+                    <span> {{file.date}} at {{file.time}}</span>
+               </div> 
+               <div class="clear"></div>
+           </div>
+    </div>
+  </div>
+  <div class="group-members-panel" id="groupMember" ng-class="{rightviewshow:!filemenu,rightviewhide:filemenu}">
+    <div class="right-heading">
+      <h4>All Your files </h4>
+      <div class="select-options">
+           <div class="dropdown"> <i class="nc-icon-mini ui-2_menu-dots dropbtn" ng-click="myFunction()"></i>
+             <!-- <div id="myDropdown" class="dropdown-content"> <a href="" ng-click="allfiles()">All Files</a><a href="">Group Members</a></div> -->
+		   </div>
+		 </div>
+      <!-- <span ng-click="closeWindow()"><i class="nc-icon-outline ui-1_simple-remove"></i></span> -->
+       <div class="clear"></div>
+      
+       </div>
+  </div>
+</div>
+</div>
+
+
+<audio id="ringtone" loop src="sounds/ringtone.wav"></audio>
+<audio id="ringbacktone" loop src="sounds/ringbacktone.wav"></audio>
+<audio id="dtmfTone" src="sounds/dtmf.wav"></audio>
+<audio id="audio_remote" autoplay="autoplay"></audio>

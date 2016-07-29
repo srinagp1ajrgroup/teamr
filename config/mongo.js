@@ -1,3 +1,4 @@
+"use strict";
 var mongoose    = require('mongoose');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
@@ -34,6 +35,7 @@ exports.UserToken = mongoose.model('UserToken',{
   'username': String,
   'user_id' : String,
   'token' : String,
+  'sessiontoken': String,
   'status_id': String
 },'UserToken');
 

@@ -1,19 +1,17 @@
+"use strict";
 var sio 			= require('socket.io');
 var requestify 		= require("requestify");
-var http            = require('http');
+var http            = require('https');
 var routeHandler 	= require('../controller/routeHandler');
-var socketHandler 	= require('../controller/socketHandler');
 var newSockHandler 	= require('../controller/newSockHandler');
 var scocuHandler 	= require('../controller/scocuHandler').scocu;
-var redisHandler 	= require('../controller/redisHandler').redisCli;
-var util			= require('../model/util').util; 
-var redisSock		= require('socket.io-redis');
+var dbutil			= require('../model/dbutil').dbutil;
+var utils			= require('../model/utils');
 var globals			= require('./global');
-var redisClient 	= require('redis').createClient(globals.redisConfig);
 var cluster 		= require('cluster');
 var os				= require('os');
-var sticky          = require('socketio-sticky-session');
-
+var fs 				= require('fs');
+//var sticky          = require('socketio-sticky-session');
 
 module.exports = function(app, mongo, express){
 	"use strict";
@@ -56,23 +54,22 @@ module.exports = function(app, mongo, express){
 // 		});
 
 // 	}
-	
-	var server 		= http.createServer(app).listen(globals.appConfig.port, function() {
+
+	var options = {
+		key: fs.readFileSync('certs/new1.pem'),
+		cert: fs.readFileSync('certs/17586483repl_2.crt')
+	};
+	var server 		= http.createServer(options, app).listen(globals.appConfig.port, function() {
 		console.log('server started on port : '+globals.appConfig.port);
 	});
 	
 	var io 			= sio.listen(server);
-	var utils 		= new util(mongo);
-	var redisCli	= new redisHandler (redisClient);
+	var dbutils 		= new dbutil(mongo);
 	var scocu 		= new scocuHandler(requestify, utils);
-	io.adapter(redisSock(globals.redisConfig));
-	routeHandler(app, utils, scocu, redisCli);
+	// io.adapter(redisSock(globals.redisConfig));
+	routeHandler(io, app, dbutils, scocu, utils);
 	// socketHandler(io, app, utils, scocu);
-	redisClient.on("error", function(err) {
-		console.error("Error connecting to redis :" + err);
-	});
-	newSockHandler(io, app, utils, scocu, redisCli);
-
+	newSockHandler(io, app, dbutils, scocu, utils);
 
 	// sticky(function() {
 		

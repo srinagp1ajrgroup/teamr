@@ -22,7 +22,7 @@ xenApp.controller('addcontactController', function ($scope, $state, $rootScope, 
         teamrService.searchcontact($scope.userdetails.username, $scope.searchContact, function(response){
             $scope.isLoading = false;
             console.log(response);
-            if(response.success == true){                
+            if(response.success == true){              
                 $scope.searchList = response.list.data;
                 for(var i = 0; i < $scope.searchList.length; i++){
                     if($scope.searchList[i].id == $scope.userdetails.user_id){
@@ -35,18 +35,18 @@ xenApp.controller('addcontactController', function ($scope, $state, $rootScope, 
                             }
                         }
                     }
-                }
-
-                $scope.$apply();
+                }                
             }
+            $scope.$apply();
         });
     }
 
     $scope.sendcontactreq = function($index){
         $scope.isSeinding = true;
-        teamrService.addcontact($scope.userdetails, $scope.searchList[$index].username, $scope.searchList[$index].id, 
+        teamrService.addcontact($scope.userdetails.username, $scope.searchList[$index].username, $scope.searchList[$index].id, 
             function(response){
                 $scope.isSeinding = false;
+                $scope.$digest();
                 console.log(response);
                 if(response.success == true){
                     var data = JSON.parse(response.data);
@@ -60,8 +60,8 @@ xenApp.controller('addcontactController', function ($scope, $state, $rootScope, 
                             "USERNAME":$scope.searchList[$index].username,
                             "EMAIL":$scope.searchList[$index].email,
                             "ID":data.data.id,
-                            "CONTACT_USER_ID1":data.data.contact_user_id1.$oid,
-                            "CONTACT_USER_ID2":data.data.contact_user_id2.$oid,
+                            "CONTACT_USER_ID1":data.data.contact_user_id1,
+                            "CONTACT_USER_ID2":data.data.contact_user_id2,
                             "WAITING_APPROVAL":data.data.waiting_approval,
                             "PRESENCE":"offline",
                             "PICTURE_URL":"",
@@ -72,7 +72,12 @@ xenApp.controller('addcontactController', function ($scope, $state, $rootScope, 
                         usercontacts.push(contact);
                         localStorageService.set('user_contacts', usercontacts);
                         $rootScope.$broadcast('updatecontact', contact);                        
-                    }                    
+                    }   
+
+                }
+                else{
+                    console.log('error in adding contact')
+                    // $scope.isSeinding = false;
                 }                
         });
     }

@@ -13,7 +13,7 @@
         <div class="group-remove-list">
             <div class="remove-contact-left">
                 <div class="cont-remove" ng-repeat="member in groupmembers" ng-if="member.USERNAME != username">
-                    <div class="left"><div class="delete-contact-bg"><img src="content/images/audio-call.jpg" alt=""></div>{{member.USERNAME}} </div>
+                    <div class="left"><div class="delete-contact-bg"><img src="content/images/01.jpg" alt=""></div>{{member.USERNAME}} </div>
                     <div class="right" ng-click="addmemtoqueue($index)"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
                     <div class="clear"></div>
                 </div>
@@ -21,10 +21,15 @@
         </div>        
       </md-dialog-content>
     </div>
-
+    <md-dialog-actions layout="row">
+      <span flex></span>
     <div class="buttons">
-      <md-button class="teamr-btn" type="button" ng-click="deletemembers()">Ok</md-button>
+      <md-button class="teamr-btn" type="button" ng-click="deletemembers()" ng-disabled="isSending">
+        Ok
+        <md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="isSending == true"></md-progress-circular>
+      </md-button>
       <md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
       <div class="clear"></div>
     </div>
+    </md-dialog-actions>
 </md-dialog>

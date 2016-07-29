@@ -1,0 +1,34 @@
+<div class="audio-call-bg" ng-class="{minimum:!showmax,maximum:showmax}">
+	<div class="audio-full-width"><a href=""><i class="nc-icon-mini arrows-1_fullscreen-double-75"></i></a> </div>
+	<div class="audio-call-max" ng-if="isoutboundcall==true">
+		<div class="audio-calling-time">
+			<div class="caller-name username">{{userdetails.username}}</div>
+			<div class="audio-caller-name"><img alt="audio-call" src="content/images/audio-call.jpg"></div>
+			<div class="caller-name username">Calling {{callduration}}</div>
+			<div class="clear"></div>
+		</div>
+		<div class="audio-call-bottom">
+			<div class="audio-icon-option">
+				<ul>
+					<li class="usermenu"><a href="" ng-click="showMenuSetting()"><i class="nc-icon-mini ui-2_menu-34"></i></a></li>
+					<li class="userchat"><a href="" ng-click="callmax()"><i class="nc-icon-mini ui-2_chat-round-content"></i></a></li>
+					<li><a href=""><i class="nc-icon-mini media-2_headphones"></i></a></li>
+					<li><a href=""><i class="nc-icon-mini tech_webcam-39"></i></a></li>
+					<li><a href=""><i class="nc-icon-mini ui-1_simple-add"></i></a></li>
+					<li class=""><a href="" ng-click="closecall()"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="group-audio-calling">
+			<li class="audio-profile-img"> 
+				<img alt="profile-img" src="content/images/audio-call.jpg"><p>Hunter Meyer</p>
+			</li>
+		</div>
+	</div>
+
+	<div ng-if="isinboundcall==true">
+		<button ng-click="acceptcall()">Accept</button>
+		<button ng-click="rejectcall()">Reject</button>
+	</div>
+</div>

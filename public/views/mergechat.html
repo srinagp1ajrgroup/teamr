@@ -1,0 +1,31 @@
+<md-dialog class="mergegroup">
+  <form>
+    <div class="blo-contact merge-chat">
+      <md-dialog-content>
+        <div class="md-dialog-content">
+          <div class="merge-contact-heading">
+            <h2>Do You Want Merge Chat</h2>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+          <div class="clear"></div>
+          <div class="">
+            <div class="group-fields">
+              <div class="left">Since When Date & Time</div>
+              <div class="right date-picker">
+                <md-datepicker ng-model="copydate" md-placeholder="DD/MM/YYYY" md-open-on-focus md-min-date="minDate" ></md-datepicker>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>
+      </md-dialog-content>
+    </div>
+    <div class="buttons mergechat-btn1">
+      <md-button class="teamr-btn" type="button" ng-click="add()"> Ok </md-button>
+      <div class="clear"></div>
+    </div>
+  </form>
+</md-dialog>

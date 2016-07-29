@@ -1,0 +1,31 @@
+<md-dialog class="mergegroup">
+	<form>
+    <div class="blo-contact merge-chat">
+      <md-dialog-content>
+        <div class="md-dialog-content">
+          <div class="merge-contact-heading">
+            <h2>Please change group name</h2>
+            <md-button class="md-icon-button" ng-click="cancel()">
+              <md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+            </md-button>
+          </div>
+          <div class="clear"></div>
+          <div class="">
+              <div class="add-contact-search">
+                  <input type="text" placeholder="Enter group name" ng-model="searchvalue">
+                  <a href="" ng-click="searchgrouplist()" ng-if="isLoading == false">
+                  <i class="nc-icon-mini ui-1_zoom"></i> 
+                  </a>
+                  <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="30px" ng-if="isLoading == true"></md-progress-circular>
+                  <div class="clear"></div>
+              </div>
+          </div>
+        </div>
+      </md-dialog-content>
+    </div>
+    <div class="buttons mergechat-btn1">
+      <md-button class="teamr-btn" type="button" ng-click="add()"> Ok </md-button>
+      <div class="clear"></div>
+    </div>
+  </form>
+</md-dialog>

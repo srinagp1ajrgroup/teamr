@@ -1,3 +1,4 @@
+"use strict";
 var globals         = require('../config/global');
 var requestify      = require('requestify'); 
 var request         = require('request');
@@ -32,7 +33,7 @@ function scocu(requestify, utils){
 
     this.fileupload = function(file, callback){
         var asset = {};
-        var req = request.post('https://brisol.net/ss-d/api/files', function (err, resp, body) {
+        var req = request.post('https://brisol.net/ss2-d/api/files', function (err, resp, body) {
             if (err) {
                 console.log('Error!');
                 callback(err, body);

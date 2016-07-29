@@ -1,12 +1,8 @@
-
-module.exports.application_id 	= 	'570b391969702d257b3a0b00';
-module.exports.app_user_ip 		= 	'216.117.82.233';
-module.exports.mongoUrl 		= 	'mongodb://localhost:27017/xenChat';
+"use strict";
+module.exports.application_id 	= 	'5773a2a95d5a2928c000001f';
+module.exports.app_user_ip 		= 	'216.117.56.68';
+module.exports.mongoUrl 		= 	'mongodb://localhost:27017/teamr';
 module.exports.secret 			= 	'comser';
 module.exports.devList 			= 	['m','w','t'];
-module.exports.redisConfig 		= 	{ 'host':'localhost','port':6379 };
-module.exports.appConfig 		= 	{ 'host':'localhost','port': 8081 };
-module.exports.baseURL 			= 	"https://brisol.net/ss-d/api/"
-// module.exports.userUrl 			=   "https://brisol.net/ss-d/api/comservusers/";
-// module.exports.baseUrl 			= 	"https://brisol.net/ss-d/api/comserv/";
-// module.exports.logUrl  			= 	"https://brisol.net/ss-d/api/app_users/";
+module.exports.appConfig 		= 	{ 'host':'localhost','port': 443 };
+module.exports.baseURL 			= 	"https://brisol.net/ss2-d/api/";

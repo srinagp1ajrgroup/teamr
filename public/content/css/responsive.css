@@ -1,15 +1,36 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,300,400italic,700);
 
-@media only screen and (min-width:1367px) and (max-width:1920px) {
+@media only screen and (min-width:1601px) and (max-width:1920px) {
 .middle-contact-middle {
-	height: 84%;
-	overflow: auto;
-	width: 100%;
+    height: 84%;
+    overflow: auto;
+    width: 100%;
+}
+.menu-dropdown.menu-options {
+    right: 342px;
 }
 }
+
+@media only screen and (min-width:1440px) and (max-width:1600px) {
+.menu-dropdown.menu-options {
+    right: 252px;
+}
+}
+
+@media only screen and (min-width:1367px) and (max-width:1439px) {
+.middle-contact-middle {
+    height: 84%;
+    overflow: auto;
+    width: 100%;
+}
+.menu-dropdown.menu-options {
+    right: 281px;
+}
+}
+
 @media only screen and (min-width:1280px) and (max-width: 1365px) {
-	.user-inner {
-    right:68px;
+.user-inner {
+    right: 68px;
 }
 .menu-dropdown.menu-options {
     right: 222px;
@@ -18,42 +39,45 @@
     width: 48%;
 }
 }
+
 @media only screen and (min-width: 1024px) and (max-width: 1365px) {
 .top-middle ul li a span {
-	padding: 5.8px 32px !important;
+    padding: 5.8px 32px !important;
 }
 .top-middle {
-	width: 64.2%;
+    width: 64.2%;
 }
 .top-left {
-	width: 18.9%;
+    width: 18.9%;
 }
 .top-right {
-	width: 15%;
+    width: 15%;
 }
 .sidenav-inner {
-	width: 19%;
+    width: 19%;
 }
 .middle-contact.slide {
-	margin-left: 18.9%;
-	
-	width: 63%;
+    margin-left: 18.9%;
+    width: 63%;
 }
 }
 
 @media only screen and (min-width: 1024px) and (max-width:1279px) {
 .user-inner {
-	right: 36px;
+    right: 36px;
 }
 .sidenav .nav-list li a {
-	padding: 4px 4px 4px 11px;
+    padding: 4px 4px 4px 11px;
+}
+.hide_panel .nav-list li a {
+    padding: 0px 4px 0px 12px;
 }
 .menu-dropdown.menu-options {
     right: 177px;
 }
 .menu-options::before {
     right: 24px;
-} 
+}
 .chatlist a {
     margin-right: -14px;
 }
@@ -83,6 +107,9 @@
 .side-bar-search input {
     width: 79%;
 }
+.hide_panel .side-bar-search input {
+    width: 0px;
+}
 .hide_panel .side-bar-search {
     padding: 0 6px;
 }
@@ -100,7 +127,7 @@
     left: 18%;
 }
 .user-login-page {
-    right:18%;
+    right: 18%;
 }
 .chat-input {
     width: 88%;
@@ -108,10 +135,20 @@
 .hide_panel .chatlist {
     padding: 0px 11px 0 14px;
 }
+.addgroup-icons {
+    margin-right: 13px;
 }
+.menu-dropdown {
+    right: 0px
+}
+.hide_panel .addgroup-icons {
+    margin-right: 7px;
+}
+}
+
 @media only screen and (min-width:980px) and (max-width:1023px) {
 .top-middle {
-width: 64.1%;
+    width: 64.1%;
 }
 .user-inner {
     right: 25px;
@@ -119,7 +156,7 @@ width: 64.1%;
     z-index: 99;
 }
 .menu-dropdown.menu-options {
-    right: 168px;
+    right: 159px;
 }
 .menu-dropdown {
     right: -8px;
@@ -132,19 +169,20 @@ width: 64.1%;
 .sidenav .nav-list li a {
     padding: 4px 4px 4px 8px;
 }
-
+.hide_panel .nav-list li a {
+    padding: 0px 4px 0px 8px;
+}
 .hide_panel .nav-list li a:hover span {
     margin: 0 6px;
 }
 .middle-contact.close {
     margin-left: 4.3%;
-
 }
 .chat-input {
     float: left;
     width: 85%;
 }
-	.user-details .md-menu {
+.user-details .md-menu {
     margin: -5px 0px;
 }
 .user-details {
@@ -168,35 +206,38 @@ width: 64.1%;
 }
 .side-bar-search input {
     width: 78%;
-
+}
+.hide_panel .side-bar-search input {
+    width: 0px;
 }
 .cgroup {
-    width: 40%;
+    width: 45%;
     min-height: 80%;
 }
-.tr-logo{
-    left:18%;
+.tr-logo {
+    left: 18%;
 }
 .user-login-page {
-    right:18%;
+    right: 18%;
 }
 .call-icons {
     width: 19%;
-
 }
 .middle-contact-right {
     width: 41%;
 }
+.hide_panel .addgroup-icons {
+    margin-right: 10px;
 }
-@media only screen and (min-width: 768px) and (max-width: 979px) {
+}
 
+@media only screen and (min-width: 768px) and (max-width: 979px) {
 .top-middle ul li a span {
     padding: 5.8px 11px !important;
 }
 .top-left {
     width: 21%;
 }
-
 .top-right {
     float: left;
     padding-right: 12px;
@@ -207,66 +248,65 @@ width: 64.1%;
     width: 48%;
 }
 .user-details {
-	padding:2px 0 0 0;
+    padding: 2px 0 0 0;
 }
-
 .sidenav-inner {
     width: 21%;
 }
 .sidenav .nav-list li a {
     padding: 4px 2px 4px 6px;
 }
-
+.hide_panel .nav-list li a {
+    padding: 0px 4px 0px 6px;
+}
 .middle-contact.slide {
     margin-left: 20.8%;
 }
 /*.nav-list span {
-	width: 52% !important;
+    width: 52% !important;
 }*/
 .call-icons {
-	float: right;
-	padding-top: 1px;
-	text-align: right;
-	width: 26%;
+    float: right;
+    padding-top: 1px;
+    text-align: right;
+    width: 26%;
 }
 .side-bar-search {
     padding: 0 14px;
 }
 .side-bar-search a {
-	float: right;
-	margin: 0;
+    float: right;
+    margin: 0;
 }
 .middle-contact.close {
-	margin-left: -8.8%;
-	width: 78.6%;
+    margin-left: -8.8%;
+    width: 78.6%;
+}
+.hide_panel .side-bar-search input {
+    width: 0px;
 }
 .side-bar-search input {
-	width: 79%;
-}
-.left-btn {
-	margin: 5px -8px 0 0;
+    width: 79%;
 }
 .chat-user i {
-	margin-right: -5px;
+    margin-right: -5px;
 }
 .user-inner {
-    right:50px;
-    top:42px;
+    right: 50px;
+    top: 42px;
     width: 160px;
 }
-
 .add-contact-search > input {
     width: 85%;
 }
 .menu-dropdown {
-    right: 0px;
-    width: 148px;
+    right: 0px
 }
 .menu-dropdown.menu-options {
-    right: 109px;
+    right: 116px;
 }
 .bottom-fix {
-    margin-left:7.5% !important;
+    margin-left: 7.5% !important;
     margin-top: 0.8%;
     width: 91.7%;
 }
@@ -274,23 +314,19 @@ width: 64.1%;
     float: left;
     width: 85%;
 }
-.middle-contact-bottom input {
+.middle-contact-bottom textarea {
     width: 85%;
 }
 .chatbox-icons {
-    margin-right: 21px;
-    margin-top: 9px;
 }
-
 .middle-contact.close {
     margin-left: 5.2%;
 }
-
-
 .hide_panel .nav-list li a:hover span {
-    margin: 0 5px;
+    margin: 0px 5px;
+    padding: 13px;
 }
-	.user-details .md-menu {
+.user-details .md-menu {
     margin: -5px 0px;
 }
 .user-details {
@@ -300,11 +336,11 @@ width: 64.1%;
     max-width: 89px !important;
 }
 .cgroup {
-    width: 52%;
+    width: 55%;
 }
 md-dialog {
-    min-width:auto !important;
-	min-height:auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
 }
 .tr-logo {
     left: 10%
@@ -316,13 +352,10 @@ md-dialog {
     width: 77%;
 }
 .added-contact-left {
-
     width: 82%;
-
 }
 .added-contact-left .added-contact-bg {
     margin: 0 5px 0 5px;
-
 }
 .added-contact-left > p:nth-child(3) {
     width: 62%;
@@ -336,15 +369,409 @@ md-dialog {
 .group-chat li {
     margin-left: 5px;
 }
+.hide_panel .addgroup-icons {
+    margin-right: 9px;
 }
+.addgroup-icons {
+    margin-right: 9px;
+}
+.top-middle ul li a {
+    font-size: 10px;
+}
+}
+
 @media only screen and (min-width: 768px) and (max-width: 980px) {
-	.call-icons {
+.call-icons {
     width: 27%;
 }
 .middle-contact-right {
     width: 40%;
 }
+.top-right {
+    float: right;
+    width: 18%;
+}
 }
 
-@media only screen and (min-width: 769px) and (max-width: 979px) {
+@media only screen and (min-width:320px) and (max-width:767px) {
+header {
+    background-color: #2d2e2b;
+    height: 50px;
+    width: 100%;
+}
+.main-top {
+    width: 100%;
+}
+.main-top .top-left img {
+    padding: 5px 10px;
+    width: 60%;
+}
+.main-top .top-left {
+    width: auto;
+}
+.top-middle {
+    width: 100%;
+    float: left;
+    background: #2d2e2b;
+    border-top: 1px solid #d5d5d5;
+}
+.middle-contact.close .middle-contact-bottom {
+    bottom: 0;
+    left: 0px !important;
+    position: fixed;
+    width: 100% !important;
+}
+.middle-contact.close {
+    width: 100% !important;
+    margin-left: 0px !important;
+}
+.top-middle ul li {
+    float: left;
+    border-left: 1px solid #2a283e;
+    width: 24.4%;
+}
+.top-middle ul li a span span {
+    display: none;
+}
+.main-top .top-right {
+    float: right;
+    padding-right: 47px;
+    padding-top: 10px;
+    width: auto;
+}
+.user-details .user-name {
+    margin: 4px 3px !important;
+    text-align: left;
+}
+.top-right .md-menu i {
+    top: 2px;
+    left: 3px;
+}
+.sidenav .sidenav-inner {
+    width: 90%;
+}
+.sidenav .hide_panel {
+    left: -90%;
+}
+.menu-dropdown.menu-options {
+    right: 0;
+    top: 111px;
+}
+.top-middle ul li {
+    float: left;
+    border-left: 1px solid #2a283e;
+    width: 24.6%;
+}
+.online, .offline, .busy, .warning {
+    background: #293235;
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+    margin-left: 8px;
+}
+.sidenav .nav-list li a {
+    padding: 4px 8px 4px 1px;
+}
+.slide_panel {
+    left: 0;
+    top: 76px;
+    overflow: hidden;
+}
+.chat-message-text {
+    width: 95%;
+}
+.sidenav-inner {
+    width: 37.2%;
+}
+.middle-contact.slide {
+    margin-left: 37.3%;
+    width: 63%;
+}
+.middle-contact-left {
+    padding: 2px 0 !important;
+    width: 38% !important;
+}
+.middle-contact-inner .call-icons {
+    margin-right: 5px;
+    width: 30%;
+}
+.user-img1 {
+    height: 20px;
+    width: 20px;
+    margin-right: 4px;
+    padding: 2px 3px 3px 3px;
+    margin-top: 3px;
+}
+.hide_panel {
+    transition: all 0.2s ease;
+    left: -27.5%;
+    top: 76px;
+}
+.call-icons ul li:nth-child(3) {
+    margin-top: 0px;
+}
+.user-name md-icon {
+    height: 22px;
+    line-height: 20px;
+}
+.hide_panel .nav-list li a {
+    padding: 0px 5px 0px 6px;
+}
+.user-details .md-menu {
+    margin: 1px 0 0 0;
+}
+.chatlist {
+    padding: 13px 8px 0 8px;
+    float: left;
+}
+.addgroup-icons {
+    padding-top: 8px;
+    margin-right: -25px;
+}
+.add-contact-search > input {
+    width: 74%;
+    line-height: 38px;
+    margin: 0;
+}
+.badge {
+    margin-right: 0;
+}
+.cgroup {
+    width: 80% !important;
+    min-width: 300px;
+}
+.menu-dropdown {
+    background: #0a0d0e none repeat scroll 0 0;
+    right: 0;
+    position: absolute;
+    top: 42px;
+    padding: 0 0;
+    width: 125px;
+    overflow-y: visible;
+}
+.user-inner {
+    position: absolute;
+    top: 42px;
+    background: #eff1f2;
+    right: 0;
+    border: 1px solid #e2e3e3;
+    width: 95px;
+    z-index: 99;
+}
+.menu-dropdown::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid #0a0d0e;
+    border-top: 5px solid transparent;
+    border-width: 7px;
+    position: absolute;
+    top: -14px;
+    right: 2%;
+}
+.middle-contact-middle {
+    height: 75%;
+}
+.chatlist-right span {
+    float: right;
+    margin-left: 0px;
+}
+.top-middle ul li a span {
+    padding: 6px 0 5px 0;
+}
+md-dialog.md-dialog-fullscreen {
+    min-height: auto !important;
+    min-width: auto !important;
+    border-radius: 0;
+}
+.create-group-fields {
+    padding: 20px 10px 0px 10px;
+    overflow: auto;
+}
+.top-middle {
+    display: none;
+}
+.sidenav .nav-list li a {
+    padding: 4px 8px 4px 3px !important;
+}
+.small-navbar ul li a {
+    border-bottom: 1px solid #3c3d3a;
+    color: #9ea2a1;
+    display: inline-block;
+    padding: 10px 8px 10px 12px;
+    width: 93%;
+}
+.small-navbar ul li:hover {
+    background-color: #4c4f46;
+}
+.sidenav .small-navbar {
+    display: block;
+}
+.small-navbar li.active a {
+    color: #b2cc4c;
+    border-bottom: 1px solid #3c3d3a;
+}
+.lg-logo {
+    display: none;
+}
+.menu-dropdown {
+    right: 0px !important;
+}
+.menu-options::before {
+    right: 6px !important;
+}
+.chat-content-text .time {
+    font-size: 10px;
+}
+.user-inner {
+    right: 20px !important;
+    width: 130px !important;
+}
+.top-left .side-nav-img1 img {
+    display: block;
+}
+.top-left .side-nav-img1 i {
+    display: none;
+}
+.login-main .user-input {
+    margin: 0px 0 0 0 !important;
+}
+.user-chat, .admin-chat {
+    padding-left: 10px !important;
+}
+.chat-area h4 {
+    left: 32px !important;
+}
+.audiojs .scrubber {
+    width: 130px;
+}
+.audiojs {
+    width: 256px;
+}
+.video-js {
+    width: 259px;
+    height: 142px;
+}
+.audiojs .scrubber {
+    width: 130px;
+}
+.audiojs .time {
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 3px;
+}
+.ngscroll-scrollbar {
+    display: none !important;
+}
+.ngscroll-scrollbar-container {
+    display: none !important;
+}
+.main {
+    max-height: 470px !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.password-change {
+    padding-top:65px;
+}
+.login-main .tr-logo {
+    top: 0;
+    text-align: center;
+    left: 0;
+    width: 160px;
+    height: 160px;
+    line-height: 0px;
+    position: relative;
+    margin: 0 auto;
+}
+.login-main .user-login-page {
+    top: 60%;
+    left: 0;
+    width: 250px;
+    position: relative;
+    right: 0;
+    margin: 0 auto;
+}
+body.tr-bg-color {
+    overflow: auto !important;
+}
+.login-left, .login-right {
+    width: 100% !important;
+    padding-top:55px;
+}
+.group-chat {
+    display: none;
+}
+.middle-contact-inner .add-group {
+    width: 40%;
+}
+.create-group-fields {
+    padding: 20px 4px 0px 8px !important;
+    font-size: 11px;
+}
+.right md-radio-button .md-label {
+    width: 35% !important;
+}
+.group-fields .right md-radio-button .md-off {
+    width: 13px;
+    height: 13px;
+}
+.group-fields .right md-radio-button .md-on {
+    width: 13px;
+    height: 13px;
+}
+.create-group .group-fields .right input {
+    font-size: 11px;
+}
+.group-fields md-checkbox:not([disabled]).md-primary .md-icon {
+    width: 14px;
+    height: 14px;
+}
+.middle-contact-middle.add-group .add-contact-search {
+    padding: 0 0px !important;
+}
+.added-contact-left {
+    width: 84% !important;
+}
+.addMem {
+    width: 100% !important;
+    min-width: 320px !important;
+}
+.middle-contact-middle.add-group .left-list {
+    width: 100% !important;
+}
+.group-contact-left {
+    width: 40% !important;
+}
+body .md-toolbar-tools h2 {
+    font-size: 17px !important;
+}
+span.name-wrap.ng-binding {
+    width:70px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    float: left;
+    overflow: hidden;
+}
+.files-upload-panel {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+}
+.login-main .tr-logo img {
+    margin-left:5px;
+    width: 81%;
+    margin-top: 37%;
+}
+.password-reset-btn .btn-submit, .password-reset-btn .btn-cancel {
+    width: 40% !important;
+}
+.middle-right{
+    display:none;
+}
+.new-password .error-msg {
+    width: 100%;
+}
 }

@@ -1,13 +1,14 @@
-xenApp.factory('teamrService', function($rootScope, localStorageService) {
+xenApp.factory('teamrService', function($state, $rootScope, localStorageService) {
     var teamrService = {};
-    var comser = new ComSer();
+    var comser      = new ComSer();
+    var voipcallobj = new comservoipcall();
 
     teamrService.login = function (credentials, logincallback) {
         comser.login(credentials, logincallback);
     };
 
     teamrService.connect = function () {
-        comser.connect();
+        comser.connect(eventsListener);
     }
 
     teamrService.subscribe = function (data, callback) {
@@ -28,8 +29,12 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
 
         this.sendpresence(username, status, filter, function(response){
             console.log(response);
-        })
+        });
     }
+
+    teamrService.changepassword = function (details, callback) {
+        comser.changepassword(details, callback);
+    };
 
     teamrService.sendpresence = function (username, presence, cList, callback) {
         comser.sendpresence(username, presence, cList, callback);
@@ -43,16 +48,24 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
         comser.searchuser(username, searchname, callback);
     }
 
-    teamrService.getchathistory = function (username, fromid, toid, callback) {
-        comser.chathistory(username, fromid, toid, callback);
+    teamrService.search = function (searchname, callback) {
+        comser.search(searchname, callback);
+    }
+
+    teamrService.getchathistory = function (username, fromid, toid, offset, callback) {
+        comser.chathistory(username, fromid, toid, offset, callback);
     }
 
     teamrService.disconnect = function (username) {
         comser.disconnect(username);
     }
 
-    teamrService.fileupload = function (username, formdata, callback) {
-        comser.fileupload(username, formdata, callback);
+    teamrService.fileupload = function (username, formdata, callback, progresscallback) {
+        return comser.fileupload(username, formdata, callback, progresscallback);
+    }
+
+    teamrService.cancelxmlreq = function (callback) {
+        comser.cancelxmlreq(callback);
     }
 
     teamrService.getfileurl = function (username, msg, callback) {
@@ -67,8 +80,16 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
         comser.acceptContactreq(username, toname, recid, status, callback);
     }
 
+    teamrService.rejectContactreq = function (username, toname, recid, obj, callback){
+        comser.rejectContactreq(username, toname, recid, obj, callback);
+    }
+
     teamrService.blockcontact = function (from, touser, recid, obj, callback) {
         comser.blockcontact(from, touser, recid, obj, callback);
+    }
+
+    teamrService.unblockcontact = function (from, touser, recid, obj, callback) {
+        comser.unblockcontact(from, touser, recid, obj, callback);
     }
 
     teamrService.deletecontact = function (from, touser, recid, obj, callback) {
@@ -76,7 +97,15 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
     }
 
     teamrService.creategroup = function (username, details, callback) {
-        comser.creategroup(username, details, callback)
+        return comser.creategroup(username, details, callback);
+    }
+
+    teamrService.createdirectteam = function (groupname, groupmembers, message, callback) {
+        return comser.createdirectteam(groupname, groupmembers, message, callback);
+    }
+
+    teamrService.updategroupname = function (groupobj, groupmembers, callback) {
+        return comser.updategroupname(groupobj, groupmembers, callback);
     }
 
     teamrService.searchgroup = function (username, searchname, callback) {
@@ -95,12 +124,12 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
         comser.groupmessage(chat, callback)
     }
 
-    teamrService.getgrouphistory = function (username, group_id, callback) {
-        comser.getgrouphistory(username, group_id, callback)
+    teamrService.getgrouphistory = function (username, group_id, offset, callback) {
+        comser.getgrouphistory(username, group_id, offset, callback)
     }
 
-    teamrService.addmemberstogroup = function (username, groupid, groupname, list, callback) {
-        comser.addmemberstogroup(username, groupid, groupname, list, callback)
+    teamrService.addmemberstogroup = function (username, groupobj, list, callback) {
+        comser.addmemberstogroup(username, groupobj, list, callback)
     }
 
     teamrService.instantadd = function (username, groupid, groupname, list, callback) {
@@ -115,8 +144,8 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
         comser.exitgroup(username, groupid, list, callback)
     }
 
-    teamrService.makeadmin = function (groupname, from, contact, callback) {
-        comser.makeadmin(groupname, from, contact, callback)
+    teamrService.makeadmin = function (username, groupid, list, callback) {
+        comser.makeadmin(username, groupid, list, callback)
     }
 
     teamrService.deletegroup = function (groupname, from, callback) {
@@ -126,6 +155,10 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
     teamrService.subscribegroups = function (username, list) {
         comser.subscribegroups(username, list)
     }
+
+    teamrService.getsharedfiles= function (username, id, callback) {
+        comser.getsharedfiles(username, id, callback)
+   }
 
     teamrService.listen = function()
     {
@@ -140,7 +173,10 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
                 break;
                 case 'privateChat':
                 {
-                    $rootScope.$broadcast('updateChat', obj);
+                    if($state.is('home.chatview') == true)
+                        $rootScope.$broadcast('updateChat', obj);
+                    else
+                        $rootScope.$broadcast('privatechatupdate', obj);
                 }
                 break;
                 case 'videochat':
@@ -160,7 +196,8 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
                 break;
                 case 'acceptcontactreq':
                 {
-                    $rootScope.$broadcast('acceptcontactreq', obj);
+                    $rootScope.$broadcast('acceptcontactrequpdate', obj);
+                    $rootScope.$broadcast('acceptcontactreq', obj);                    
                 }
                 break;
                 case 'isTyping':
@@ -170,12 +207,30 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
                 break;
                 case 'blockcontact':
                 {
-                    $rootScope.$broadcast('blockcontact', obj);
+                    if($state.is('home.chatview') == true){
+                        $rootScope.$broadcast('blockcontact', obj);
+                    }
+                    else if($state.is('home') == true)
+                        $rootScope.$broadcast('updatecontact', obj);
                 }
                 break;
+                case 'unblockcontact':
+                {
+                    if($state.is('home.chatview') == true){
+                        $rootScope.$broadcast('unblockcontact', obj);
+                    }
+                    else if($state.is('home') == true)
+                        $rootScope.$broadcast('updatecontact', obj);
+                }
+                break;
+
                 case 'deletecontact':
                 {
-                    // $rootScope.$broadcast('deletecontact', obj);
+                    if($state.is('home.chatview') == true){
+                        $rootScope.$broadcast('deletecontact', obj);
+                    }
+                    else if($state.is('home') == true)
+                        $rootScope.$broadcast('updatecontact', obj);
                 }
                 break;
                 case 'updategroup':
@@ -227,8 +282,108 @@ xenApp.factory('teamrService', function($rootScope, localStorageService) {
         comser.logout(username, callback);
     }
 
+    teamrService.getservertime = function (callback) {
+        return comser.getservertime(callback);
+    }
+
     teamrService.removeAllListeners = function () {
         comser.removeAllListeners();
+    }
+
+    teamrService.sipregistration = function () {
+        var credentials = {privIdentity:"3xen3000", password:"abcdef"};
+        voipcallobj.connect(credentials, eventsListener);
+    }
+
+    teamrService.outboundcall = function (audioremote, sipext) {
+        voipcallobj.call(audioremote, sipext);
+    }
+
+    function eventsListener(e)
+    {
+        switch(e.type)
+        {
+            case 'started':
+            {
+                voipcallobj.register();
+            }
+            break;
+            case 'i_new_message':
+            {
+
+            }
+            break;
+            case 'i_new_call':
+            {
+                voipcallobj.callSession = e.newSession;
+                voipcallobj.callSession.setConfiguration(voipcallobj.oConfigCall);
+                $rootScope.$broadcast('i_new_call');
+            }
+            break;
+            case 'connected':
+            {
+                if (e.session == voipcallobj.registerSession) {
+                    $rootScope.$broadcast('registered');
+                }
+            }
+            break;
+            case 'm_early_media':
+            {
+                $rootScope.$broadcast('m_early_media');
+            }
+            break;
+            case 'stopping':
+            case 'stopped':
+            case 'failed_to_start':
+            case 'failed_to_stop':
+            {
+                var bFailure = (e.type == 'failed_to_start') || (e.type == 'failed_to_stop');
+                voipcallobj.sipStack = null;
+                voipcallobj.registerSession = null;
+                voipcallobj.callSession = null;
+            }
+            break;
+            case 'terminating':
+            case 'terminated':
+            {
+                if (e.session == voipcallobj.callSession) {
+                    voipcallobj.callSession = null;
+                    $rootScope.$broadcast('hangup');
+                }
+            }
+            break;
+            case 'm_stream_audio_local_added':
+            case 'm_stream_audio_local_removed':
+            case 'm_stream_audio_remote_added':
+            case 'm_stream_audio_remote_removed':
+            {
+                break;
+            }
+            case 'i_ao_request':
+            {
+                if (e.session == voipcallobj.callSession) {
+                    var iSipResponseCode = e.getSipResponseCode();
+                    if (iSipResponseCode == 180 || iSipResponseCode == 183) {
+                        $rootScope.$broadcast('i_ao_request');
+                    }
+                }
+            }
+            break;
+            case 'm_permission_requested':
+            {
+                
+                break;
+            }
+            case 'm_permission_accepted':
+            case 'm_permission_refused':
+            {
+                if (e.type == 'm_permission_refused') {
+                    voipcallobj.callSession = null;
+                    $rootScope.$broadcast('m_permission_refused');
+                }
+            }
+            break;
+        }
     }
 
     return teamrService;

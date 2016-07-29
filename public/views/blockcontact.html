@@ -17,18 +17,12 @@
 				</div>
 			</md-dialog-content>
 		</div>
-<!-- 		<md-dialog-actions layout="row">
-			<span flex></span>
-			<md-button ng-click="answer('block')">
-				Block
-			</md-button>
-			<md-button ng-click="answer('cancel')" style="margin-right:20px;">
-				Cancel
-			</md-button>
-		</md-dialog-actions> -->
 		<div class="buttons">
-			<md-button class="teamr-btn" type="button" ng-click="answer('block')">Block</md-button>
-			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="answer('cancel')">Cancel </md-button>
+			<md-button class="teamr-btn" type="button" ng-click="blockContact()">
+				Block
+				<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="bLoading == true"></md-progress-circular>
+			</md-button>
+			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
 			<div class="clear"></div>
 		</div>
 	</form>

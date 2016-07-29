@@ -16,10 +16,16 @@
 				</div>
 			</md-dialog-content>
 		</div>
-		<div class="buttons">
-			<md-button class="teamr-btn" type="button" ng-click="exit()">Exit</md-button>
-			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
-			<div class="clear"></div>
-		</div>
+		<md-dialog-actions layout="row">
+      		<span flex></span>
+			<div class="buttons">
+				<md-button class="teamr-btn" type="button" ng-click="exit()" ng-disabled="isSending">
+					Exit
+					<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="isSending == true"></md-progress-circular>
+				</md-button>
+				<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
+				<div class="clear"></div>
+			</div>
+		</md-dialog-actions>
 	</form>
 </md-dialog>

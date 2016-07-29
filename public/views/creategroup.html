@@ -11,10 +11,11 @@
 		</md-toolbar>
 		<md-dialog-content>
 			<div class="create-group-form">
+				<div class="error-field" ng-if="groupalert != '' ">{{groupalert}}</div>
 				<div class="create-group-list">
 					<div class="create-group-fields">
 						<div class="group-fields">
-							<div class="left">Group Name</div>
+							<div class="left">Group Name <sup>&#42;</sup></div>
 							<div class="right">
 								<md-input-container class="md-block flex-gt-sm" flex-gt-sm="">
 									<label for="">Enter Group Name</label>
@@ -48,21 +49,33 @@
 						<div class="group-fields">
 							<div class="left">Expiry Date</div>
 								<div class="right">
-									<md-datepicker ng-model="groupdetails.expdate" md-placeholder="Enter date"></md-datepicker>
+									<md-datepicker ng-model="groupdetails.expdate" md-placeholder="Enter date" md-open-on-focus md-min-date="minDate" ></md-datepicker>
 								</div>
 							<div class="clear"></div>
 						</div>
 						<div class="group-fields">
-							<div class="left">Group Type</div>
+							<div class="left">Group Type <sup>&#42;</sup></div>
 							<div class="right">
 								<md-radio-group ng-model="groupdetails.type">
 									<md-radio-button value="unicast" class="md-primary">Unicast </md-radio-button>
-									<md-radio-button value="multicast" class="md-primary"> Multicast </md-radio-button>
+									<md-radio-button value="multicast" class="md-primary"> Multicast </md-radio-button>			
 								</md-radio-group>
 							</div>
 							<div class="clear"></div>
 						</div>
-						<div class="group-fields">
+						<!-- <div class="group-fields multicast-inner">
+							<div class="left"></div>
+							<div class="right">
+								<md-radio-group ng-model="groupdetails.type">
+									<md-radio-button value="unicast" class="md-primary">Anyone </md-radio-button>
+									<md-radio-button value="multicast" class="md-primary"> Reply to Admin </md-radio-button><br>
+									<md-radio-button value="multicast" class="md-primary"> Reply to Member </md-radio-button>
+								<div class="clear"></div>
+								</md-radio-group>
+							</div>
+							<div class="clear"></div>
+						</div>
+ -->						<div class="group-fields">
 							<div class="left">Allow Invitation</div>
 							<div class="right">
 								<md-checkbox value="Apple" class="md-primary"></md-checkbox> 
@@ -70,7 +83,7 @@
 							<div class="clear"></div>
 						</div>
 						<div class="group-fields">
-							<div class="left">Invitation Type</div>
+							<div class="left">Invitation Type <sup>&#42;</sup></div>
 							<div class="right">
 								<md-radio-group ng-model="groupdetails.invitation">
 									<md-radio-button value="instant" class="md-primary">Instant Add </md-radio-button>
@@ -80,10 +93,10 @@
 							<div class="clear"></div>
 						</div>
 						<div class="group-fields">
-							<div class="left">Max Limit.</div>
+							<div class="left">Max Limit</div>
 							<div class="right">
 								<md-input-container class="md-block flex-gt-sm max-limit" flex-gt-sm="">
-									<input ng-model="groupdetails.maxlimit" class="ng-pristine ng-valid md-input ng-touched" type="number" aria-invalid="false" style="">
+									<input ng-model="groupdetails.maxlimit" class="ng-pristine ng-valid md-input ng-touched" type="number" aria-invalid="false" min="1">
 									<div class="md-errors-spacer"></div>
 								</md-input-container>
 							</div>
@@ -116,10 +129,13 @@
 		<md-dialog-actions layout="row">
 			<span flex></span>
 			<div class="buttons">			
-                 <md-button class="teamr-btn" type="button" ng-click="create()">Create Group</md-button>
+                 <md-button class="teamr-btn" type="button" ng-click="create()" ng-disabled="cgLoading">
+                 	Create Group
+                 	<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="cgLoading == true"></md-progress-circular>
+                 </md-button>
                  <md-button class="teamr-btn teamr-cancel" type="button" ng-click="cancel()">Cancel</md-button>
-                 <div class="clear"></div>
+                 <div class="clear"></div>                 
                </div>
-		</md-dialog-actions>
-	</form>
+		</md-dialog-actions>		
+	</form>	
 </md-dialog>

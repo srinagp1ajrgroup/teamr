@@ -1,37 +1,76 @@
 <div class="contact" ng-init="groupsinit()">
-	<div class="sidenav">
-		<div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
-			<div class="side-bar-search text-center">
-				<div class="clearfix"></div>
-				<input type="text">
-				<a href=""><i class="nc-icon-mini ui-1_zoom"></i></a>
-			</div>
-			<div class="side-chat-box">
-                <div class="chatlist">
-                    <span>Groups</span>
+    <div class="sidenav">
+        <div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
+            <div class="side-bar-search text-center">
+                <div class="clearfix"></div>
+                <span class="chat-ro"> <i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false"></i></span>
+                <input type="text" placeholder="Search" ng-change="clearGroupSearchContacts()" ng-model="searchGroupContact" ng-keypress="searchgrouplistkeypress($event)">
+                <!-- <span class="search-close" ng-if="searchContact != '' ">
+                        <i class="nc-icon-mini ui-1_simple-remove"></i>
+                </span> -->
+                <span>
+                    <div class="search-loader" ng-if="isLoading == true">
+                        <div class="search-animate"><img src="../content/images/loader-logo.png" alt="" /> </div>
+                    </div>
+                </span>
+            </div>
+            <div ng-if="searchNewGrouplist == true" class="main">
+                <ul class="nav-list list">
+                    <li class="" role="presentation" ng-repeat="sgroup in groupsearch" ng-if="sgroup.exist == false">
+                        <a href="">
+                            <div class="offline">
+                                <img src="content/images/01.jpg" class="" alt="">
+                            </div>
+                            <span>{{sgroup.name}}</span>
+                            <div class="added-contact-right" ng-click="joingroup($index)" ng-show="toggleAdd">
+                                <i class="nc-icon-mini ui-1_simple-add"></i>
+                            </div>
+                            <div ng-if="groupContactIdIndex==$index">
+                                <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" ng-if="isSending" md-diameter="40px"></md-progress-circular>
+                            </div>
+                        </a>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="main" mb-scrollbar="scrollbar('vertical', true)">
+                <div class="small-navbar">
+                    <ul>     
+                        <li><a data-ui-sref="home.callphones">Call Phones</a></li>
+                        <li><a ui-sref="home.chat">Chat</a></li>
+                        <li class="active"><a ui-sref="home.groupchat">Group Chat</a></li>
+                        <li><a ui-sref="home.broadcast">Broadcast</a></li>
+                    </ul>
                 </div>
-                <div class="addgroup-icons">
-                    <span class="chatlist-right">                        
-                        <a href="" ng-click="searchgroup($event)"><img src="../content/images/group-icon1.png" alt=""></a>
-                    </span>
-                    <span class="chatlist-right">
-                       <a href="" ng-click="creategroup($event)"><img src="../content/images/group-icon2.png" alt=""></a>
-                   </span> 
+
+                <div class="side-chat-box" ng-if="searchNewGrouplist == false">
+                    <div class="chatlist">
+                        <span>Groups</span>
+                    </div>
+                    <div class="addgroup-icons">
+                        <span class="chatlist-right">
+                            <a href="" ng-click="creategroup($event)">
+                                <md-tooltip md-direction="top">Create group</md-tooltip>
+                                <span><img src="../content/images/group-icon2.png" alt=""></span>
+                            </a>
+                        </span>
+                    </div>
                 </div>
                 <div class="clear"></div>
+	            <div>
+	                <ul class="nav-list list">
+	                    <li role="presentation" class="" ng-repeat="group in groups|filter:searchGroupContact" ng-click="getSelgroup($index)" ng-class="{active: $index == selected}">
+	                        <a ui-sref="home.groupchat.groupchatview({group:group.NAME })">
+	                            <img src="content/images/01.jpg" alt="" class="offline">
+	                            <span>{{group.NAME}}</span>
+	                        </a>
+	                    </li>
+	                </ul>
+	            </div>                
             </div>
-			<div class="main">
-				<ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)">
-					<li role="presentation" class="" ng-repeat="group in groups" ng-click="getSelgroup($index)">
-						<a ui-sref="home.groupchat.groupchatview({group:group.NAME })">
-							<img src="content/images/01.jpg" alt="" class="offline">
-							<span>{{group.NAME}}</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div ui-view style="height:100%;"></div>
-	<div class="middle-right"></div>
+        </div>
+    </div>
+    <div ui-view style="height:100%;"></div>
+    <div class="middle-right"></div>
 </div>

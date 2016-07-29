@@ -1,0 +1,58 @@
+<md-dialog>
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Please Change Groupname</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        
+        <div class="blo-contact">
+            <md-dialog-content>
+                <div class="create-group-form">
+                    <div class="create-group-list">
+                        <div class="create-group-fields">
+                            <div class="group-fields">
+                            <div class="left"></div>
+                            <div class="right">
+                                <md-radio-group ng-model="pref">
+                                    <md-radio-button value="yes" class="md-primary">Yes </md-radio-button>
+                                    <md-radio-button value="no" class="md-primary"> No </md-radio-button>         
+                                </md-radio-group>
+                            </div>
+                            <div class="clear"></div>
+                            </div>
+                        </div>
+                    <div class="create-group-list" ng-if="pref == 'yes' ">
+                        <div class="create-group-fields">
+                            <div class="group-fields">
+                                <div class="left">Group Name</div>
+                                <div class="right">
+                                    <md-input-container class="md-block flex-gt-sm" flex-gt-sm="">
+                                        <label for="">Enter Group Name</label>
+                                        <input id="team_name" ng-model="teamname" class="ng-pristine ng-valid md-input ng-touched" >
+                                        <div class="md-errors-spacer"></div>
+                                    </md-input-container>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </md-dialog-content>   
+        </div>     
+        <md-dialog-actions layout="row"ng-if="pref == 'yes' || pref == 'no' " >
+            <span flex></span>
+            <div class="buttons">           
+                 <md-button class="teamr-btn" type="button" ng-click="create()" ng-disabled="cgLoading">
+                    Ok
+                    <md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="cgLoading == true"></md-progress-circular>
+                 </md-button>
+                 <div class="clear"></div>                 
+               </div>
+        </md-dialog-actions>
+    </form> 
+</md-dialog>

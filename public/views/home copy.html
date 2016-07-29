@@ -1,0 +1,309 @@
+<div class="wrapper" ng-init="home_init()">
+  <header>
+    <div class="top-menubar">
+      <div class="logo"><span><a href="#"><img src="../content/images/project-logo.png" alt=""></a></span></div>
+      <div class="search">
+        <div class="search-input text-center">
+          <input type="text" placeholder="Search">
+          <span class="search-icon"> <i class="nc-icon-mini ui-1_zoom"></i> </span> </div>
+      </div>
+      <div class="communication">
+        <ul>
+          <li><a href="#"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini ui-2_chat-round"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini arrows-e_zoom-e"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini ui-2_share"></i></a></li>
+          <li><a href="#"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+        </ul>
+      </div>
+      <div class="admin">
+        <!--<div class="user-img"> <i class="nc-icon-mini users_single-03"></i> </div>
+        <div class="useradmin" ng-click="useradmin()"> <a><span>{{userdetails.username}}</span><i class="nc-icon-mini arrows-1_small-triangle-down"></i></a> </div>
+        <div ng-if="show">
+          <div hide-item="show-panel" click-anywhere-but-here="clickedSomewhereElse()">
+            <div class="adminpanel"  ng-show="adminlogout">
+              <ul>
+                <li><a href="" ng-click="ctrl.menuItemClick($index)">Profile</a></li>
+                <li><a href="" ng-click="statechangepassword()">Change Password</a></li>
+                <li><a href="" ng-click="logout()">Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>-->
+        
+    <div class="user-img"> <i class="nc-icon-mini users_single-03"></i> </div>
+       <div class="useradmin"> 
+       <md-menu-bar>
+                   <md-menu>
+                       <md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+                           <md-icon md-menu-origin> <a><span>{{userdetails.username}}</span><span class="triangle-down"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></span></a></md-icon>
+                         </md-button>
+                       <md-menu-content class="teamr-dropdown">
+                           <md-menu-item>
+                               <md-button ng-click="ctrl.sampleAction('share', $event)">Profile</md-button>
+                           </md-menu-item>
+                           <md-menu-item>
+                               <md-button ng-click="ctrl.sampleAction('share', $event)">Change Password</md-button>
+                           </md-menu-item>
+                           <md-menu-item>
+                               <md-button ng-click="ctrl.sampleAction('share', $event)">Sign out</md-button>
+                           </md-menu-item>
+                       </md-menu-content>
+                   </md-menu>
+               </md-menu-bar> </div>
+      </div>
+      <div class="clear"></div>
+      <div class="main-top"> 
+        <!--<div class="top-left top-logo" >
+            <figure><img src="../content/images/logo-home1.png" alt="logo"> </figure>
+            <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+          
+          
+            </a> </div>-->
+        <div class="top-middle">
+          <div id="wrapper">
+            <ul>
+              <li> <a href="#"> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href="#"> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href="#"><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href="#"> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href="#"> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href="#"> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_menu-dots"></i></a> <span>More</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="clear clearfix"></div>
+      </div>
+  </header>
+
+	<section>
+    <div class="contact">
+      <div class="sidenav">
+        <div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
+          <div ng-if="searchNewClist == true" class="main">
+            <ul class="nav-list list">
+              <li class="" role="presentation" ng-repeat="item in searchList" ng-if="item.exist == false"> <a href="">
+                <div class="offline"> <img src="content/images/01.jpg" class="" alt=""> </div>
+                <span>{{item.username}}</span>
+                <div class="added-contact-right" ng-click="sendcontactreq($index)" ng-if="isSending == false"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+                <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+                </a> </li>
+            </ul>
+          </div>
+          <div class="main">
+            <div class="top-left"> <a href="" ng-click="redirectochat()">
+              <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
+              </a> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+              <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+                <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
+                <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+              </a> </div>
+            <div class="clear"></div>
+            <div class="clear"></div>
+            <div class="small-navbar">
+              <ul>
+                <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
+                <li> <a href=""><i class="nc-icon-mini gestures_pin"></i></a> </li>
+                <li> <a href=""> <i class="nc-icon-mini envir_home"></i></a> </li>
+                <li> <a href=""> <i class="nc-icon-mini users_add-27"></i></a> </li>
+              </ul>
+              <div class="side-bar-search text-center">
+                <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
+                  <li>
+                    <div class="inputsearch">
+                      <input type="text" placeholder="search...">
+                    </div>
+                  </li>
+                  <li class="left-btn" ng-click="searchtoggle()"> <i class="nc-icon-mini ui-1_zoom"></i> </li>
+                </ul>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+            <div class="side-chat-box">
+              <div class="chatlist"> <span>Contacts</span> </div>
+              <div class="addgroup-icons hide-icon">
+                <div class="chatlist-right"> 
+                  <!-- <md-tooltip md-direction="right">Add Contact</md-tooltip> --> 
+                  <a> <i class="nc-icon-mini users_single-01"></i> </a> </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)"> 
+              <!-- <ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)"> -->
+              <div class="side-nav-main force-overflow" >
+                <ul class="nav-list list">
+                  <li role="presentation" ng-repeat="contact in contacts | filter:searchContact | limitTo:cLimit" ng-click="getSeluser($index);" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                    <div ng-class="contact.PRESENCE"> </div>
+                    <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                    <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                    <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                  </li>
+                </ul>
+                <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+              </div>
+            </div>
+            <div class="clear"></div>
+            <div ng-if="searchNewClist == false" class="side-chat-box">
+              <div class="chatlist"> <span>Contacts</span> </div>
+              <div class="addgroup-icons hide-icon">
+                <div class="chatlist-right"> 
+                  <!-- <md-tooltip md-direction="right">Add Contact</md-tooltip> --> 
+                  <a> <i class="nc-icon-mini users_single-01"></i> </a> </div>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div ng-if="searchNewClist == false"> 
+              <!-- <ul class="nav-list list" mb-scrollbar="scrollbar('vertical', true)"> -->
+              <div class="side-nav-main">
+                <ul class="nav-list list">
+                  <li role="presentation" ng-repeat="contact in contacts | filter:searchContact" ng-click="getSeluser($index);" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                    <div ng-class="contact.PRESENCE"> </div>
+                    <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                    <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                    <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                  </li>
+                </ul>
+                <div class="sidenav-more"><span><a href=""><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+              </div>
+            </div>
+            <div class="side-chat-box">
+                  <div class="chatlist">
+                      <span>Teams</span>
+                  </div>
+                  <div class="addgroup-icons">
+                      <span class="chatlist-right">
+                          <a href="" ng-click="creategroup($event)">
+                              <md-tooltip md-direction="top">Create group</md-tooltip>
+                              <span><img src="../content/images/group-icon2.png" alt=""></span>
+                          </a>
+                      </span>
+                  </div>
+              </div>
+              <div class="clear"></div>
+              <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)"> 
+                <div class="side-nav-main">
+                    <ul class="nav-list list">
+                        <li role="presentation" class="" ng-repeat="group in groups|filter:searchGroupContact|limitTo:gLimit" ng-click="getSelgroup($index)" ng-class="{active: $index == selected}">
+                            <a ui-sref="home.groupchatview({group:group.NAME })">
+                              <div class="offline"> </div>
+                                <span>{{group.NAME}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+                </div>  
+              </div>
+          </div>
+        </div>
+      </div>
+      <div ui-view style="height:100%;"></div>
+    </div>
+		<div id="demo-switcher">
+      <div id="toggle-button" ng-click="togglecolorswitcher()"> <i class="nc-icon-outline ui-1_settings-gear-63"></i> </div>
+      <div id="demo-menu" class="demo-menu" ng-class="{show_switcher:!showcolorsMenu,hide_switcher:showcolorsMenu}">
+        <h4>Themes</h4>
+        <div class="switcher">
+          <ul class="theme-colors">
+            <li><a class="change-color" data-url="content/css/style.css" href="javascript:void(0)" ng-click="saveStyle('style')">
+              <div class="theme-green">
+                <div class="theme-left green-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>Green</h6>
+              </div>
+              </a></li>
+            <li><a class="change-color" data-url="content/css/peach-theme.css" href="javascript:void(0)" ng-click="saveStyle('peach-theme')">
+              <div class="theme-red">
+                <div class="theme-left red-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>peach</h6>
+              </div>
+              </a></li>
+            <li><a class="change-color" data-url="content/css/voilet-theme.css" href="javascript:void(0)" ng-click="saveStyle('violet-theme')">
+              <div class="theme-violet">
+                <div class="theme-left violet-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>Violet</h6>
+              </div>
+              </a></li>
+             <li><a class="change-color" data-url="content/css/white-theme.css" href="javascript:void(0)" ng-click="saveStyle('white-theme')">
+                    	<div class="theme-white">
+                            	<div class="theme-left white-left"></div>
+                                <div class="theme-right">
+                                	<div class="top"></div>
+                                    <div class="bottom"></div>
+                                </div>
+                                <div class="clear"></div>
+                                <h6>White</h6>
+                            </div>
+                    </a></li>
+                <li><a class="change-color" data-url="content/css/blue-green-theme.css" href="javascript:void(0)" ng-click="saveStyle('blue-green-theme')">
+                    	<div class="theme-blue-green">
+                            	<div class="theme-left blue-green-left"></div>
+                                <div class="theme-right">
+                                	<div class="top"></div>
+                                    <div class="bottom"></div>
+                                </div>
+                                <div class="clear"></div>
+                                <h6>blue</h6>
+                            </div>
+                    </a></li>
+                    <li><a class="change-color" data-url="content/css/green-new-theme.css" href="javascript:void(0)" ng-click="saveStyle('green-new-theme')">
+                       <div class="theme-green-new">
+                               <div class="theme-left greennew-left"></div>
+                               <div class="theme-right">
+                                   <div class="top"></div>
+                                   <div class="bottom"></div>
+                               </div>
+                               <div class="clear"></div>
+                               <h6>Green</h6>
+                           </div>
+                   </a></li>
+            <div class="clear"></div>
+          </ul>
+        </div>
+      </div>
+    </div>
+	</section>
+</div>

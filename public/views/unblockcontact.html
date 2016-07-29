@@ -1,0 +1,25 @@
+<md-dialog class="">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2>Unblock Contact</h2>
+				<span flex></span>
+				<md-button class="md-icon-button" ng-click="cancel()">
+					<md-icon md-svg-src="content/images/icon_close.svg" aria-label="Close dialog"></md-icon>
+				</md-button>
+			</div>
+		</md-toolbar>
+		<div class="blo-contact">
+			<md-dialog-content>
+				<div class="md-dialog-content">
+					<h2>Are you sure you want to unblock {{parentscope.seluser}}?</h2>
+				</div>
+			</md-dialog-content>
+		</div>
+		<div class="buttons">
+			<md-button class="teamr-btn" type="button" ng-click="unblockContact()">Unblock</md-button>
+			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
+			<div class="clear"></div>
+		</div>
+	</form>
+</md-dialog>

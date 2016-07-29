@@ -1,31 +1,41 @@
 ﻿<!DOCTYPE html>
 <html ng-app="xenChat">
     <head>
-        <title>TEAMR</title>
+        <title>TeamR</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
 
+	   <link rel="shortcut icon" href="content/images/favicon.ico">
         <link rel="stylesheet" href="content/css/style.css">
         <link rel="stylesheet" href="content/css/responsive.css">
         <link rel="stylesheet" href="content/css/nucleo-mini.css">
         <link rel="stylesheet" href="content/css/nucleo-outline.css">
         <link rel="stylesheet" href="content/css/angular-material.min.css"> 
-        <link rel="stylesheet" href="content/css/video-js.css">
+        <link href="content/css/video-js.css" rel="stylesheet">
+        <link rel="stylesheet" href="content/css/nucleo-outline.css">
+
+        <link rel="stylesheet" ng-href="{{ dataUrl }}">
 
 
+        <!--<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>-->
+        <script src="lib/videojs-ie8.min.js"></script>
         <script src="lib/video.js"></script>
+        <script src="lib/audio.js"></script>
+        <script src="lib/underscore.js"></script>
         <script src="lib/angular/angular.js"></script>
         <script src="lib/angular/angular-ui-router.js"></script>
         <script src="lib/angular/angular-local-storage.js"></script>
         <script src="lib/angular/angular-animate.js"></script>
         <script src="lib/angular/angular-aria.js"></script>
-        <script src="lib/angular/angular-material.min.js"></script>        
+        <script src="lib/angular/angular-material.min.js"></script>   
+        <script src="lib/angular/elastic.js"></script>        
+        <script src="lib/angular/scrollglue.js"></script>
         <script src="scripts/vendor/comser.js"></script>
-        <script src="lib/vjs-video.js"></script>
-        <script src="lib/vjs.directive.js"></script>
+        <script src="scripts/vendor/comservoicecall.js"></script>
+        <script src="lib/angular-css-injector.js"></script>
         
         
         <script src="scripts/app.js"></script>
@@ -33,17 +43,19 @@
         <!---Controllers-->
         <script src="scripts/controllers/loginController.js"></script>
         <script src="scripts/controllers/homeController.js"></script>
-        <script src="scripts/controllers/addcontactController.js"></script>
-        <script src="scripts/controllers/chatController.js"></script>
         <script src="scripts/controllers/chatviewController.js"></script>
-        <script src="scripts/controllers/groupController.js"></script>
         <script src="scripts/controllers/groupchatcontroller.js"></script>
+        <script src="scripts/controllers/popupcontroller.js"></script>
+        <script src="scripts/controllers/changepasswordController.js"></script>
 
         <!---Directives-->
         <script src="scripts/directives/scrollbar.js"></script>
+        <script src="scripts/directives/voicecall.js"></script>
+        
 
         <!---Services-->
         <script src="scripts/services/teamrService.js"></script>
+        <script src="scripts/services/cachefactory.js"></script>
 
     </head>
     <body class="tr-bg-color">

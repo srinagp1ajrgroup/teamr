@@ -1,0 +1,27 @@
+<md-button class="md-button-toggle side-chat-box">
+    <div class="side-menu">
+    	<div class="chatlist"> 
+            <span>Contacts</span>         
+        </div>
+        <div class="addgroup-icons hide-icon">
+            <div class="chatlist-right"> 
+                <a> <i class="nc-icon-mini users_single-01"></i></a>
+            </div>
+        </div>
+        <md-icon md-svg-src="../content/images/ic_expand_more_white_24px.svg" aria-label="android "></md-icon>
+        <div class="clear"></div>    
+    </div>    
+</md-button>
+<div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
+    <div class="side-nav-main force-overflow">
+        <ul class="nav-list list">
+            <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                <div ng-class="contact.PRESENCE"> </div>
+                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+            </li>
+        </ul>
+        <!-- <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div> -->
+    </div>
+</div>
