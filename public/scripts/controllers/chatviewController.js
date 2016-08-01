@@ -24,7 +24,6 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     $scope.errormsg     = "";
     $scope.isoutboundcall  = false;
     $scope.isinboundcall   = false;
-    var servertime      = 0;
     var timeout;
     var offset = 0;
 
@@ -32,6 +31,10 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         $state.go('home')
         return;
     }
+
+    if($scope.selobj.WAITING_APPROVAL == true){
+        $scope.reqdatetime = $scope.selobj.UPDATED_AT.split(" ");
+    }    
 
     $scope.chatMessageStatus = true;
 
@@ -110,54 +113,47 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         });
     }
 
-    $scope.audioplayer = function(msg, ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;        
-        $mdDialog.show({            
-            templateUrl: '../../views/playaudio.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            clickOutsideToClose:true,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-            },
-            controller:function($scope, parentscope)
-            {
-                $scope.isplay = false;
-                $scope.duration = '';
-                var timelineWidth = 0;
-                var duration = 0;         
-                teamrService.getfileurl(parentscope.userdetails.username, msg, function(response){
-                    if(response.success == true){
-                        var resp = JSON.parse(response.data);
-                        if(resp.status == "redirect"){
-                            audiojs.events.ready(function() {
-                                audiojs.createAll();
-                                var vid = document.getElementById("myAudio")
-                                vid.src = resp.data;
-                            });    
-                        }
-                    }
-                });
-            },
-            onRemoving:function(){
-                var vid = document.getElementById("myAudio")
-                vid.pause();
-                vid.src = "";
+   
+$scope.audioplayer = function(msg, ev) {
+       $scope.mdDialogPopup($scope, audioplayer, '../../views/playaudio.html', ev);
+   };
+   function audioplayer($scope, parentscope) {
+       $scope.isplay = false;
+       $scope.duration = '';
+       var timelineWidth = 0;
+       var duration = 0;
+       teamrService.getfileurl(parentscope.userdetails.username, msg, function (response) {
+           if (response.success == true) {
+               var resp = JSON.parse(response.data);
+               if (resp.status == "redirect") {
+                   audiojs.events.ready(function () {
+                       audiojs.createAll();
+                       var vid = document.getElementById("myAudio")
+                       vid.src = resp.data;
+                   })
+               }
+           }
+
+       })
+   }
+        function pvController(scope, parentscope){
+        videoplayer_init = function(){
+            var queryResult = $document[0].getElementById('my_video_1')                        
+        }
+
+        teamrService.getfileurl(parentscope.userdetails.username, parentscope.msg, function(response){
+            if(response.success == true){
+                var resp = JSON.parse(response.data);
+                if(resp.status == "redirect"){    
+                    var vid = document.getElementById('my_video_1');
+                    vid.src = resp.data;
+                    vid.controls = true;
+                    vid.autoplay = true;
+                    player = videojs(vid,  { controlBar: true });                        
+                }
             }
-        })
-        .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
-        }, function() {
-            $scope.status = 'You cancelled the dialog.';
-        });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
-        });
-    };
+        }); 
+    }
 
     $scope.videplayer = function(msg, ev) {
         $scope.msg = msg;
@@ -247,7 +243,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                 } 
                 scope.$apply();
                 console.log(response);
-                mdDialog.hide();
+                $mdDialog.hide();
             }); 
         }
 
@@ -261,6 +257,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
 
     function dcController(scope, parentscope)
     {
+        scope.dcLoading = false;
         scope.delete = function()
         {
             sessionStorage.removeItem(scope.seluser);
@@ -274,7 +271,9 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                 obj = {USERID2_REMOVING: true};
             }
 
+            scope.dcLoading = true;
             teamrService.deletecontact(parentscope.userdetails.username, parentscope.seluser, parentscope.contacts[parentscope.selindex].ID, obj, function(response){
+                scope.dcLoading = false;
                 if(response.success == true){
                     $rootScope.$broadcast('updatecontact', response.data)
                 }
@@ -322,7 +321,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         var datetime = currentdate.getHours() + ":" + minutes;
 
         if(obj.fromuser != $scope.seluser){
-            updatecache(obj);
+            // updatecache(obj);
             $rootScope.$broadcast('privatechatupdate', obj);
             return;
         }
@@ -335,10 +334,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
         obj.delivered       = true;
         obj.offline         = false;
 
-        teamrService.sendreqwithcallback("chatack", obj, function(err, data){
-            console.log(data);
-        });
-
+        sendack(obj);
         $scope.$apply();
     });    
 
@@ -454,12 +450,14 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
             "message"       : $scope.message,
             "type"          : "chat",
             "timestamp"     : timestamp,
-            "file_name"     : null
+            "file_name"     : null,
+            "rec"           : $scope.selobj
         };
         
         updatechatui($scope.userdetails.username, $scope.seluser, $scope.message, chat.message_id, "user-chat", false, false, false, false, false, false, timestamp, null);
 
-        teamrService.sendmessage(chat, function(ackData){
+        teamrService.sendmessage(chat, function(ackData)
+        {
             if(ackData.success == true){
                 var dateindex =  _.findLastIndex($scope.chatdate, {
                     date:"Today"
@@ -625,7 +623,8 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                             "message"       : resp.data.id,
                             "type"          : "chat",
                             "timestamp"     : timestamp,
-                            "file_name"     : filename
+                            "file_name"     : filename,
+                            "rec"           : $scope.selobj
                         };
 
                         
@@ -643,16 +642,17 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                         updatechatui($scope.userdetails.username, $scope.seluser, resp.data.id, chat.message_id, "user-chat", 
                             false, false, true, mediaflag, audioflag, videoflag, timestamp, filename);
 
-                        teamrService.sendmessage(chat, function(ackData){
+                        teamrService.sendmessage(chat, function(ackData)
+                        {
                             if(ackData.success == true){
-                                for(var i = 0; i < $scope.chatdate.length; i++){
-                                    for(var j = 0; j < $scope.chatdate[i].chats.length; j++){
-                                        if($scope.chatdate[i].chats[j].message_id == ackData.data.message_id){
-                                            $scope.chatdate[i].chats[j].delivered = true;
-                                            break;
-                                        }
-                                    }            
-                                }
+                                var dateindex =  _.findLastIndex($scope.chatdate, {
+                                        date:"Today"
+                                    });
+
+                               var index =  _.findLastIndex($scope.chatdate[dateindex].chats, {
+                                    message_id: ackData.data.message_id
+                                });
+                               $scope.chatdate[dateindex].chats[index].sent = true;
                                 $scope.$apply();
                             }
                         });
@@ -775,10 +775,23 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     function getselcontactobj(){
         if($scope.contacts == null)
             return;
-        for(var i = 0; i < $scope.contacts.length; i++){
+        for(var i = 0; i < $scope.contacts.length; i++)
+        {
             if($scope.contacts[i].USERNAME == $scope.seluser){
                 $scope.selindex = i;
                 $scope.contacts[i].nCount = 0;
+                if($scope.contacts[i].CONTACT_USER_ID1 == $scope.userdetails.user_id && $scope.contacts[i].CONTACT_USER2_UMCOUNT > 0){
+                    $scope.contacts[i].CONTACT_USER2_UMCOUNT = 0;
+                    teamrService.updateumcount($scope.contacts[i], function(response){
+                        console.log(response)
+                    });
+                }
+                else if($scope.contacts[i].CONTACT_USER_ID2 == $scope.userdetails.user_id && $scope.contacts[i].CONTACT_USER1_UMCOUNT > 0){
+                    $scope.contacts[i].CONTACT_USER1_UMCOUNT = 0;
+                    teamrService.updateumcount($scope.contacts[i], function(response){
+                        console.log(response) 
+                    });
+                }
                 localStorageService.set("user_contacts", $scope.contacts);
                 $rootScope.$broadcast('updatechatcount', i);
                 return $scope.contacts[i];
@@ -804,32 +817,26 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     }
 
     $scope.createteam = function(ev){
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/addmembers.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-            },
-            controller:function($scope, parentscope){
-                $scope.addmembers           = [];
-                $scope.updatedcontacts      = localStorageService.get('user_contacts');
-                $scope.isSending = false;
-                $scope.groupname = '';
+       $scope.mdDialogPopup($scope, createteam, '../../views/addmembers.html', ev);
+   }
 
-                $scope.addmembers.push({admin:true, user_id:parentscope.userdetails.user_id, username:parentscope.userdetails.username, exit:false, is_delete:false})
-                $scope.addmembers.push({admin:true, user_id:parentscope.selid, username:parentscope.selobj.USERNAME, exit:false, is_delete:false})
-                $scope.groupname = parentscope.userdetails.username+','+parentscope.selobj.USERNAME+',';
+   function createteam($scope, parentscope) 
+   {
+       $scope.addmembers           = [];
+       $scope.updatedcontacts      = localStorageService.get('user_contacts');
+       $scope.isSending = false;
+       $scope.groupname = '';
 
-                $scope.cancel = function(){
-                    $scope.addmembers = [];
-                    $mdDialog.hide();
-                }
+       $scope.addmembers.push({admin:true, user_id:parentscope.userdetails.user_id, username:parentscope.userdetails.username, exit:false, is_delete:false})
+       $scope.addmembers.push({admin:true, user_id:parentscope.selid, username:parentscope.selobj.USERNAME, exit:false, is_delete:false})
+       $scope.groupname = parentscope.userdetails.username+','+parentscope.selobj.USERNAME+',';
 
-                $scope.addmembertogroup = function(contact){
+       $scope.cancel = function(){
+           $scope.addmembers = [];
+           $mdDialog.hide();
+       }
+
+       $scope.addmembertogroup = function(contact){
                     var ismember = _.where($scope.addmembers, {username:contact.USERNAME})
                     if(ismember.length == 0){
                         if(contact.CONTACT_USER_ID1 == parentscope.userdetails.user_id)
@@ -849,98 +856,70 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
                     parentscope.mergechat(ev);
                 }
             }
-        });
-    }
 
-    $scope.mergechat = function(ev){
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/mergechat.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-            },
-            controller:function($scope, parentscope)
-            {
+        $scope.mergechat = function (ev) {
+            $scope.mdDialogPopup($scope, mergechat, '../../views/mergechat.html', ev);
+        }       
+
+        function mergechat($scope, parentscope){
                 $scope.copydate = '';
-                $scope.add = function(){
-                    var timestamp = new Date().getTime();
-                    var copymsg = [];
+                   $scope.add = function(){
+                       var timestamp = new Date().getTime();
+                       var copymsg = [];
 
-                    if(parentscope.addmembers.length > 3){
-                        suggestgroupname(ev)
-                    }else{
-                        var msg = undefined;
-                        if(parentscope.chatdate[0].length > 0)
-                            var msg = parentscope.chatdate[0].chats[0]
-                        teamrService.createdirectteam(parentscope.teamname, parentscope.addmembers, msg, function(response){
-                            // $rootScope.$broadcast("updategroup", response);
-                            $mdDialog.hide();
-                        })
-                    }
-
-                    // _.filter(parentscope.chatdate, function(data){
-                    //     if(data.timestamp > timestamp){
-                    //         copymsg = data.chats.concat(copymsg);
-                    //         console.log(copymsg)
-                    //     }
-
-                    //     teamrService.createteam(parentscope.teamname, parentscope.addmembers, copymsg, function(response){
-                    //         console.log(response);
-                    //     })
-                    // })
-                }
-
-                $scope.cancel = function(){
-                    $scope.addmembers = [];
-                    $mdDialog.hide();
-                }
-            }
-        });
+                       if(parentscope.addmembers.length > 3){
+                           suggestgroupname(event)
+                       }else{
+                           var msg = parentscope.chatdate[0].chats[0]
+                           teamrService.createdirectteam(parentscope.teamname, parentscope.addmembers, msg, function(response){
+                               console.log(response);
+                               $mdDialog.hide();
+                           })
+                       }
+                   }
+                   $scope.cancel = function(){
+                       $scope.addmembers = [];
+                       $mdDialog.hide();
+                   }
+            
     }
 
-    function suggestgroupname(ev)
+     function suggestgroupname(ev)
     {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/groupname.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-            },
-            controller:function($scope, parentscope){
-                $scope.cgLoading = false;
-                $scope.pref = "";
-                $scope.teamname = "";
-                $scope.create = function(){
-                    var msg = parentscope.chatdate[0].chats[0]
-                    $scope.teamname  = document.getElementById('team_name').value;
-                    if($scope.teamname != '')
-                        parentscope.teamname = $scope.teamname;
+       $scope.mdDialogPopup($scope, suggest_groupname, '../../views/groupname.html', ev);
+   }
+  function suggest_groupname($scope, parentscope){
+                   $scope.cgLoading = false;
+                   $scope.pref = "";
+                   $scope.teamname = "";
+                   $scope.create = function(){
+                       var msg = parentscope.chatdate[0].chats[0]
+                       $scope.teamname  = document.getElementById('team_name').value;
+                       if($scope.teamname != '')
+                           parentscope.teamname = $scope.teamname;
 
-                    $scope.cgLoading = true;
-                    teamrService.createdirectteam(parentscope.teamname, parentscope.addmembers, msg, function(response){
-                        $scope.cgLoading = false;
-                        $scope.$digest();
-                        $rootScope.$broadcast("updategroup", response);
-                        console.log(response);
-                        $mdDialog.hide();
-                    })
-                    
-                }
-                $scope.cancel = function(){
-                    $scope.addmembers = [];
-                    $mdDialog.hide();
-                }
-            }
-        });
-    }
+                       $scope.cgLoading = true;
+                       teamrService.createdirectteam(parentscope.teamname, parentscope.addmembers, msg, function(response){
+                           $scope.cgLoading = false;
+                           var response=JSON.parse(response.data)
+                           if (response.success==false) {
+                               var err = typeof response.data == "string" ? JSON.parse(response.data) : response.data;
+                               parentscope.errorpopup(err.errors[0] || err)
+                           }
+                           $rootScope.$broadcast("updategroup", response);
+                           $scope.$digest();
+                           console.log(response);
+                           $mdDialog.hide();
+                       })
+                   
+                   }
+                   $scope.cancel = function(){
+                       $scope.addmembers = [];
+                       $mdDialog.hide();
+                   }
+   }
+
+
 
     $scope.myFunction=function () {
         document.getElementById("myDropdown").classList.toggle("show");
@@ -999,6 +978,13 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
        }
 
        return false;
+    }
+
+    function sendack(obj){
+        obj.rec = $scope.selobj;
+        teamrService.sendreqwithcallback("chatack", obj, function(err, data){
+            console.log(data);
+        });
     }
 
     /***********************************************Audio Call*************************************************************/

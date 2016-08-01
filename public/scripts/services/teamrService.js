@@ -158,7 +158,15 @@ xenApp.factory('teamrService', function($state, $rootScope, localStorageService)
 
     teamrService.getsharedfiles= function (username, id, callback) {
         comser.getsharedfiles(username, id, callback)
-   }
+    }
+
+    teamrService.getgroupsharedfiles = function (groupid, callback) {
+        comser.getgroupsharedfiles(groupid, callback);
+    }
+
+    teamrService.updateumcount = function (obj, callback) {
+        comser.updateumcount(obj, callback)
+    }
 
     teamrService.listen = function()
     {

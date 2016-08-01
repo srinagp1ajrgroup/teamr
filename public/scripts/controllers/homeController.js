@@ -14,6 +14,7 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
     $scope.accordianData = [{"heading":"Contacts"}, {"heading":"Teams"}];
     $scope.seluser  = 0;
     $scope.selgroup = -1;
+    $scope.isLoading = false;
     $scope.useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 
     $scope.$watch('tSearch', function (newValue, oldValue) {
@@ -49,14 +50,21 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
 
     $scope.$on('updatechatcount', function(event, index){
         $scope.contacts = localStorageService.get('user_contacts');
-        $scope.accordianData[0].content = $scope.contacts;
-        // $scope.$apply();
     });
 
     $scope.$on('privatechatupdate', function(event, obj){
         for(var i = 0; i < $scope.contacts.length; i++){
-            if($scope.contacts[i].USERNAME == obj.fromuser){
+            if($scope.contacts[i].USERNAME == obj.fromuser)
+            {
+                if($scope.contacts[i].CONTACT_USER_ID1 == $scope.userdetails.user_id)
+                    $scope.contacts[i].CONTACT_USER2_UMCOUNT = $scope.contacts[i].CONTACT_USER2_UMCOUNT+1;
+                else if($scope.contacts[i].CONTACT_USER_ID2 == $scope.userdetails.user_id)
+                    $scope.contacts[i].CONTACT_USER1_UMCOUNT = $scope.contacts[i].CONTACT_USER1_UMCOUNT+1;
                 $scope.contacts[i].nCount++;
+
+                teamrService.updateumcount($scope.contacts[i], function(response){
+                    console.log(response)
+                })
                 break;
             }
         }
@@ -221,8 +229,7 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
                     localStorageService.set("user_contacts", $scope.contacts);
                     teamrService.sendstatus($scope.userdetails.username, "online");
                     $scope.$apply();
-                    // $state.go('home.chatview', {user:$scope.contacts[0].USERNAME})
-                    $scope.accordianData[0].content = $scope.contacts;
+                    $state.go('home.chatview', {user:$scope.contacts[0].USERNAME})
                 }
                 else if(response.success == false){
                   $scope.errorpopup(response.data)
@@ -303,8 +310,9 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
         if($scope.tSearch == "" || $scope.tSearch == undefined || $scope.tSearch == null || $scope.tSearch.length < 3 || $event.keyCode != 13)
             return;
 
+        $scope.isLoading = true;
         $scope.searchteamr = true;
-        teamrService.search($scope.tSearch, function(response){
+        teamrService.search($scope.tSearch, function(response){            
             if(response.success == true){
                 for(var i = 0; i < response.data.length; i++)
                 {
@@ -339,7 +347,8 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
                     }
                }
 
-                $scope.searchResults = $scope.searchResults.concat(response.data)
+                $scope.searchResults = response.data.concat($scope.searchResults);
+                $scope.isLoading = false;
                 $scope.$apply();
             }
             console.log(response);

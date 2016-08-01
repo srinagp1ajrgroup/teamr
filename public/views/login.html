@@ -22,9 +22,7 @@
             <div class="submit-btn">
                 <md-button class="md-raised md-primary md-button md-ink-ripple" type="button" ng-transclude="" aria-label="Primary" ng-click="loginformsubmit()" ng-disabled="isLoading">
                     <span class="ng-scope">L<span class="tolowercase">ogin</span></span>
-                    <div class="md-ripple-container">
-                        <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isLoading == true"></md-progress-circular>
-                    </div>
+                    <div class="loader" ng-show="isLoading == true"></div>
                 </md-button>
             </div>
             <div class="forgot-pw"><a href="" ng-click="forgotpass()">Forgot Password</a></div>

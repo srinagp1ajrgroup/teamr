@@ -54,13 +54,13 @@
 		</div>
 	</div>
 	<md-dialog-actions layout="row">
-      				<span flex></span>
-					<div class="buttons">
-						<md-button class="teamr-btn" type="button" ng-click="add()" ng-disabled="isSending">
-							Add
-							<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="isSending == true"></md-progress-circular>
-						</md-button>
-						<div class="clear"></div>
-					</div>
-				</md-dialog-actions>
+		<span flex></span>
+		<div class="buttons">
+			<md-button class="teamr-btn" type="button" ng-click="add()" ng-disabled="isSending">
+				Add
+				<div class="loader" ng-if="isSending == true"></div>
+			</md-button>
+			<div class="clear"></div>
+		</div>
+	</md-dialog-actions>
 </md-dialog>

@@ -156,7 +156,7 @@
                                 <!-- <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
                                 <li> <a href=""><i class="nc-icon-mini gestures_pin"></i></a> </li>
                                 <li> <a href=""><i class="nc-icon-mini envir_home"></i></a> </li> -->
-                                <li> <a href=""><i class="nc-icon-mini envir_home"></i></a> </li>
+                                <!-- <li> <a href=""><i class="nc-icon-mini users_add-27"></i></a> </li> -->
                                 <li> 
                                     <a href="" ng-click="creategroup($event)">
                                         <md-tooltip md-direction="top">Create group</md-tooltip>
@@ -168,10 +168,13 @@
                                 <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
                                     <li>
                                         <div class="inputsearch">
-                                            <input type="text" ng-model="tSearch"  ng-minlength="3" placeholder="search..." ng-keypress = "teamrsearch($event)">
+                                            <input type="text" ng-model="tSearch"  ng-minlength="3" placeholder="search..." ng-keypress = "teamrsearch($event)">                                            
                                         </div>
+                                    </li>                                    
+                                    <li class="left-btn" ng-click="searchtoggle()"> 
+                                        <i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false"></i>
+                                        <div class="loader" ng-if="isLoading == true"></div>
                                     </li>
-                                    <li class="left-btn" ng-click="searchtoggle()"> <i class="nc-icon-mini ui-1_zoom"></i></li>
                                 </ul>
                             </div>
                             <div class="clear"></div>
@@ -187,7 +190,10 @@
                                                     <span>{{result.FIRSTNAME+' '+result.LASTNAME}}</span>
                                                 </a>
                                                 <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-                                                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                                                <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+
+                                                <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+
                                             </div>
                                             <div ng-if="result.NAME != undefined">
                                                 <a ui-sref="home.groupchatview({group:result.NAME })">
@@ -277,12 +283,15 @@
                                             <div ng-class="contact.PRESENCE"> </div>
                                             <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
                                             <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-                                            <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                                            <!-- <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div> -->
+                                            <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+
+                                            <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
                                         </li>
-                                    </ul>
-                                    <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+                                    </ul>                                    
                                 </div>
                             </div>
+                            <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
                             <div class="clear"></div>
                             <div class="side-chat-box" >
                                 <div class="chatlist">
@@ -299,10 +308,10 @@
                                                 <span># {{group.NAME}}</span>
                                             </a>
                                         </li>
-                                    </ul>
-                                    <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+                                    </ul>                                    
                                 </div>  
                             </div>
+                            <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
                         </div>
                     </div>
                 </div>

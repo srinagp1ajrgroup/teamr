@@ -2,6 +2,7 @@
 var dbutil			= require('./dbutil').dbutil;
 var mongo           = require('../config/mongo');
 var dbutils 		= new dbutil(mongo);
+var underscore 		= require("underscore");
 function globFunc() {};
 
 globFunc.prototype.removeSocketId = function(io, username) {
@@ -39,6 +40,46 @@ globFunc.prototype.emitMsg = function(io,username, data, eventName, callback)
 		 	callback(flag);
 	});
 }
+
+globFunc.prototype.getusercontacts = function(userid, token, callback)
+{
+	scocu.senddata( "comserv/contacts/"+userid, "GET", null, token, function(err, result){
+		if(err){
+			callback({success:false, data:err.body})
+		}
+		else{
+			var resp = JSON.parse(result);
+			if(resp.status == "success"){
+				var contacts = underscore.filter(resp.data, function(data){
+					if(data.USERID1_REMOVING == true || data.USERID2_REMOVING == true)
+						return false;
+					else if(data.USERID1_BLOCKING == true || data.USERID2_BLOCKING == true || data.WAITING_APPROVAL == true){
+						data.PRESENCE 	 = 'offline'
+					}
+					else if(data.WAITING_APPROVAL == false){
+						data.incomingreq = false;
+					}
+
+					if(data.PRESENCE == null)
+						data.PRESENCE = 'offline'
+
+					if(data.CONTACT_USER_ID1 == doc.user_id && data.WAITING_APPROVAL == true)
+						data.incomingreq = false;
+					else if(data.CONTACT_USER_ID2 == doc.user_id && data.WAITING_APPROVAL == true)
+						data.incomingreq = true;
+
+					data.nCount = 0;
+					return true;
+				})
+
+				res.send({success:true, data:JSON.stringify(contacts)})
+			}
+			else
+				res.send({success:false, data:result})
+		}
+	})
+}
+
 globFunc.prototype.joinGroup = function(io, username, groupid)
 {
 	var self = this;
@@ -156,6 +197,16 @@ globFunc.prototype.updatepresence = function(scocu, userid, token, callback)
 			callback({success:false, data:err.body});
 		else
 			callback({success:false, data:result});
+	});
+}
+
+globFunc.prototype.updateUmcount = function(scocu, userid, token, rec)
+{	
+	scocu.senddata("comserv/contacts/"+rec.ID, "PUT", {"contact":rec}, token, function(err, result){
+		if(err)
+			console.log(err)
+		else
+			console.log(result)
 	});
 }
 

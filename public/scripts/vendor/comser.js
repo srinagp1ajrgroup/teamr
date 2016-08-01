@@ -24,6 +24,8 @@ var url = 'https://'+ip+':'+port
 
 var filexmlhttp;
 
+var tself;
+
 function ComSer(){
 	this.socket = null;
 }
@@ -88,8 +90,12 @@ function uploadprogress(e){
 	}
 }
 
-window.addEventListener('beforeunload', function () 
-{
+window.addEventListener('beforeunload', function (){
+
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+
+	tself.sendpresence(userdetails.username, "offline", localStorage.getItem("ls.user_contacts"), function(result){
+	})
 	localStorage.removeItem("ls.user_contacts");
 	localStorage.removeItem("ls.user_groups");
 })
@@ -98,6 +104,7 @@ ComSer.prototype.login = function (credentials, callback){
 	if(credentials == null || credentials.username == null || credentials.password == null){
 		return ("Please Enter Valid Credentials");
 	}else{
+		tself = this;
 		credentials['devType'] = 'w';
 		sendxmlhttp(credentials, url+'/login', 'POST', function(response){
 			var res = JSON.parse(response);
@@ -127,8 +134,8 @@ ComSer.prototype.connect = function (){
 		hostname: ip,
 		port: port
 	};
-	// this.socket = io.connect(options, {'forceNew': true}, {'sync disconnect on unload' : true}, {'secure': true});	
-	this.socket = io.connect('https://teamr.ajrgroup.in:443');
+	this.socket = io.connect(options, {'forceNew': true}, {'sync disconnect on unload' : true}, {'secure': true}, {'reconnection': true});	
+	// this.socket = io.connect('https://teamr.ajrgroup.in:443');
 	kinda_ntp.init(this.socket);
 }
 
@@ -142,6 +149,7 @@ ComSer.prototype.subscribe = function (username, callback)
 {
 	if(username == undefined || username == null || username == "")
 		return "Invalid Username"
+	tself = this;
 	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
 	var data = {username:username, sessiontoken:userdetails.sessiontoken, devType:'w'};
 	this.socket.emit("subscribe", data, function(err, ackData){
@@ -159,7 +167,7 @@ ComSer.prototype.sendpresence = function (username, presence, cList, callback)
 
 	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
 
-	var data = {username:username, sessiontoken:userdetails.sessiontoken, status:presence, list:cList};
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, status:presence, list:cList};
 
 	this.socket.emit("sendpresence", data, function(ackData){
 		callback(ackData);
@@ -214,6 +222,11 @@ ComSer.prototype.emitwithcallback = function (eventType, data ,callback){
 
 ComSer.prototype.listen = function(callback){
 	if(this.socket != null){
+		
+		this.socket.on('reconnect', function() {
+			console.log('reconnect fired!');
+		});
+
 		this.socket.on("presence", function(data){
 			callback("presence", data);
 		});
@@ -951,6 +964,30 @@ ComSer.prototype.getsharedfiles = function (username, toid, callback) {
 	data['devType'] = 'w';
 
 	sendxmlhttp(data, url + '/getFiles', 'POST', function (response) {
+		var res = JSON.parse(response);
+		callback(res);
+	});
+}
+
+ComSer.prototype.getgroupsharedfiles = function (groupid, callback) {
+    
+    var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+    var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, groupid:groupid};
+    data['devType'] = 'w';
+
+    sendxmlhttp(data, url + '/getGroupFiles', 'POST', function (response) {
+        var res = JSON.parse(response);
+        callback(res);
+    });
+}
+
+ComSer.prototype.updateumcount = function (obj, callback) {
+	
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, obj:obj};
+	data['devType'] = 'w';
+
+	sendxmlhttp(data, url + '/updateumcount', 'POST', function (response) {
 		var res = JSON.parse(response);
 		callback(res);
 	});

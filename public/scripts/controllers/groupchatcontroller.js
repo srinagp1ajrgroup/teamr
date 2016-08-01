@@ -10,6 +10,7 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
     $scope.message      = '';
     $scope.groupchats   =  [];
     $scope.groupdate    =  [];
+    $scope.files        =  [];
     $scope.mdToast      = $mdToast
     $scope.alert        = "";
     $scope.showprogress = false;
@@ -73,7 +74,42 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
                 }
             }
         });
+
+        teamrService.getgroupsharedfiles($scope.selgroupobj.GROUP_ID, function(response){
+            console.log("files:")
+            console.log(response)
+            if(response.success == true){
+                var resp = JSON.parse(response.data);
+                $scope.files = resp.data;
+                $scope.files.filter(function (data) {
+                    if(data.file_name != null){
+                        var msgid         =   data.message_id.replace( /^\D+/g, '')
+                        var timestamp     =   parseFloat(msgid);
+                        if(timestamp == 0){
+                            timestamp = new Date(messages[i].created_at).getTime();
+                        }
+                        var str = data.file_name.lastIndexOf(".");
+                        data.ext = data.file_name.substr(str + 1, data.file_name.length)
+                        if(data.ext == 'jpg' || data.ext == 'png' || data.ext == 'jpeg' || data.ext == 'gif')
+                            data.media = true;
+                        data.time = gettime(timestamp);
+                        data.date = today_yesterday(timestamp);
+                    }
+                });
+
+                // teamrCache.put($scope.seluser + 'files', $scope.files)                
+            }
+        })
         offset += 30;
+    }
+
+    $scope.readfile = function(file){
+        if(file.audio == true)
+            $scope.audioplayer(file.message, event)
+        else if(file.video == true)
+            $scope.videplayer(file.message, event)
+        else
+            $scope.download(file.message)
     }
 
 
@@ -114,18 +150,12 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
         return output;
     };
 
+
     $scope.addmemberstogroup = function(ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/addmembers.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-            },
-            controller:function($scope, parentscope){
+
+          $scope.mdDialogPopup($scope, addmemberstogroupctrl, '../../views/addmembers.html', ev)
+    }
+function addmemberstogroupctrl($scope, parentscope){
                 $scope.addmembers           = [];
                 $scope.updatedcontacts      = localStorageService.get('user_contacts');
                 $scope.isSending = false;
@@ -199,10 +229,7 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
                     //     })
                     // }
                 }
-            }
-        });
-    }
-
+}
     $scope.showCustomToast = function() {
         $mdToast.show({
             hideDelay   : 3000,
@@ -214,20 +241,14 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
         });
     };
 
+
+
+
     $scope.delmemberstogroup = function(ev) {
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/deletemembers.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                items: $scope.contacts,
-                selgroup:$scope.selgroup,
-                parentscope:$scope
-             },
-            controller:function($scope, items, selgroup, parentscope, $mdToast){
+            $scope.mdDialogPopup($scope, delmemberstogroupctrl, '../../views/deletemembers.html', ev);
+    };
+
+    function delmemberstogroupctrl($scope, parentscope){
                 $scope.username = parentscope.userdetails.username;
                 $scope.selgroup = parentscope.selgroup;
                 $scope.groupmembers = parentscope.groupmembers;
@@ -267,19 +288,14 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
                     $scope.delmem = [];            
                     $mdDialog.hide();
                 }
-            }
-        })
-        .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
-        }, function() {
-            $scope.status = 'You cancelled the dialog.';
-        });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
-        });
-    };
+
+
+    }
+
+
+
+
+
 
     $scope.$on('addmemberstogroup', function(event, data){
         if(data.groupid == $scope.selgroupobj.GROUP_ID){
@@ -300,18 +316,14 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
         $scope.$apply();
     })
 
+
+
     $scope.exitgroup = function(ev){
-        var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-        $mdDialog.show({
-            templateUrl: '../../views/exitgroup.html',
-            parent: angular.element(document.body),
-            targetEvent: ev,
-            fullscreen: useFullScreen,
-            preserveScope:true,
-            locals: {
-                parentscope:$scope
-             },
-            controller:function($scope, parentscope){
+        $scope.mdDialogPopup($scope, exitgroupctrl, '../../views/exitgroup.html', ev);
+    }
+
+    function exitgroupctrl($scope, parentscope){
+
                 $scope.selgroup = parentscope.selgroup;
                 $scope.cancel = function(){           
                     $mdDialog.hide();
@@ -337,18 +349,6 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
                         $mdDialog.hide();
                     })
                 }
-            }
-        })
-        .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
-        }, function() {
-            $scope.status = 'You cancelled the dialog.';
-        });
-        $scope.$watch(function() {
-            return $mdMedia('xs') || $mdMedia('sm');
-        }, function(wantsFullScreen) {
-            $scope.customFullscreen = (wantsFullScreen === true);
-        });
     }
 
     $scope.$on('exitgroup', function (event, data) {

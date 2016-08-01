@@ -60,14 +60,14 @@
 			</div>
 			<div class="chat-area" ng-repeat="chats in chatdate | orderBy:'timestamp' ">
 				<h4>{{chats.date}}</h4>
-				<div ng-class="chat.chatclass" ng-repeat="chat in chats.chats | orderBy:'timestamp' " ng-if="chat.seluser == seluser">
-					<!-- <div class="chat-icon-img" ng-if="chat.from != chats.chats[$index-1].from"><span><img src="content/images/01.jpg"></span></div> -->
-					<div class="chat-icon-img"><span><img src="content/images/01.jpg"></span></div>
-					<div class="chat-content" ng-class="{chatcontent: chat.from == chats.chats[$index-1].from}">
+				<div ng-class="chat.chatclass" ng-repeat="chat in (chattings=(chats.chats | orderBy:'timestamp')) " ng-if="chat.seluser == seluser">
+					<div class="chat-icon-img" ng-if="chat.from != chattings[$index-1].from"><span><img src="content/images/01.jpg"></span></div>
+					<!-- <div class="chat-icon-img"><span><img src="content/images/01.jpg"></span></div> -->
+					<div class="chat-content" ng-class="{chatcontent: chat.from == chattings[$index-1].from}">
 						<div class="chat-content-text">
-							<!-- <div class="chat-username" ng-if="chat.from != chats.chats[$index-1].from"> -->
-							<div class="chat-username">
-								<div>
+							<div class="chat-username" ng-if="chat.from != chattings[$index-1].from">
+							<!-- <div class="chat-username"> -->
+								<div ng-if="chat.from != chattings[$index-1].from">
 									<span class="chat-head">{{chat.from}}</span>									
 								</div>								
 								<div class="chat-time-left">
@@ -83,16 +83,16 @@
 							<div class="chat-message" ng-if="chat.filetransfer == false">
 								<pre><p class="chat-message-text">{{chat.message}}</p></pre>
 
-								<!-- <span class="chatmessage-timeinfo" ng-if="chat.from == chats.chats[$index-1].from"> -->
-								<span class="chatmessage-timeinfo">									
-									<!-- <span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
+								<div class="chat-time-display" ng-if="chat.from == chattings[$index-1].from">
+									<span class="time">{{chat.time.split(" ")[0]}}</span>
+									<span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
 										<i class="nc-icon-mini ui-1_eye-19"></i>
 									</span>
 									<span class="seen" ng-if="chat.delivered == true">
 										<i class="nc-icon-mini ui-1_eye-19"></i>
 									</span>
-									<span class="time">{{chat.time}}</span> -->
-								</span>
+								</div>
+
 							</div>
 							<div class="video-download" ng-if="chat.filetransfer == true"> 
 								<ul class="video-img">
@@ -124,7 +124,7 @@
 										<md-tooltip md-direction="bottom">Download</md-tooltip>								
 										<i class="nc-icon-mini arrows-2_hit-down"></i>
 									</a>
-									<!-- <span class="messageview text-right" ng-if="chat.from == chats.chats[$index-1].from">
+									<span class="messageview text-right" ng-if="chat.from == chattings[$index-1].from">
 										<span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
 											<i class="nc-icon-mini ui-1_eye-19"></i>
 										</span>
@@ -132,7 +132,7 @@
 											<i class="nc-icon-mini ui-1_eye-19"></i>
 										</span>
 										<span class="time">{{chat.time}}</span>
-									</span> -->
+									</span>
 								</div>
 								<div class="clear" ng-if="chat.media == true"></div>
 								<div class="loading-status">
@@ -158,7 +158,7 @@
 	          	</div>
 			</div>
 			<div class="user-chat-area request-sent">
-				<h4 class="pad15">Today</h4>
+				<h4 class="pad15">{{reqdatetime[0]}}</h4>
 				<div class="chat-content-text">
 					<div class="pad15">
 						<span>Hi {{seluser}}, I'd like to add you as a contact.</span>
@@ -166,7 +166,7 @@
 							<span class="seen" ng-if="chat.delivered == true">
 								<i class="nc-icon-mini ui-1_eye-19"></i>
 							</span>
-							<span class="time">{{chat.time}}</span>
+							<span class="time">{{reqdatetime[1]}}</span>
 						</span> 
 					</div>
 				</div>

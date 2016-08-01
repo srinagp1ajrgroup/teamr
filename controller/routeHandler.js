@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var globals 				= require('../config/global');
 var multipart       		= require('connect-multiparty');
 var multipartMiddleware    	= multipart();
@@ -190,7 +190,6 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 									return false;
 								else if(data.USERID1_BLOCKING == true || data.USERID2_BLOCKING == true || data.WAITING_APPROVAL == true){
 									data.PRESENCE 	 = 'offline'
-									data.incomingreq = true;
 								}
 								else if(data.WAITING_APPROVAL == false){
 									data.incomingreq = false;
@@ -198,6 +197,16 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 
 								if(data.PRESENCE == null)
 									data.PRESENCE = 'offline'
+
+								if(data.CONTACT_USER_ID1 == doc.user_id && data.WAITING_APPROVAL == true)
+									data.incomingreq = false;
+								else if(data.CONTACT_USER_ID2 == doc.user_id && data.WAITING_APPROVAL == true)
+									data.incomingreq = true;
+
+								if(data.CONTACT_USER1_UMCOUNT == null)
+									data.CONTACT_USER1_UMCOUNT = 0;
+								if(data.CONTACT_USER2_UMCOUNT == null)
+									data.CONTACT_USER2_UMCOUNT = 0;
 
 								data.nCount = 0;
 								return true;
@@ -448,30 +457,6 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 		});
 	})
 
-	app.post("/searchgroup", function(req, res){
-		dbutils.getUserData(req.body.username, req.body.sessiontoken, function(err, doc){
-			if(err || doc == null){
-				console.log('err @ getToken : '+err);
-				err = "Invalid ID";
-				res.send({success:false, data:err})
-			}
-			else{
-				scocu.senddata("comserv/groups/"+req.body.searchname+"/search", "GET", null, doc.token, function(err, result){
-					if(err)
-						res.send({success: false, data: err.body});
-					else{
-						var resp = JSON.parse(result);
-						if(resp.data.length > 0 && resp.data[0].invitation == 'instant'){
-							res.send({success: true, list:resp.data});
-						}else{
-							res.send({success: false});
-						}							
-					}
-				});
-			}
-		});
-	});
-
 	// Delete list of memebers in a group
 	app.post("/deleteGroup", function(req, res){
 		var data = req.body;
@@ -544,6 +529,21 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 			}
 		})
 	});
+
+	app.post('/updateumcount', function(req, res){
+		dbutils.getUserData(req.body.username, req.body.sessiontoken, function(err,doc){
+			if(err || doc == null){
+				console.log('err @ getToken : '+err);
+				err = "Invalid ID";
+				res.send({success:false, data:err})
+			}
+			else{
+				utils.updateUmcount(scocu, doc.user_id, doc.token, req.body.obj, function(result){
+					res.send(result);
+				})
+			}
+		});
+	})
 
 	app.post('/calllog', function(req, res){
 		dbutils.getUserData(req.body.username, req.body.sessiontoken, function(err,doc){
@@ -675,7 +675,7 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 				err = "Invalid ID";
 				res.send({success:false, data:err})
 			}else{
-				scocu.senddata('comserv/group/messages/'+req.body.groupid+'?filetransfer=true', 'GET', null, doc.token, function(err, result){
+				scocu.senddata('comserv/'+req.body.groupid+'/groupmessages/filesearch', 'GET', null, doc.token, function(err, result){
 					if(err){
 						res.send({success:false, data:err.body})
 					}

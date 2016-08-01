@@ -17,7 +17,10 @@
 			</md-dialog-content>
 		</div>
 		<div class="buttons">
-			<md-button class="teamr-btn" type="button" ng-click="unblockContact()">Unblock</md-button>
+			<md-button class="teamr-btn" type="button" ng-click="unblockContact()">
+				Unblock
+				<div class="loader" ng-if="ubLoading == true"></div>
+			</md-button>
 			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
 			<div class="clear"></div>
 		</div>

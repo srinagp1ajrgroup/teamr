@@ -20,7 +20,7 @@
 		<div class="buttons">
 			<md-button class="teamr-btn" type="button" ng-click="blockContact()">
 				Block
-				<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="bLoading == true"></md-progress-circular>
+				<div class="loader" ng-if="bLoading == true"></div>
 			</md-button>
 			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
 			<div class="clear"></div>

@@ -21,7 +21,7 @@
 			<div class="buttons">
 				<md-button class="teamr-btn" type="button" ng-click="exit()" ng-disabled="isSending">
 					Exit
-					<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="isSending == true"></md-progress-circular>
+					<div class="loader" ng-if="isSending == true"></div>
 				</md-button>
 				<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
 				<div class="clear"></div>

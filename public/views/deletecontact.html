@@ -28,7 +28,10 @@
 			</md-button>
 		</md-dialog-actions> -->
 		<div class="buttons">
-			<md-button class="teamr-btn" type="button" ng-click="delete()">Delete</md-button>
+			<md-button class="teamr-btn" type="button" ng-click="delete()">
+				Delete
+				<div class="loader" ng-if="dcLoading == true"></div>
+			</md-button>
 			<md-button class="teamr-btn teamr-cancel" type="button" teamr-cancel ng-click="cancel()">Cancel </md-button>
 			<div class="clear"></div>
 		</div>

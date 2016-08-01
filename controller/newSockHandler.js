@@ -294,12 +294,20 @@ module.exports = function(io, app, dbutils, scocu, utils)
 
 					data.sent = true;
 					callback({success:true, data:msgobj});
-					utils.emitMsg(io, data.chatobj.touser,  data.chatobj, "privateChat",function(flag){                        
+					utils.emitMsg(io, data.chatobj.touser,  data.chatobj, "privateChat",function(flag)
+					{
                         msgobj.offline = !flag;
-                        var message = {message:msgobj};
-                        scocu.senddata('comserv/'+doc.user_id+'/messages', 'POST', message, doc.token, function(err, result){
+                        scocu.senddata('comserv/'+doc.user_id+'/messages', 'POST', {message:msgobj}, doc.token, function(err, result){
                             console.log(result);
                         });
+                        if(msgobj.offline){
+                        	if(data.chatobj.rec.CONTACT_USER_ID1 == doc.user_id)
+								data.chatobj.rec.CONTACT_USER1_UMCOUNT = data.chatobj.rec.CONTACT_USER1_UMCOUNT+1;
+							else if(data.chatobj.rec.CONTACT_USER_ID2 == doc.user_id)
+								data.chatobj.rec.CONTACT_USER2_UMCOUNT = data.chatobj.rec.CONTACT_USER2_UMCOUNT+1;
+	
+                        	utils.updateUmcount(scocu, doc.user_id, doc.token, data.chatobj.rec)
+                        }
                     });
 				}
 			});
@@ -470,7 +478,7 @@ module.exports = function(io, app, dbutils, scocu, utils)
 					callback({success:false, data:err})
 				}
 				else{
-					utils.getGroupmembers(data.groupid, doc.token, function(result){
+					utils.getGroupmembers(scocu, data.groupid, doc.token, function(result){
 						if(result.success){
 							var resp = JSON.parse(result.data);
 							var admin = false;
@@ -644,9 +652,8 @@ module.exports = function(io, app, dbutils, scocu, utils)
 		});
 
 		socket.on('disconnect', function (data) {
-			/* {'username':'','devType':''} */
 
-			var user = socket.username.split('_');
+			delete io.sockets.sockets[socket.username]
 	       	socket.disconnect();
 	    });
 	});
