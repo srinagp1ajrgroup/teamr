@@ -16,10 +16,10 @@ var GROUP_NOTIFICATION = {
 
 var GROUP_DEFAULT_MAXLIMIT = 10;
 
-var FILE_UPLOAD_LIMIT = 100000;
+var FILE_UPLOAD_LIMIT = 1024000;
 
-var ip = "teamr.ajrgroup.in"
-var port = 443;
+var ip = "192.168.1.90"
+var port = 8081;
 var url = 'https://'+ip+':'+port
 
 var filexmlhttp;
@@ -321,7 +321,15 @@ ComSer.prototype.listen = function(callback){
 
 		this.socket.on("updategroup", function(data){
 			var usergroups = JSON.parse(localStorage.getItem('ls.user_groups'));
-			usergroups.push(data);
+			if(usergroups == null)
+				usergroups = [];
+
+			var index =  _.findLastIndex(usergroups, {
+                GROUP_ID: data.GROUP_ID
+            });
+			if(index < 0)
+				usergroups.push(data);
+
 			localStorage.setItem('ls.user_groups', JSON.stringify(usergroups));
 			callback("updategroup", data);
 		});
@@ -882,8 +890,9 @@ ComSer.prototype.getjoinedgroups = function(username, callback)
 	var data = {username:username, sessiontoken:userdetails.sessiontoken}
 	data['devType'] = 'w';
 
-	this.socket.emit("getjoinedgroups", data, function(ackData){
-		callback(ackData);
+	sendxmlhttp(data, url+'/getjoinedgroups', 'POST', function(response){
+		var res = JSON.parse(response);
+		callback(res);
 	});
 }
 

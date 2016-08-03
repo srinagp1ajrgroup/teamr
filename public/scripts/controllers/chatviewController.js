@@ -1,7 +1,7 @@
 var chatList = [];
 var cacheObj = null;
 xenApp.controller('chatviewController', function ($scope, $state, $stateParams, $rootScope, $window, $cacheFactory, 
-    teamrService, localStorageService, $mdDialog, $mdMedia, teamrCache){
+    teamrService, localStorageService, $mdDialog, $mdMedia, teamrCache, $notification, $log){
 
     $scope.userdetails  = JSON.parse(localStorageService.get("localpeer"));
     $scope.contacts     = localStorageService.get("user_contacts");
@@ -33,7 +33,7 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     }
 
     if($scope.selobj.WAITING_APPROVAL == true){
-        $scope.reqdatetime = $scope.selobj.UPDATED_AT.split(" ");
+        // $scope.reqdatetime = $scope.selobj.UPDATED_AT.split(" ");
     }    
 
     $scope.chatMessageStatus = true;
@@ -276,12 +276,13 @@ $scope.audioplayer = function(msg, ev) {
                 scope.dcLoading = false;
                 if(response.success == true){
                     $rootScope.$broadcast('updatecontact', response.data)
+                    $mdDialog.hide();
                 }
             }); 
         }
 
         scope.cancel = function() {
-            $mdDialog.cancel();
+            $mdDialog.hide();
         }
     }
 
@@ -319,7 +320,6 @@ $scope.audioplayer = function(msg, ev) {
         var currentdate = new Date();
         var minutes = (currentdate.getMinutes() < 10 ? '0' : '') + currentdate.getMinutes();
         var datetime = currentdate.getHours() + ":" + minutes;
-
         if(obj.fromuser != $scope.seluser){
             // updatecache(obj);
             $rootScope.$broadcast('privatechatupdate', obj);
@@ -925,9 +925,22 @@ $scope.audioplayer = function(msg, ev) {
         document.getElementById("myDropdown").classList.toggle("show");
     };
 
-    $scope.closeFunction=function () {
-        document.getElementById("closeDropdown").classList.toggle("open");
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+    
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
     };
+    
+    
 
     function updatecache(obj){
         var cache = teamrCache.get(obj.fromuser);

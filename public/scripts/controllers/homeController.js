@@ -1,4 +1,4 @@
-xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope, $window, teamrService, localStorageService, cssInjector, $mdMedia, $mdDialog,$filter){
+xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope, $window, teamrService, localStorageService, cssInjector, $mdMedia, $mdDialog,$filter, $notification, $log){
     $scope.userdetails = JSON.parse(localStorageService.get("localpeer"));    
     $scope.contacts = [];
     $scope.groups = [];
@@ -26,9 +26,14 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
             $scope.searchteamr = true;
             return;
         }       
-        if(newValue != undefined && newValue.length > 0){
-            var searchList          =   tContacts.concat(tGroups);
-            $scope.searchResults    =   $filter('filter')(searchList, newValue);
+        if (newValue != undefined && newValue.length > 0) {
+            var tContactsFilteredList = _.filter(tContacts, function (data) {
+                return data.FIRSTNAME.indexOf(newValue) >= 0;
+            })
+            var tGroupsFilteredList = _.filter(tGroups, function (data) {
+                return data.NAME.indexOf(newValue) >= 0;
+            })
+            $scope.searchResults = tContactsFilteredList.concat(tGroupsFilteredList);
             $scope.searchteamr = false;
             $scope.isSearch = true;
         }
@@ -52,7 +57,8 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
         $scope.contacts = localStorageService.get('user_contacts');
     });
 
-    $scope.$on('privatechatupdate', function(event, obj){
+    $scope.$on('privatechatupdate', function(event, obj)
+    {
         for(var i = 0; i < $scope.contacts.length; i++){
             if($scope.contacts[i].USERNAME == obj.fromuser)
             {
@@ -70,7 +76,44 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
         }
         localStorageService.set('user_contacts', $scope.contacts)
         $scope.$apply();
+
+        var notification = $notification('New message', {
+            body: obj.fromuser+'has sent you a new message.',
+            delay: 5000
+        });
+        notification.$on('show', function () {
+            $log.debug('My notification is displayed.');
+        });
+        notification.$on('click', function () {
+            $state.go('home.chatview', { user: obj.fromuser })
+        });
+        notification.$on('close', function () {
+            $log.debug('The notification encounters on close.');
+        });
+        notification.$on('error', function () {
+            $log.debug('The notification encounters an error.');
+        });
     });
+
+    $scope.$on('groupchatupdate', function(event, obj){
+        
+        var notification = $notification('New message', {
+            body: obj.username + 'has sent you a new message.',
+            delay: 5000
+        });
+        notification.$on('show', function () {
+            $log.debug('My notification is displayed.');
+        });
+        notification.$on('click', function () {
+            $state.go('home.groupchatview', { group: obj.NAME });
+        });
+        notification.$on('close', function () {
+            $log.debug('The notification encounters on close.');
+        });
+        notification.$on('error', function () {
+            $log.debug('The notification encounters an error.');
+        });
+    })
 
     $scope.$on('acceptcontactrequpdate', function(event, contactobj){
         $scope.contacts = localStorageService.get('user_contacts');
@@ -137,15 +180,24 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
 
     $scope.openstatusmenu = function(){
         $scope.myDropdown = !$scope.myDropdown;
-    }
+    };
 
     $scope.$watch('statusmenu', function($event){
         $scope.statusmenu = $event;
     });
-
+    $scope.showmenu=false;
     $scope.toggleMenu = function () {
-        $scope.showmenu = ($scope.showmenu) ? false : true;
+        $scope.showmenu = !$scope.showmenu;
+        $scope.showmenures=true;
     };
+    $scope.showmenures=true;
+    $scope.resmenu = function () {
+        $scope.showmenures = !$scope.showmenures;
+        $scope.showmenu=true;
+    };
+    
+    
+    
 
     $scope.redirectochat = function () {
         $scope.topMiddleIndex = 1;
@@ -440,8 +492,7 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
         console.log(scope.groupdetails);
         scope.groupalert = ""; 
         scope.cgLoading = false;
-        scope.create = function(){
-            scope.cgLoading = true;
+        scope.create = function(){            
             scope.groupalert = teamrService.creategroup(parentscope.userdetails.username, scope.groupdetails, function(response)
             {
                 console.log(response);
@@ -457,6 +508,9 @@ xenApp.controller('homeController', function ($filter,$scope, $state, $rootScope
                 }
                 scope.$digest();
             });
+
+            if(scope.groupalert == '')
+                scope.cgLoading = true;
         }
 
         scope.cancel = function(){

@@ -92,8 +92,8 @@
                         </div>
                         <div class="chat-message" ng-if="chat.filetransfer == false">
                             <pre><p class="chat-message-text">{{chat.message}}</p></pre>
-                            <div class="chat-time-left" ng-if="chat.username == chattings[$index-1].username">
-                                <span class="time">{{chat.time}}</span>
+                            <div class="chat-time-display" ng-if="chat.username == chattings[$index-1].username">
+                                <span class="time">{{chat.time.split(' ')[0]}}</span>
                             </div>
                         </div>                            
                         <div class="video-download" ng-if="chat.filetransfer == true">
@@ -217,7 +217,7 @@
             <div class="group-members" ng-if="isMember">
                 <ul>
                     <li role="presentation" class="ng-scope" ng-repeat="member in groupmembers"> 
-                        <a href=""> <img src="../content/images/audio-call.jpg" class="online" alt=""> 
+                        <a href=""> <img src="../content/images/01.jpg" class="online" alt=""> 
                             <span>{{member.USERNAME}}</span> 
                         </a> 
                     </li>

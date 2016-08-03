@@ -248,7 +248,10 @@ xenApp.factory('teamrService', function($state, $rootScope, localStorageService)
                 break;
                 case 'groupchat':
                 {
-                    $rootScope.$broadcast('groupchat', obj);
+                    if($state.is('home.groupchatview') == true)
+                        $rootScope.$broadcast('groupchat', obj);
+                    else
+                        $rootScope.$broadcast('groupchatupdate', obj);
                 }
                 break;
                 case 'addmemberstogroup':

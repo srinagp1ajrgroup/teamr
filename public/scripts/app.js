@@ -1,6 +1,5 @@
 
-var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'luegg.directives', 'monospaced.elastic', 'angular.css.injector']);
-
+var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'luegg.directives', 'monospaced.elastic', 'angular.css.injector', 'notification']);
     xenApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, cssInjectorProvider)
     {
         cssInjectorProvider.setSinglePageMode(true);
@@ -17,20 +16,10 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
             templateUrl: '../views/home.html',
             controller: 'homeController'
         })
-        // .state('home.chat', {
-        //     url: '/chat',
-        //     templateUrl: '../views/chat.html',
-        //     controller: 'chatController'
-        // })
         .state('home.callphones', {
             url: '/callphones',
             templateUrl: '../views/callphones.html'
         })
-        // .state('home.groupchat', {
-        //     url: '/groupchat',
-        //     templateUrl: '../views/groupchat.html',
-        //     controller:'groupController'
-        // })
         .state('home.broadcast', {
             url: '/broadcast',
             templateUrl: '../views/broadcast.html'
@@ -71,6 +60,24 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             if ((fromState.name == 'home') || (fromState.name == 'home.chat'))
                 teamrService.removeAllListeners();
+
+            function handleVisibilityChange() {
+                if (document.hidden) {
+                    $rootScope.$apply(function () {
+                        $rootScope.userPresenceStatus = "hidden";
+                    });
+                  
+                     console.log($rootScope.userPresenceStatus)
+                } else {
+                    $rootScope.$apply(function () {
+                        $rootScope.userPresenceStatus = "visible";
+                    });
+                   
+                     console.log($rootScope.userPresenceStatus)
+
+                }
+            }
+            document.addEventListener("visibilitychange", handleVisibilityChange, false);
 
             $rootScope.netConnectionStat = navigator.onLine;
             $window.addEventListener("offline", function () {

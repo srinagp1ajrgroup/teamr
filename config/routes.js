@@ -65,7 +65,7 @@ module.exports = function(app, mongo, express){
 	
 	var io 			= sio.listen(server);
 	var dbutils 		= new dbutil(mongo);
-	var scocu 		= new scocuHandler(requestify, utils);
+	var scocu 		= new scocuHandler();
 	// io.adapter(redisSock(globals.redisConfig));
 	routeHandler(io, app, dbutils, scocu, utils);
 	// socketHandler(io, app, utils, scocu);

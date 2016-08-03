@@ -131,7 +131,7 @@
 			<div class="buttons">			
                  <md-button class="teamr-btn" type="button" ng-click="create()" ng-disabled="cgLoading">
                  	Create Group
-                 	<md-progress-circular class="md-hue-2 loading grouploading" md-mode="indeterminate" md-diameter="25px" ng-show="cgLoading == true"></md-progress-circular>
+                 	<div class="loader" ng-if="cgLoading == true"></div>
                  </md-button>
                  <md-button class="teamr-btn teamr-cancel" type="button" ng-click="cancel()">Cancel</md-button>
                  <div class="clear"></div>                 

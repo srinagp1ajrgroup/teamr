@@ -125,20 +125,20 @@
 										<i class="nc-icon-mini arrows-2_hit-down"></i>
 									</a>
 									<span class="messageview text-right" ng-if="chat.from == chattings[$index-1].from">
+										<span class="time">{{chat.time.split(" ")[0]}}</span>
 										<span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
 											<i class="nc-icon-mini ui-1_eye-19"></i>
-										</span>
+										</span>										
 										<span class="seen" ng-if="chat.delivered == true">
 											<i class="nc-icon-mini ui-1_eye-19"></i>
-										</span>
-										<span class="time">{{chat.time}}</span>
+										</span>										
 									</span>
 								</div>
 								<div class="clear" ng-if="chat.media == true"></div>
 								<div class="loading-status">
 									<p>{{chat.filename}}</p>
 								</div>								
-								<div class="clear" ng-if="chat.media == false"></div>
+								<div class="" ng-if="chat.media == false"></div>
 							</div>
 						</div>
 					</div>

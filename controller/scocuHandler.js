@@ -1,13 +1,15 @@
 "use strict";
 var globals         = require('../config/global');
-var requestify      = require('requestify'); 
+var requestify               = require('requestify'); 
 var request         = require('request');
 var FormData        = require('form-data');
 var fs              = require('fs');
-function scocu(requestify, utils){
-
+function scocu(){
     this.senddata = function(excatURL, method, data, token, callback){
         var url      = globals.baseURL+excatURL
+        console.log(url)
+        console.log("token:")
+        console.log(token)
         switch(method){
             case 'POST':{
                 scocuRESTController(url, method, data, token, callback);
@@ -50,14 +52,29 @@ function scocu(requestify, utils){
     }
 
     function scocuRESTController(url, method, data, token, callback){
+
         var header = {
-              'application_id': globals.application_id,
-              'app_user_ip': globals.app_user_ip,
-              'Content-Type': "application/json",
-            };
+            'application_id': globals.application_id,
+            'app_user_ip': globals.app_user_ip,
+            'Content-Type': "application/json",
+        };
         if (token != null) {
-               header['app_user_token'] = token;
-            };
+            header['app_user_token'] = token;
+        };
+
+        // request({method:method, url:url, body:JSON.stringify(data), headers:header}, function(err, response, body){
+        //     if(err)
+        //         callback(err,null)
+        //     else{
+        //         callback(null, body)
+        //     }
+        // })
+        // rp(options).then(function (body) {
+        //     // POST succeeded... 
+        //     callback(null, body);
+        // }).catch(function (err) {
+        //     callback(err, null)
+        // });
         requestify.request(url, {
             method: method,
             headers: header,
@@ -65,6 +82,8 @@ function scocu(requestify, utils){
             dataType: 'json'
         }).then(function (response) 
         {
+            console.log(response);
+            
             response.getBody();
             response.getHeaders();
             response.getHeader('Accept');

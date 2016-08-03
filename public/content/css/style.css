@@ -352,7 +352,7 @@ md-menu-item > .md-button p:hover {
 }
 .top-menubar .search {
 	float: left;
-	width: 52%;
+	width:57%;
 	position: relative;
 	background: #fff;
 }
@@ -369,7 +369,7 @@ md-menu-item > .md-button p:hover {
 }
 .top-menubar .communication {
 	float: left;
-	width: 19%;
+	width:14%;
 	background: #f2f6f7;
 	padding:7px 0 4px 0;
 }
@@ -403,8 +403,8 @@ md-menu-item > .md-button p:hover {
 /*========= admin panel style ======*/
 
 .admin {
-	width: 13%;
-	float: left;
+    width: auto;
+    float: right;
 }
 .user-admin-status {
 	width: 25%;
@@ -664,7 +664,7 @@ md-menu-item > .md-button p:hover {
 }
 .call-icons ul li a:nth-child(1) {
 	text-align: center;
-	border: 1px solid;
+	border: 1px solid #7f9ea2;
 	border-radius: 200%;
 	font-size: 10px;
 	margin-right: 5px;
@@ -673,9 +673,19 @@ md-menu-item > .md-button p:hover {
 .call-icons ul li a:nth-child(2) {
 	transform: rotate(90deg);
 	background: none;
-	color: #000;
-	border: none !important;
+	color: #7f9ea2 !important;
+	border: 1px solid #7f9ea2 !important;
 	margin-top: 1px;
+}
+.call-icons ul li:nth-child(3):hover a {
+	border: 1px solid #069aad;
+}
+.call-icons ul li a i.nc-icon-mini.ui-2_menu-dots{
+	color:#7f9ea2 !important;
+	}
+
+.call-icons ul li a:hover i.nc-icon-mini.ui-2_menu-dots {
+    color: #069aad !important;
 }
 .call-icons .phn-icon-bg {
 	background: #05b1c7;
@@ -745,7 +755,7 @@ md-menu-item > .md-button p:hover {
 .middle-contact-left {
 	float: left;
     line-height: 30px;
-    padding: 3px 23px;
+    padding:3px 15px;
     width: 70%;
     text-transform: capitalize;
     font-weight: bold;
@@ -755,11 +765,11 @@ md-menu-item > .md-button p:hover {
     white-space: nowrap;
 }
 .call-icons {
-	float: right;
-	padding-top: 2px;
-	text-align: right;
-	width: 17%;
-	margin-right: 14px;
+    float: right;
+    padding-top: 2px;
+    text-align: right;
+    width: 22%;
+    margin-right: 9px;
 }
 .middle-contact.close .middle-contact-middle {
 	height: 84.2%;
@@ -767,7 +777,7 @@ md-menu-item > .md-button p:hover {
 	width: 100%;
 }
 .middle-contact-middle {
-	height: 84%;
+	height: 80%;
 	overflow: auto;
 	width: 100%;
 }
@@ -818,6 +828,7 @@ md-menu-item > .md-button p:hover {
 .close .chat-icon-img span {
 	left: 4.4% !important;
 }
+
 /*side nav open*/
 .small-logo img {
 	display: none;
@@ -854,7 +865,7 @@ md-menu-item > .md-button p:hover {
 	color: #05b1c7;
 }
 .sidenav .nav-list li.active {
-	background-color: #394d69;
+	background-color:#24354c;
 }
 .sidenav .nav-list li:hover {
 	background-color: #394d69;
@@ -952,14 +963,14 @@ md-menu-item > .md-button p:hover {
 }
 .online, .offline, .busy, .warning {
 	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-	border-radius: 50%;
-	float: left;
-	height: 14px;
-	overflow: hidden;
-	padding: 3px;
-	text-align: center;
-	width: 14px;
-	line-height: 14px;
+    border-radius: 50%;
+    float: left;
+    height: 17px;
+    overflow: hidden;
+    padding: 3px;
+    text-align: center;
+    width: 17px;
+    line-height: 17px;
 }
 .user-admin.online, .user-admin.offline, .user-admin.busy, .user-admin.warning {
 	background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
@@ -1087,7 +1098,8 @@ section {
 	top: 7px;
 }
 .chat-area:first-child {
-	margin-top: 25px;
+    margin-top: 25px;
+    padding-bottom: 30px;
 }
 .chat-area {
 	padding: 10px 0;
@@ -1103,7 +1115,7 @@ section {
 	top: -17px;
 	display: inline-block;
 	right: 0;
-	left: 45px;
+	left: 39px;
 	color: #2d2d2b;
 	font-weight: bold;
 	text-transform: capitalize;
@@ -1123,20 +1135,22 @@ section {
 	width: 100%;
 }
 .chat-icon-img span {
-	background: #fff;
-	height: 19px;
-	width: 19px;
-	float: left;
-	border-radius: 50%;
-	border: 2px solid #828d91;
-	overflow: hidden;
-	text-align: center;
-	margin-right: 10px;
-	padding: 3px;
+    background: #fff;
+    height: 17px;
+    width: 17px;
+    float: left;
+    border-radius: 50%;
+    border: 2px solid #828d91;
+    overflow: hidden;
+    text-align: center;
+    margin-right: 10px;
+    padding: 3px;
 }
 .chat-content {
 	margin-left: 0px;
 	padding-top: 0px !important;
+	position: relative;
+	margin-top:0px;
 }
 .chat-head {
 	font-size: 14px !important;
@@ -1171,12 +1185,12 @@ section {
 	height: 100%;
 }
 .chat-content-text {
-	padding-Left: 42px;
+	padding-Left:38px;
 	padding-top: 1px !important;
 	padding-right: 5px;
 }
 .user-chat, .admin-chat {
-	padding-left: 24px;
+	padding-left:15px;
 	
 }
 .user-chat:hover, .admin-chat:hover {
@@ -1209,8 +1223,8 @@ section {
 }
 .seen {
 	vertical-align: middle;
-	margin-left: 2px;
-	margin-right: 2px;
+	margin-left: 5px;
+	margin-right: 0px;
 }
 .seen i {
 	color: rgba(0, 198, 255, 0.67);
@@ -1303,7 +1317,7 @@ section {
 	top: 22px;
 }
 .chatbox-icons {
-	top: 8px;
+	top: 10px;
 	position: absolute;
 	right: 14px;
 }
@@ -2604,12 +2618,36 @@ body .md-dialog-container {
 .chat-message {
 	width: 100%;
 	word-wrap: break-word;
-	padding: 0 0 13px;
+	padding: 0 0 10px;
 	position:relative;
 }
 .chat-message:hover .chat-time-display{
 	visibility: visible;
-   top: 1px;
+   top: 4px;
+   position: absolute;
+   left: -50px;
+}
+.chat-time-display {
+	left:0;
+	top:0;
+   visibility: hidden;
+   position:absolute;
+}
+
+.chat-content:hover .messageview{
+	visibility:visible;
+	position:absolute;
+	left:-12px;
+}
+.messageview {
+	float: none;
+	visibility:hidden;
+}
+
+
+.chat-message:hover .chat-time-display{
+	visibility: visible;
+   top: 6px;
    position: absolute;
    left: 0;
 }
@@ -2819,6 +2857,7 @@ md-dialog {
 	transition: .4s;
 	z-index: 99999;
 	right: 0;
+
 }
 #demo-menu {
 	width: 145px;
@@ -3012,10 +3051,20 @@ h6 {
     position: absolute;
     background-color: #1e2d42;
     min-width: 160px;
-    overflow: auto;
+    overflow: visible;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     right: 0px;
     top: 32px;
+}
+.dropdown-content::before {
+   content: '';
+   border-top: 0 none;
+   border-bottom: 8px solid #1e2d42 ;
+   border-left: 8px solid transparent;
+   border-right: 8px solid transparent;
+   position: absolute;
+   right: 16px;
+   top: -8px;
 }
 .dropmenu-content {
 	display: none;
@@ -3158,19 +3207,19 @@ group-members-panel {
 	width: 25px;
 	height: 26px;
 	padding: 9px 10px 9px 10px;
-	background: #919f9f;
+	background: #76818d;
 }
 .file-img.filetype-rar img {
 	width: 25px;
 	height: 26px;
 	padding: 9px 10px 9px 10px;
-	background: #b9cd6c;
+	background: #76818d;
 }
 .file-img.filetype-mp3 img {
 	width: 25px;
 	height: 26px;
 	padding: 9px 10px 9px 10px;
-	background: #76818d;
+	background:#506a8f;
 }
 .file-img.filetype-zip img {
 	width: 58%;
@@ -3188,7 +3237,7 @@ group-members-panel {
 	width: 25px;
 	height: 26px;
 	padding: 9px 10px 9px 10px;
-	background: #47525f;
+	background:#76818d;
 }
 .file-img.filetype-image img {
 	width: 58%;
@@ -3289,7 +3338,7 @@ pre {
 	white-space: -o-pre-wrap;
 	white-space: pre-wrap;
 	word-wrap: break-word;
-	width: 90%;
+	width:95%;
 	overflow: hidden;
 	padding-left: 0px;
 	line-height: 18px;
@@ -3611,7 +3660,7 @@ pre {
 }
 .loading-status {
 	padding-top: 3px;
-	padding-left: 15px;
+	padding-left:0px;
 	padding-bottom: 8px;
 }
 .video-download {
@@ -3626,6 +3675,13 @@ pre {
 }
 .download-btn i {
 	padding-top: 4px;
+	color: #05b1c7;
+}
+.loading-status p {
+    width: 95%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 /*============ popups ==============*/
 .margin-top {
@@ -3884,4 +3940,13 @@ pre {
 }
 .side-nav-main{
 	overflow:hidden;
+}
+
+.sidenav-inner.slide_panel_res {
+	display:none;
+}
+
+
+.sidenav-inner.hide_panel_res {
+	display:none;
 }

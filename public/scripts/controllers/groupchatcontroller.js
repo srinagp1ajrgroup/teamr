@@ -1,5 +1,5 @@
 xenApp.controller('groupchatController', function ($scope, $state, $stateParams, $rootScope, $window, $cacheFactory, 
-    teamrService, localStorageService, $mdDialog, $mdMedia, $mdToast){
+    teamrService, localStorageService, $mdDialog, $mdMedia, $mdToast, $notification, $log){
     $scope.userdetails  = JSON.parse(localStorageService.get("localpeer"));
     $scope.selgroup     = $stateParams.group;
     $scope.selgroupobj  = {};
@@ -127,8 +127,10 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
     $scope.$on('groupchat', function(event, obj){
         console.log(obj);
 
-        if(obj.group_id != $scope.selgroupobj.GROUP_ID)
+        if(obj.group_id != $scope.selgroupobj.GROUP_ID){
+            $rootScope.$broadcast('groupchatupdate', obj);
             return;
+        }
 
         updatechatui(obj.username, obj.message, "user-chat", obj.file_transfer, obj.media, obj.audio, obj.video, obj.message_id, obj.file_name);
         $scope.$apply();
@@ -313,6 +315,8 @@ function addmemberstogroupctrl($scope, parentscope){
                 }
             }
         }
+
+        $state.go('home')
         $scope.$apply();
     })
 
@@ -323,12 +327,13 @@ function addmemberstogroupctrl($scope, parentscope){
     }
 
     function exitgroupctrl($scope, parentscope){
-
+                $scope.isSending = false;
                 $scope.selgroup = parentscope.selgroup;
                 $scope.cancel = function(){           
                     $mdDialog.hide();
                 }
-                $scope.exit = function(){
+                $scope.exit = function()
+                {
                     var list = [];
                     for(var i = 0 ; i < parentscope.groupmembers.length; i++){
                         if(parentscope.groupmembers[i].USERNAME == parentscope.userdetails.username){
@@ -337,7 +342,9 @@ function addmemberstogroupctrl($scope, parentscope){
                             break;
                         }
                     }
+                    $scope.isSending = true;
                     teamrService.exitgroup(parentscope.userdetails.username, parentscope.selgroupobj.GROUP_ID, list, function(response){
+                        $scope.isSending = false;
                         console.log(response);
                         if(response.success == true){
                             var usergroups = localStorageService.get('user_groups');
@@ -345,6 +352,8 @@ function addmemberstogroupctrl($scope, parentscope){
                             localStorageService.set('user_groups', usergroups);
                             $rootScope.$broadcast('updategroup');
                         }
+
+                        $state.go('home');
 
                         $mdDialog.hide();
                     })
@@ -360,7 +369,7 @@ function addmemberstogroupctrl($scope, parentscope){
                 }
             }
         }
-        $scope.$apply();
+        $scope.$apply();        
     });
 
     $scope.create = function(){

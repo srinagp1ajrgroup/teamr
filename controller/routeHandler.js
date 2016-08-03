@@ -303,7 +303,7 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 			else{
 				var groupreq = {"name":req.body.details.groupname, 
 								"description":req.body.details.description, 
-								"category":req.body.details.category, 
+								"category":'default', 
 								"expire_date":req.body.details.expdate, 
 								"type":req.body.details.type, 								
 								"invitation":req.body.details.invitation,
@@ -492,6 +492,29 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 		});
 	});
 
+	app.post('/getjoinedgroups', function(req, res){
+		dbutils.getUserData(req.body.username, req.body.sessiontoken, function(err,doc)
+		{
+			if(err || doc == null){
+				console.log('err @ getToken : '+err);
+				err = "Invalid ID";
+				res.send({success:false, data:err})
+			}
+			else{
+				utils.getJoinedgroups(scocu, doc.user_id, doc.token, function(result){
+					console.log(result)
+					res.send(result)
+					if(result.success)
+					{
+						for(var i = 0; i < result.data.length; i++){
+							utils.joinGroup(io, req.body.username, result.data[i].GROUP_ID)
+						}
+					}
+				});
+			}
+		})
+	});
+
 	app.post('/getgroupmembers', function(req, res){
 		var data = req.body;
 		dbutils.getUserData(req.body.username, req.body.sessiontoken, function(err,doc)
@@ -523,6 +546,7 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 						res.send({success:false, data:err.body})
 					}
 					else{
+						console.log(result);
 						res.send({success:true, data:result})
 					}
 				});

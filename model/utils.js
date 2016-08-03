@@ -103,14 +103,16 @@ globFunc.prototype.leaveGroup = function(io, sessiontoken, list, groupid)
 	}											
 }
 
-globFunc.prototype.getJoinedgroups = function(scocu, userid, token, callback){
+globFunc.prototype.getJoinedgroups = function(scocu, userid, token, callback){	
 	scocu.senddata("comserv/groups/users/"+userid, 'GET', null, token, function(err, result)
 	{
 		if(err){
+			console.log(err)
 			callback({success:false, data:err.body})
 		}
 		else
-		{
+		{			
+			console.log(result)
 			var resp = JSON.parse(result)
 			if(resp.status == "success")
 			{
@@ -169,11 +171,11 @@ globFunc.prototype.addMemberstoGroup = function(scocu, groupid, token, list, cal
 }
 
 globFunc.prototype.updateGroupMemebers = function(scocu, groupid, token, list, callback){
-	scocu.senddata('comserv/groups/'+data.groupid+'/users', 'PUT', groupuser, token, function(err, result){
+	scocu.senddata('comserv/groups/'+groupid+'/users', 'PUT', list, token, function(err, result){
 		if(err)
 			callback({success:false, data:err.body});
 		else
-			callback({success:false, data:result});
+			callback({success:true, data:result});
 	});
 }
 

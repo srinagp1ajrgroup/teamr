@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 var globals 	= require('../config/global');
 var extend 		= require('extend');
 var ntp 		= require('socket-kinda-ntp');
@@ -344,7 +344,8 @@ module.exports = function(io, app, dbutils, scocu, utils)
 			});
 		})
 
-		socket.on('getjoinedgroups', function(data, callback){
+		socket.on('getjoinedgroups', function(data, callback)
+		{
 			dbutils.getUserData(data.username, data.sessiontoken, function(err,doc){
 				if(err || doc == null){
 					console.log('err @ getToken : '+err);
@@ -352,7 +353,9 @@ module.exports = function(io, app, dbutils, scocu, utils)
 					callback({success:false, data:err})
 				}
 				else{
+					console.log(data)
 					utils.getJoinedgroups(scocu, doc.user_id, doc.token, function(result){
+						console.log(result)
 						callback(result);
 						if(result.success){
 							for(var i = 0; i < result.data.length; i++){
@@ -405,13 +408,13 @@ module.exports = function(io, app, dbutils, scocu, utils)
 												for (var i = 0; i < result.data.length; i++) 
 												{
 													var groupmembersobj = {GROUP_ID:data.groupobj.GROUP_ID, ADMIN:false, EXIT:false, IS_DELETE:false, 
-													USER_ID:result.data[i].user_id, NAME:data.groupobj.NAME, EXPIRE_DATE:data.groupobj.EXPIRE_DATE, 
+													USER_ID:result.data[i].USER_ID, NAME:data.groupobj.NAME, EXPIRE_DATE:data.groupobj.EXPIRE_DATE, 
 													INVITATION:data.groupobj.INVITATION, JOINGROUP:data.groupobj.JOINGROUP, 
 													NOTIFICATION:data.groupobj.NOTIFICATION, TYPE:data.groupobj.TYPE};
 													
 
-													utils.emitMsg(io, result.data[i].username, groupmembersobj, 'updategroup');
-													utils.joinGroup(io, result.data[i].username, data.groupobj.GROUP_ID);
+													utils.emitMsg(io, result.data[i].USERNAME, groupmembersobj, 'updategroup');
+													utils.joinGroup(io, result.data[i].USERNAME, data.groupobj.GROUP_ID);
 												}
 											}												
 										})
@@ -480,24 +483,23 @@ module.exports = function(io, app, dbutils, scocu, utils)
 				else{
 					utils.getGroupmembers(scocu, data.groupid, doc.token, function(result){
 						if(result.success){
-							var resp = JSON.parse(result.data);
+							var resp = result;
 							var admin = false;
-							if(resp.status == "success"){
-								console.log(resp.data);
+							if(resp.success)
+							{
 								for(var i = 0; i < resp.data.length; i++){
 									if(resp.data[i].USERNAME == data.username &&  resp.data[i].ADMIN == true){
 										admin = true;
 										break;
 									}
 								}
-								if(admin){
+								if(admin){	
 									utils.updateGroupMemebers(scocu, data.groupid, doc.token, {data:data.list}, function(result){
 										if(result.success == true){
 											socket.broadcast.to(data.groupid).emit('delmembersfromgroup', data);
-											utils.leaveGroup(data.list, data.sessiontoken, data.groupid)
+											utils.leaveGroup(io, data.list, data.sessiontoken, data.groupid)
 										}
-										else
-											callback(result);
+										callback(result);
 									})
 								}
 							}

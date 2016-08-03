@@ -19,13 +19,13 @@ var ipMiddleware = function(req, res, next) {
 };
 
 var httpServer = http.createServer(app);
-httpServer.listen(80);
+httpServer.listen(8080);
 
 function ensureSecure(req, res, next){
   if(req.secure){
     return next();
   };
-  res.redirect('https://'+req.host+':' + 443 + req.url);
+  res.redirect('https://'+req.host+':' + 8081 + req.url);
 };
 
 app.all('*', ensureSecure);

@@ -1,231 +1,243 @@
 <div class="wrapper" ng-init="home_init()">
-    <header>
-        <div class="top-menubar">
-            <div class="logo"><span><a href=""><img src="../content/images/project-logo.png" alt=""></a></span></div>
-            <div class="search">
-                <div class="search-input text-center">
-                    <input type="text" placeholder="Search">
-                    <span class="search-icon"> <i class="nc-icon-mini ui-1_zoom"></i> </span>
-                </div>
-            </div>
-            <div class="communication">
-                <ul>
-                    <li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini ui-2_chat-round"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini arrows-e_zoom-e"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini ui-2_share"></i></a></li>
-                    <li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
-                </ul>
-            </div>
-            <div class="admin">
-                <div class="user-admin-status"> 
-                    <md-menu-bar>
-                        <md-menu>
-                            <md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
-                                <md-icon md-menu-origin>
-                                    <a id="userstatus"><span class="user-admin"><i class="nc-icon-mini users_single-03"></i></span></a>
-                                </md-icon>
-                                <span class="drop-arrow"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></span>
-                            </md-button>
-                            <md-menu-content class="teamr-dropdown teamr-dropdown-1">
-                                
-                            <md-menu-item class="user-status user-online" ng-click="setStatus('online')">
-                              <md-button ng-click="ctrl.menuItemClick($index)">
-                             <div class="user-icons"></div>
-                              <span class="user-icons-name ">Online</span>
-                              </md-button>
-                          </md-menu-item>
-                         <md-menu-item class="user-status user-away" ng-click="setStatus('warning')">
-                              <md-button ng-click="ctrl.menuItemClick($index)">
-                             <div class="user-icons away1"></div>
-                              <span class="user-icons-name "> Away</span>
-                              </md-button>
-                          </md-menu-item>
-                          <md-menu-item class="user-status user-offline" ng-click="setStatus('busy')">
-                              <md-button ng-click="ctrl.menuItemClick($index)">
-                             <div class="user-icons offline1"></div>
-                              <span class="user-icons-name "> Busy</span>
-                              </md-button>
-                          </md-menu-item>
-                         <md-menu-item class="user-status  user-invisible" ng-click="setStatus('offline')">
-                              <md-button ng-click="ctrl.menuItemClick($index)">
-                             <div class="user-icons invisible1"></div>
-                              <span class="user-icons-name"> Offline</span>
-                              </md-button>
-                          </md-menu-item>
-                         <md-menu-item class="user-status user-invisible" ng-click="setStatus('offline')">
-                              <md-button ng-click="ctrl.menuItemClick($index)">
-                             <div class="user-icons invisible1"></div>
-                              <span class="user-icons-name"> Invisible</span>
-                              </md-button>
-                          </md-menu-item>    
-                                
-                            </md-menu-content>
-                        </md-menu>
-                    </md-menu-bar>
-                </div>
-                <div class="admin-profile"> 
-                    <md-menu-bar>
-                        <md-menu>
-                            <md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
-                                <md-icon md-menu-origin>
-                                    <a><span>{{userdetails.username}}</span><span class="triangle-down"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></span></a>
-                                </md-icon>
-                            </md-button>
-                            <md-menu-content class="teamr-dropdown teamr-dropdown-2">
-                                <md-menu-item>
-                                    <md-button ng-click="ctrl.sampleAction('share', $event)">Profile</md-button>
-                                </md-menu-item>
-                                <md-menu-item>
-                                    <md-button ng-click="statechangepassword()">Change Password</md-button>
-                                </md-menu-item>
-                                <md-menu-item>
-                                    <md-button ng-click="logout()">Sign out</md-button>
-                                </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                    </md-menu-bar>
-                </div>
-            </div>
-            <div class="clear"></div>
-            <div class="main-top">
-                <div class="top-middle">
-                    <div id="wrapper">
-                        <ul>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-2_menu-dots"></i></a> <span>More</span></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="clear clearfix"></div>
-            </div>            
+  <header>
+    <div class="top-menubar">
+      <div class="logo"><span><a href=""> 
+       <img src="../content/images/project-logo.png" alt="" class="scosu-logo-web">
+        <img src="../content/images/scocu-logo-responsive.png" alt="" class="scosu-logo-res" ng-click="resmenu()"></a></span> 
+      <span class="teamr-res-logo"> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+        <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+          <figure><img src="../content/images/teamr-logo-responsiveness.png" alt="logo"> </figure>
+          <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+        </a> </span> </div>
+      <div class="search">
+        <div class="search-input text-center">
+          <input type="text" placeholder="Search">
+          <span class="search-icon"> <i class="nc-icon-mini ui-1_zoom"></i> </span> </div>
+      </div>
+      <div class="communication">
+        <ul>
+          <li><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
+          <li><a href=""><i class="nc-icon-mini ui-2_chat-round"></i></a></li>
+          <li><a href=""><i class="nc-icon-mini arrows-e_zoom-e"></i></a></li>
+          <li><a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+          <li><a href=""><i class="nc-icon-mini ui-2_share"></i></a></li>
+       
+        </ul>
+      </div>
+      <div class="admin">
+      <div class="admin-right">
+        <div class="user-admin-status">
+          <md-menu-bar>
+            <md-menu>
+              <md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin> <a id="userstatus"><span class="user-admin"><i class="nc-icon-mini users_single-03"></i></span></a> </md-icon>
+                <span class="drop-arrow"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></span> </md-button>
+              <md-menu-content class="teamr-dropdown teamr-dropdown-1">
+                <md-menu-item class="user-status user-online" ng-click="setStatus('online')">
+                  <md-button ng-click="ctrl.menuItemClick($index)">
+                    <div class="user-icons"></div>
+                    <span class="user-icons-name ">Online</span> </md-button>
+                </md-menu-item>
+                <md-menu-item class="user-status user-away" ng-click="setStatus('warning')">
+                  <md-button ng-click="ctrl.menuItemClick($index)">
+                    <div class="user-icons away1"></div>
+                    <span class="user-icons-name "> Away</span> </md-button>
+                </md-menu-item>
+                <md-menu-item class="user-status user-offline" ng-click="setStatus('busy')">
+                  <md-button ng-click="ctrl.menuItemClick($index)">
+                    <div class="user-icons offline1"></div>
+                    <span class="user-icons-name "> Busy</span> </md-button>
+                </md-menu-item>
+                <md-menu-item class="user-status  user-invisible" ng-click="setStatus('offline')">
+                  <md-button ng-click="ctrl.menuItemClick($index)">
+                    <div class="user-icons invisible1"></div>
+                    <span class="user-icons-name"> Offline</span> </md-button>
+                </md-menu-item>
+                <md-menu-item class="user-status user-invisible" ng-click="setStatus('offline')">
+                  <md-button ng-click="ctrl.menuItemClick($index)">
+                    <div class="user-icons invisible1"></div>
+                    <span class="user-icons-name"> Invisible</span> </md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-menu-bar>
         </div>
-    </header>
-    <section>
-        <div class="contact">
-            <div class="sidenav">
-                <div class="sidenav-inner" ng-class="{slide_panel:!showmenu,hide_panel:showmenu}">
-                    <div class="main">
-                        <div class="top-left">
-                            <a href="" ng-click="redirectochat()">
-                                <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
-                            </a>
-                            <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
-                                <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
-                                    <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
-                                    <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> 
-                                </md-button>
-                            </a>
-                        </div>
-                        <div class="clear"></div>
-                        <div class="clear"></div>
-                        <div class="small-navbar">
-                            <ul>
-                                <!-- <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
+        
+        <div class="admin-profile">
+          <md-menu-bar>
+            <md-menu>
+              <md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin> <a><span>{{userdetails.username}}</span><span class="triangle-down"><i class="nc-icon-mini arrows-1_small-triangle-down"></i></span></a> </md-icon>
+              </md-button>
+              <md-menu-content class="teamr-dropdown teamr-dropdown-2">
+                <md-menu-item>
+                  <md-button ng-click="ctrl.sampleAction('share', $event)">Profile</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="statechangepassword()">Change Password</md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="logout()">Sign out</md-button>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </md-menu-bar>
+        </div>
+        </div>
+      </div>
+      <div class="clear"></div>
+      <div class="main-top">
+        <div class="top-middle">
+          <div id="wrapper">
+            <!--<ul>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><span>User</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><span>Time</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <span>Audio</span></li>
+              <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><span>Settings</span> </li>
+              <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><span>Email</span> </li>
+              <li> <a href=""> <i class="nc-icon-mini ui-2_menu-dots"></i></a> <span>More</span></li>
+            </ul>-->
+            
+            <ul>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a><md-tooltip md-direction="bottom">Audio</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a><md-tooltip md-direction="bottom">Audio</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a><md-tooltip md-direction="bottom">Audio</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a><md-tooltip md-direction="bottom">User</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip> </li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a><md-tooltip md-direction="bottom">Time</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> <md-tooltip md-direction="bottom">Audio</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a><md-tooltip md-direction="bottom">Settings</md-tooltip></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a><md-tooltip md-direction="bottom">Email</md-tooltip></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_menu-dots"></i></a><md-tooltip md-direction="bottom">More</md-tooltip></li>
+                        </ul>
+          </div>
+        </div>
+        <div class="clear clearfix"></div>
+      </div>
+    </div>
+  </header>
+  <section>
+    <div class="contact">
+    
+      <div class="sidenav">
+        <div class="sidenav-inner" ng-class="{slide_panel:!showmenu, hide_panel:showmenu}">
+          <div class="main">
+            <div class="top-left"> <a href="" ng-click="redirectochat()">
+              <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
+              </a> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+              <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+                <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
+                <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+              </a> </div>
+            <div class="clear"></div>
+            <div class="clear"></div>
+            <div class="small-navbar">
+              <ul>
+                <!-- <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
                                 <li> <a href=""><i class="nc-icon-mini gestures_pin"></i></a> </li>
-                                <li> <a href=""><i class="nc-icon-mini envir_home"></i></a> </li> -->
-                                <!-- <li> <a href=""><i class="nc-icon-mini users_add-27"></i></a> </li> -->
-                                <li> 
-                                    <a href="" ng-click="creategroup($event)">
-                                        <md-tooltip md-direction="top">Create group</md-tooltip>
-                                        <span><img src="../content/images/group-icon2.png" alt=""></span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="side-bar-search text-center">
-                                <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
-                                    <li>
-                                        <div class="inputsearch">
-                                            <input type="text" ng-model="tSearch"  ng-minlength="3" placeholder="search..." ng-keypress = "teamrsearch($event)">                                            
-                                        </div>
-                                    </li>                                    
-                                    <li class="left-btn" ng-click="searchtoggle()"> 
-                                        <i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false"></i>
-                                        <div class="loader" ng-if="isLoading == true"></div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" ng-hide="!isSearch">
-                            <div class="side-nav-main force-overflow">
-                                <ul class="nav-list list">
-                                    <li role="presentation" ng-repeat="result in searchResults | filter:tSearch" ng-class="{active: $index == selected}"> 
-                                        <div>
-                                            <div ng-if="result.FIRSTNAME != undefined">
-                                                <a ui-sref="home.chatview({user:result.USERNAME })">
-                                                    <div ng-class="result.PRESENCE"> </div>
-                                                    <span>{{result.FIRSTNAME+' '+result.LASTNAME}}</span>
-                                                </a>
-                                                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-                                                <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
-
-                                                <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
-
-                                            </div>
-                                            <div ng-if="result.NAME != undefined">
-                                                <a ui-sref="home.groupchatview({group:result.NAME })">
-                                                    <div class="offline"> </div>
-                                                    <span>{{result.NAME}}</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div ng-if="searchteamr">
-                                            <div ng-if="result.firstname != undefined">
-                                                <a>
-                                                    <div class="offline"> </div>
-                                                    <span>{{result.firstname+' '+result.lastname}}</span>
-                                                    <div class="added-contact-right" ng-click="sendcontactreq($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
-                                                    <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
-                                                </a>
-                                            </div>
-                                            <div ng-if="result.name != undefined">
-                                                <a>
-                                                   <div class="offline"> </div>
-                                                    <div class="added-contact-right" ng-click="joingroup($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
-                                                    <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
-                                                    <span>{{result.name}}</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div ng-hide="isSearch">
-                            <!-- <div class="md-accordion" ng-repeat="data in accordianData">
+                                <li> <a href=""><i class="nc-icon-mini envir_home"></i></a> </li> --> 
+                <!-- <li> <a href=""><i class="nc-icon-mini users_add-27"></i></a> </li> -->
+                <li> <a href="" ng-click="creategroup($event)">
+                  <md-tooltip md-direction="top">Create group</md-tooltip>
+                  <span><img src="../content/images/group-icon2.png" alt=""></span> </a> </li>
+              </ul>
+              <div class="side-bar-search text-center">
+                <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
+                  <li>
+                    <div class="inputsearch">
+                      <input type="text" ng-model="tSearch"  ng-minlength="3" placeholder="search..." ng-keypress = "teamrsearch($event)">
+                    </div>
+                  </li>
+                  <li class="left-btn" ng-click="searchtoggle()"> <i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false"></i>
+                    <div class="loader" ng-if="isLoading == true"></div>
+                  </li>
+                </ul>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" ng-hide="!isSearch">
+              <div class="side-nav-main force-overflow">
+                <ul class="nav-list list">
+                  <li role="presentation" ng-repeat="result in searchResults | filter:tSearch" ng-class="{active: $index == selected}">
+                    <div>
+                      <div ng-if="result.FIRSTNAME != undefined"> <a ui-sref="home.chatview({user:result.USERNAME })">
+                        <div ng-class="result.PRESENCE"> </div>
+                        <span>{{result.FIRSTNAME+' '+result.LASTNAME}}</span> </a>
+                        <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                        <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+                        <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+                      </div>
+                      <div ng-if="result.NAME != undefined"> <a ui-sref="home.groupchatview({group:result.NAME })">
+                        <div class="offline"> </div>
+                        <span>{{result.NAME}}</span> </a> </div>
+                    </div>
+                    <div ng-if="searchteamr">
+                      <div ng-if="result.firstname != undefined"> <a>
+                        <div class="offline"> </div>
+                        <span>{{result.firstname+' '+result.lastname}}</span>
+                        <div class="added-contact-right" ng-click="sendcontactreq($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+                        <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+                        </a> </div>
+                      <div ng-if="result.name != undefined"> <a>
+                        <div class="offline"> </div>
+                        <div class="added-contact-right" ng-click="joingroup($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+                        <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+                        <span>{{result.name}}</span> </a> </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div ng-hide="isSearch"> 
+              <!-- <div class="md-accordion" ng-repeat="data in accordianData">
                                         <div ng-init="data.expanded = false" ng-click="collapseAll(data)">
                                             <div class="">
                                                 <div class="side-chat-box" >
@@ -266,148 +278,384 @@
                                             </div>
                                         </div>
                                     </div> -->
-                            <div class="clear"></div>
-                            <div class="side-chat-box" >
-                                <div class="chatlist"> <span>Contacts</span> </div>
-                                <div class="addgroup-icons hide-icon">
-                                    <div class="chatlist-right"> 
-                                        <a> <i class="nc-icon-mini users_single-01"></i></a>
-                                    </div>
-                                </div>
-                                <div class="clear"></div>
-                            </div>
-                            <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
-                                <div class="side-nav-main force-overflow">
-                                    <ul class="nav-list list">
-                                        <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == seluser}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
-                                            <div ng-class="contact.PRESENCE"> </div>
-                                            <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
-                                            <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-                                            <!-- <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div> -->
-                                            <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
-
-                                            <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
-                                        </li>
-                                    </ul>                                    
-                                </div>
-                            </div>
-                            <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
-                            <div class="clear"></div>
-                            <div class="side-chat-box" >
-                                <div class="chatlist">
-                                    <span>Teams</span>
-                                </div>
-                            </div>
-                            <div class="clear"></div>
-                            <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" > 
-                                <div class="side-nav-main">
-                                    <ul class="nav-list list">
-                                        <li role="presentation" class="" ng-repeat="group in groups|limitTo:gLimit" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selgroup}">
-                                            <a ui-sref="home.groupchatview({group:group.NAME })">
-                                                <!-- <div class="offline">#</div> -->
-                                                <span># {{group.NAME}}</span>
-                                            </a>
-                                        </li>
-                                    </ul>                                    
-                                </div>  
-                            </div>
-                            <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
-                        </div>
+              <div class="clear"></div>
+              <div class="side-chat-box" >
+                <div class="chatlist"> <span>Contacts</span> </div>
+                <div class="addgroup-icons hide-icon">
+                  <div class="chatlist-right"> <a> <i class="nc-icon-mini users_single-01"></i></a> </div>
+                </div>
+                <div class="clear"></div>
+              </div>
+              <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
+                <div class="side-nav-main force-overflow">
+                  <ul class="nav-list list">
+                    <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == seluser}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                      <div ng-class="contact.PRESENCE"> </div>
+                      <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                      <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                      <!-- <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div> -->
+                      <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+                      <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+              <div class="clear"></div>
+              <div class="side-chat-box" >
+                <div class="chatlist"> <span>Teams</span> </div>
+              </div>
+              <div class="clear"></div>
+              <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
+                <div class="side-nav-main">
+                  <ul class="nav-list list">
+                    <li role="presentation" class="" ng-repeat="group in groups|limitTo:gLimit" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selgroup}"> <a ui-sref="home.groupchatview({group:group.NAME })"> 
+                      <!-- <div class="offline">#</div> --> 
+                      <span># {{group.NAME}}</span> </a> </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+      <div class="sidenav sidenav-res">
+        <div class="sidenav-inner" ng-class="{slide_panel_res:!showmenures,hide_panel_res:showmenures}">
+          <div class="main">
+            <div class="top-left"> <a href="" ng-click="redirectochat()">
+              <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
+              </a> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+              <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+                <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
+                <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+              </a> </div>
+            <div class="clear"></div>
+            <div class="clear"></div>
+            <div class="sidenav-res-main">
+             <div id="wrapper-1">
+            <ul>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a</li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a>/li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a>/li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a> </li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a>/li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> </li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-2_menu-dots"></i></a></li>
+                        </ul>
+          
+            </div>
+            <div class="sidenav-res-right">
+            
+            <div class="main">
+            <div class="top-left"> <a href="" ng-click="redirectochat()">
+              <figure class="lg-logo"><img src="content/images/logo-home.png" alt="logo"> </figure>
+              </a> <a href="javascript:void(0)" class="left-btn" ng-click="toggleMenu()">
+              <md-button class="md-icon-button md-button md-ink-ripple side-nav-img1">
+                <figure><img src="content/images/small-logo.png" alt="logo"> </figure>
+                <i class="nc-icon-mini ui-2_menu-34 side-nav-img2"></i> </md-button>
+              </a> </div>
+            <div class="clear"></div>
+            <div class="clear"></div>
+            <div class="small-navbar">
+              <ul>
+                <!-- <li class="active"> <a href=""> <i class="nc-icon-mini ui-3_chat-33"></i></a> </li>
+                                <li> <a href=""><i class="nc-icon-mini gestures_pin"></i></a> </li>
+                                <li> <a href=""><i class="nc-icon-mini envir_home"></i></a> </li> --> 
+                <!-- <li> <a href=""><i class="nc-icon-mini users_add-27"></i></a> </li> -->
+                <li> <a href="" ng-click="creategroup($event)">
+                  <md-tooltip md-direction="top">Create group</md-tooltip>
+                  <span><img src="../content/images/group-icon2.png" alt=""></span> </a> </li>
+              </ul>
+              <div class="side-bar-search text-center">
+                <ul class="search" ng-class="{search_slide_panel:!showbar,search_hide_panel:showbar}">
+                  <li>
+                    <div class="inputsearch">
+                      <input type="text" ng-model="tSearch"  ng-minlength="3" placeholder="search..." ng-keypress = "teamrsearch($event)">
                     </div>
+                  </li>
+                  <li class="left-btn" ng-click="searchtoggle()"> <i class="nc-icon-mini ui-1_zoom" ng-if="isLoading == false"></i>
+                    <div class="loader" ng-if="isLoading == true"></div>
+                  </li>
+                </ul>
+              </div>
+              <div class="clear"></div>
+            </div>
+            <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" ng-hide="!isSearch">
+              <div class="side-nav-main force-overflow">
+                <ul class="nav-list list">
+                  <li role="presentation" ng-repeat="result in searchResults | filter:tSearch" ng-class="{active: $index == selected}">
+                    <div>
+                      <div ng-if="result.FIRSTNAME != undefined"> <a ui-sref="home.chatview({user:result.USERNAME })">
+                        <div ng-class="result.PRESENCE"> </div>
+                        <span>{{result.FIRSTNAME+' '+result.LASTNAME}}</span> </a>
+                        <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                        <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+                        <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+                      </div>
+                      <div ng-if="result.NAME != undefined"> <a ui-sref="home.groupchatview({group:result.NAME })">
+                        <div class="offline"> </div>
+                        <span>{{result.NAME}}</span> </a> </div>
+                    </div>
+                    <div ng-if="searchteamr">
+                      <div ng-if="result.firstname != undefined"> <a>
+                        <div class="offline"> </div>
+                        <span>{{result.firstname+' '+result.lastname}}</span>
+                        <div class="added-contact-right" ng-click="sendcontactreq($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+                        <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+                        </a> </div>
+                      <div ng-if="result.name != undefined"> <a>
+                        <div class="offline"> </div>
+                        <div class="added-contact-right" ng-click="joingroup($index)"> <i class="nc-icon-mini ui-1_simple-add" ng-if="item.isSent == undefined"></i> <i class="nc-icon-mini ui-1_check" ng-if="item.isSent == true"></i> </div>
+                        <md-progress-circular class="md-hue-2 loading" md-mode="indeterminate" md-diameter="40px" ng-show="isSending == true"></md-progress-circular>
+                        <span>{{result.name}}</span> </a> </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div ng-hide="isSearch"> 
+              <!-- <div class="md-accordion" ng-repeat="data in accordianData">
+                                        <div ng-init="data.expanded = false" ng-click="collapseAll(data)">
+                                            <div class="">
+                                                <div class="side-chat-box" >
+                                                    <div class="chatlist"> 
+                                                        <span>{{data.heading}}</span> 
+                                                        <menu-toggle contact="contact"></menu-toggle>
+                                                    </div>
+                                                    <div class="addgroup-icons hide-icon">
+                                                        <div class="chatlist-right"> 
+                                                            <a> <i class="nc-icon-mini users_single-01"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <span ng-class="{expandCollapse:true, active:data.expanded}"></span> 
+                                                    <div class="clear"></div>
+                                                </div>
+                                                <span flex=""></span>                                                
+                                                <div class="scrollbar-box" ng-class="{dataContent:true, activeContent:data.expanded}" mb-scrollbar="scrollbar('vertical', true)">
+                                                    <div class="side-nav-main force-overflow">
+                                                        <ul class="nav-list list" ng-if="data.heading == 'Contacts' ">
+                                                            <li role="presentation" ng-repeat="contact in data.content" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                                                                <div ng-class="contact.PRESENCE"> </div>
+                                                                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                                                                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                                                                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                                                            </li>
+                                                        </ul>
+
+                                                        <ul class="nav-list list" ng-if="data.heading == 'Teams' ">
+                                                            <li role="presentation" class="" ng-repeat="group in data.content" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selected}">
+                                                                <a ui-sref="home.groupchatview({group:group.NAME })">
+                                                                    <div class="offline"> </div>
+                                                                    <span>{{group.NAME}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+              <div class="clear"></div>
+              <div class="side-chat-box" >
+                <div class="chatlist"> <span>Contacts</span> </div>
+                <div class="addgroup-icons hide-icon">
+                  <div class="chatlist-right"> <a> <i class="nc-icon-mini users_single-01"></i></a> </div>
                 </div>
-            </div>
-            <div ui-view style="height:100%;"></div>
-        </div>
-        <div id="demo-switcher">
-            <div id="toggle-button" ng-click="togglecolorswitcher()">
-                <i class="nc-icon-outline ui-1_settings-gear-63"></i>
-            </div>
-            <div id="demo-menu" class="demo-menu" ng-class="{show_switcher:!showcolorsMenu,hide_switcher:showcolorsMenu}">
-                <h4>Themes</h4>
-                <div class="switcher">
-                    <ul class="theme-colors">
-                        <li>
-                            <a class="change-color" data-url="content/css/style.css" href="javascript:void(0)" ng-click="saveStyle('style')">
-                                <div class="theme-green">
-                                    <div class="theme-left green-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>Green</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="change-color" data-url="content/css/peach-theme.css" href="javascript:void(0)" ng-click="saveStyle('peach-theme')">
-                                <div class="theme-red">
-                                    <div class="theme-left red-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>peach</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="change-color" data-url="content/css/voilet-theme.css" href="javascript:void(0)" ng-click="saveStyle('violet-theme')">
-                                <div class="theme-violet">
-                                    <div class="theme-left violet-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>Violet</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="change-color" data-url="content/css/white-theme.css" href="javascript:void(0)" ng-click="saveStyle('white-theme')">
-                                <div class="theme-white">
-                                    <div class="theme-left white-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>White</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="change-color" data-url="content/css/blue-green-theme.css" href="javascript:void(0)" ng-click="saveStyle('blue-green-theme')">
-                                <div class="theme-blue-green">
-                                    <div class="theme-left blue-green-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>blue</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="change-color" data-url="content/css/green-new-theme.css" href="javascript:void(0)" ng-click="saveStyle('green-new-theme')">
-                                <div class="theme-green-new">
-                                    <div class="theme-left greennew-left"></div>
-                                    <div class="theme-right">
-                                        <div class="top"></div>
-                                        <div class="bottom"></div>
-                                    </div>
-                                    <div class="clear"></div>
-                                    <h6>Green</h6>
-                                </div>
-                            </a>
-                        </li>
-                        <div class="clear"></div>
-                    </ul>
+                <div class="clear"></div>
+              </div>
+              <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
+                <div class="side-nav-main force-overflow">
+                  <ul class="nav-list list">
+                    <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == seluser}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                      <div ng-class="contact.PRESENCE"> </div>
+                      <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                      <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                      <!-- <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div> -->
+                      <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
+                      <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+                    </li>
+                  </ul>
                 </div>
+              </div>
+              <div class="sidenav-more" ><span><a href="" ng-click="cloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
+              <div class="clear"></div>
+              <div class="side-chat-box" >
+                <div class="chatlist"> <span>Teams</span> </div>
+              </div>
+              <div class="clear"></div>
+              <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
+                <div class="side-nav-main">
+                  <ul class="nav-list list">
+                    <li role="presentation" class="" ng-repeat="group in groups|limitTo:gLimit" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selgroup}"> <a ui-sref="home.groupchatview({group:group.NAME })"> 
+                      <!-- <div class="offline">#</div> --> 
+                      <span># {{group.NAME}}</span> </a> </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="sidenav-more"><span><a href="" ng-click="gloadmore()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></span></div>
             </div>
+          </div>
+            <div class="clear"></div>
+            </div>
+            </div>
+            <div ng-hide="isSearch"> 
+              <!-- <div class="md-accordion" ng-repeat="data in accordianData">
+                                        <div ng-init="data.expanded = false" ng-click="collapseAll(data)">
+                                            <div class="">
+                                                <div class="side-chat-box" >
+                                                    <div class="chatlist"> 
+                                                        <span>{{data.heading}}</span> 
+                                                        <menu-toggle contact="contact"></menu-toggle>
+                                                    </div>
+                                                    <div class="addgroup-icons hide-icon">
+                                                        <div class="chatlist-right"> 
+                                                            <a> <i class="nc-icon-mini users_single-01"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <span ng-class="{expandCollapse:true, active:data.expanded}"></span> 
+                                                    <div class="clear"></div>
+                                                </div>
+                                                <span flex=""></span>                                                
+                                                <div class="scrollbar-box" ng-class="{dataContent:true, activeContent:data.expanded}" mb-scrollbar="scrollbar('vertical', true)">
+                                                    <div class="side-nav-main force-overflow">
+                                                        <ul class="nav-list list" ng-if="data.heading == 'Contacts' ">
+                                                            <li role="presentation" ng-repeat="contact in data.content" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                                                                <div ng-class="contact.PRESENCE"> </div>
+                                                                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
+                                                                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                                                                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
+                                                            </li>
+                                                        </ul>
+
+                                                        <ul class="nav-list list" ng-if="data.heading == 'Teams' ">
+                                                            <li role="presentation" class="" ng-repeat="group in data.content" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selected}">
+                                                                <a ui-sref="home.groupchatview({group:group.NAME })">
+                                                                    <div class="offline"> </div>
+                                                                    <span>{{group.NAME}}</span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+              <div class="clear"></div>
+             
+              
+            </div>
+          </div>
         </div>
-    </section>
+      </div>
+      <div ui-view style="height:100%;"></div>
+    </div>
+    <div id="demo-switcher">
+      <div id="toggle-button" ><!--ng-click="togglecolorswitcher()"--> <i class="nc-icon-outline ui-1_settings-gear-63"></i> </div>
+      <div id="demo-menu" class="demo-menu" ng-class="{show_switcher:!showcolorsMenu,hide_switcher:showcolorsMenu}">
+        <h4>Themes</h4>
+        <div class="switcher">
+          <ul class="theme-colors">
+            <li> <a class="change-color" data-url="content/css/style.css" href="javascript:void(0)" ng-click="saveStyle('style')">
+              <div class="theme-green">
+                <div class="theme-left green-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>Green</h6>
+              </div>
+              </a> </li>
+            <li> <a class="change-color" data-url="content/css/peach-theme.css" href="javascript:void(0)" ng-click="saveStyle('peach-theme')">
+              <div class="theme-red">
+                <div class="theme-left red-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>peach</h6>
+              </div>
+              </a> </li>
+            <li> <a class="change-color" data-url="content/css/voilet-theme.css" href="javascript:void(0)" ng-click="saveStyle('violet-theme')">
+              <div class="theme-violet">
+                <div class="theme-left violet-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>Violet</h6>
+              </div>
+              </a> </li>
+            <li> <a class="change-color" data-url="content/css/white-theme.css" href="javascript:void(0)" ng-click="saveStyle('white-theme')">
+              <div class="theme-white">
+                <div class="theme-left white-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>White</h6>
+              </div>
+              </a> </li>
+            <li> <a class="change-color" data-url="content/css/blue-green-theme.css" href="javascript:void(0)" ng-click="saveStyle('blue-green-theme')">
+              <div class="theme-blue-green">
+                <div class="theme-left blue-green-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>blue</h6>
+              </div>
+              </a> </li>
+            <li> <a class="change-color" data-url="content/css/green-new-theme.css" href="javascript:void(0)" ng-click="saveStyle('green-new-theme')">
+              <div class="theme-green-new">
+                <div class="theme-left greennew-left"></div>
+                <div class="theme-right">
+                  <div class="top"></div>
+                  <div class="bottom"></div>
+                </div>
+                <div class="clear"></div>
+                <h6>Green</h6>
+              </div>
+              </a> </li>
+            <div class="clear"></div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
