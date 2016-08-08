@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>Progress Bars</title>
+<style>
+.upload-progressbar{
+	width:100%;
+}
+.progressbar-bg {
+	height: 9px;
+
+	border-radius: 2px;
+	width: 98%;
+
+	background: #c5cfd1;
+	float: left;
+}
+.progressbar {
+	height: 100%;
+	background-color: #07c3b5;
+	border-radius: 2px;
+	max-width: 80%;
+	color: #fff;
+}
+
+
+.progressbarclose {
+	height: 15px;
+	width: 15px;
+	text-align: center;
+	border-radius: 20px;
+	line-height: 12px;
+	cursor: pointer;
+	float: right;
+}
+.progressbarclose:hover {
+	background: #00b8a9;
+	color: #fff;
+}
+</style>
+</head>
+
+<body>
+<div class="upload-progressbar">
+  <div class="progressbar-bg">
+    <div class="progressbar"> </div>
+  </div>
+  <div class="progressbarclose"><span>x</span></div>
+</div>
+</body>
+</html>

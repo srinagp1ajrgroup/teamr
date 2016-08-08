@@ -1,21 +1,30 @@
 <div class="middle-contact padt50" ng-class="{slide:!showmenu,close:showmenu}" ng-init="chatviewinit()">
-	<voice-call ng-show="isoutboundcall || isinboundcall" isoutboundcall=isoutboundcall isinboundcall=isinboundcall callback-fn="acceptcall()" callback-fn1="rejectcall()"> </voice-call>
-	<div class="file_progress">
-		<div class="progressbar-bg" ng-show="showprogress == true">
-			<div id="progressBar" class="progressbar" max="100">
-				<div class="progressbartext"><span>{{filename}}</span></div>
-				<!-- <div class="progressbarpercent"><span>{{progresspercent}}%</span></div> -->
+	<!-- <voice-call ng-show="isoutboundcall || isinboundcall" isoutboundcall=isoutboundcall isinboundcall=isinboundcall callback-fn="acceptcall()" callback-fn1="rejectcall()"> </voice-call> -->
+
+	<!-- <video-call ng-show="isoutboundvcall || isinboundvcall" isoutboundvcall=isoutboundvcall isinboundcall=isinboundvcall callback-fn="acceptvideocall()" callback-fn1="rejectvideocall()"></video-call> -->
+	<div class="audio-call-bg audio-call-receiving" ng-class="{minimum:!showmax,maximum:showmax}" ng-if="isinboundvcall==true">
+		<div class="audio-call-max">
+			<div class="audio-calling-one">
+				<div class="audio-caller-name receiver-call"><img alt="audio-call" src="content/images/audio-call.jpg"></div>
+				<span>{{videocalldetails.username}}</span>
 			</div>
-			<div class="progressbarclose" ng-click="cancelFileUpload(event)"><span>x</span></div>
+			<div class="audio-call-bottom">
+				<div class="audio-icon-option">
+					<ul>
+						<li ><a href="" ng-click="acceptvideocall()"><i class="nc-icon-mini ui-3_phone"></i></a></li>
+						<li><a href=""><i class="nc-icon-mini tech_webcam-39"></i></a></li>
+						<li class="active"><a href="" ng-click="rejectvideocall()"><i class="nc-icon-mini ui-1_simple-remove"></i></a></li>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
 		</div>
 	</div>
 
 	<div class="middle-contact-inner" ng-class="{audioinner: isoutboundcall == true}">
 		<div class="middle-contact-top">
-			<div class="middle-contact-left"> 
-				<!-- <span class="user-img1" ng-class="selobj.PRESENCE">
-					<img src="content/images/01.jpg">
-				</span> -->
+			<div class="middle-contact-left">
 				<div ng-class="selobj.PRESENCE" class="user-img1">
 					<img src="content/images/profile_icon.jpg" class="" alt="">
 				</div>
@@ -29,8 +38,8 @@
 				<ul>
 					<!-- <li><a href="" ng-click="createteam($event)"><md-tooltip md-direction="bottom">Add members</md-tooltip><i class="nc-icon-mini ui-1_simple-add"></i></a></li> -->
 					<li ng-disabled="isoutboundcall"><md-tooltip md-direction="bottom">Audio Call</md-tooltip><a href="" class="phn-icon-bg" ng-click="outboundvoicecall()"><i class="nc-icon-mini ui-3_phone"></i></a></li>
-                    <li><md-tooltip md-direction="bottom">Video Call</md-tooltip><a href="" class="video-icon-bg"><i class="nc-icon-mini media-1_video-64"></i></a></li>
-					<li>
+                    <li><md-tooltip md-direction="bottom">Video Call</md-tooltip><a href="" class="video-icon-bg" ng-click="outboundvideocall()"><i class="nc-icon-mini media-1_video-64"></i></a></li>
+					<li ng-if="!selobj.WAITING_APPROVAL">
 						<md-menu-bar>
 							<md-menu>
 								<md-button aria-label="Sample Menu" class="md-icon-button user-name" ng-click="$mdOpenMenu($event)">
@@ -50,9 +59,19 @@
 							</md-menu>
 						</md-menu-bar>
 					</li>
+					<li class="right-toggle-btn"><a href="" ng-click="right_toggle()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></li>
 				</ul>
 			</div>
 			<div class="clear clearfix"></div>
+		</div>
+		<div class="upload-progressbar" ng-show="showprogress == true">
+			<div class="progressbar-bg">
+				<div id="progressBar" class="progressbar" max="100">
+					<div class="progressbartext"><span>{{filename}}</span></div>
+					<!-- <div class="progressbarpercent"><span>{{progresspercent}}%</span></div> -->
+				</div>			
+			</div>
+			<div class="progressbarclose" ng-click="cancelFileUpload(event)"><i class="nc-icon-mini ui-1_simple-remove"></i></div>		
 		</div>
 		<div class="middle-contact-middle" ng-if="selobj.WAITING_APPROVAL == false" scroll-glue chatmessagestatus=chatMessageStatus callback-fn="getchathistory()" topmiddleindex=topMiddleIndex>
 			<div class="page-loader" ng-if="showSpinner==true">
@@ -134,12 +153,12 @@
 										</span>										
 									</span>
 								</div>
-								<div class="clear" ng-if="chat.media == true"></div>
 								<div class="loading-status">
-									<p>{{chat.filename}}</p>
+									<p class="loading-text">{{chat.filename}}</p>
 								</div>								
+								<div class="clear"></div>
 								<div class="" ng-if="chat.media == false"></div>
-							</div>
+							</div>							 
 						</div>
 					</div>
 				</div>				
@@ -217,7 +236,7 @@
 		<div class="clear"></div>
 	</div>
 </div>
-<div class="middle-right">
+<div class="middle-right" ng-class="{rightviewshow:!filemenu,rightviewhide:filemenu}">
   <!-- <div class="select-options">
     <div class="dropdown"> <i class="nc-icon-mini ui-2_menu-dots dropbtn" ng-click="myFunction()"></i>
       <div id="myDropdown" class="dropdown-content"> <a href="" ng-click="allfiles()">All Files</a></div>
@@ -238,18 +257,28 @@
                <div class="file-img" ng-class="(file.ext == 'pdf')?'filetype-pdf':(file.ext == 'rar')?'filetype-rar':(file.ext == 'zip')?'filetype-zip':(file.audio == true)? 'filetype-mp3':(file.ext == 'txt')?'filetype-text':'filetype-unknown'">
                    <img ng-if="file.ext == 'pdf'" src="../content/images/pdf.png"  alt=""/>
                    <img ng-if="file.ext == 'rar'" src="../content/images/rar.png" alt=""/>
-                   <img ng-if="file.ext == 'zip'" src="../content/images/zip-file.png" alt=""/>
+                   <img ng-if="file.ext == 'zip'" src="../content/images/zip-white.png" alt=""/>
                    <img ng-if="file.ext == 'txt'" src="../content/images/text.png" alt=""/>
+                   <img ng-if="file.ext == 'css'" src="../content/images/text.png" alt=""/>
+                   <img ng-if="file.ext == 'html'" src="../content/images/text.png" alt=""/>
                    <img ng-if="file.audio == true" src="../content/images/mp3.png" alt=""/>
                    <img ng-if="file.video == true" src="../content/images/nature1.jpg" alt=""/>
-                   <img ng-if="file.media == false && file.audio == false && file.video == false   && file.ext != 'pdf' && file.ext != 'rar' && file.ext != 'zip' && file.ext != 'txt' " src="../content/images/unknown_white.png" alt=""/>
+                   <img ng-if="file.media == false && file.audio == false && file.video == false   && file.ext != 'pdf' && file.ext != 'rar' && file.ext != 'zip' && file.ext != 'txt' && file.ext != 'css' && file.ext != 'html' " src="../content/images/unknown_white.png" alt=""/>
                    <img ng-if="file.media == true" src="../content/images/audio-call.jpg" alt=""/>
                </div>
                 <div class="file-details">
                     <span>{{file.created_by}}</span>
                     <h4>{{file.file_name}}</h4>
                     <span> {{file.date}} at {{file.time}}</span>
-               </div> 
+               </div>
+               <div class="more-icons">
+                <a href="" class="share-icn"><i class="nc-icon-mini arrows-1_share-91"></i></a>
+                <i class="nc-icon-mini ui-2_menu-dots dropmenu" ng-click="menufunction()"></i>
+                    <div id="myDropmenu" class="dropmenu-content">
+                        <a href="">All Files</a>
+                        <a href="">Group Members</a>
+                    </div>
+                </div> 
                <div class="clear"></div>
            </div>
     </div>

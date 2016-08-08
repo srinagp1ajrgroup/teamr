@@ -7,6 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
+         <base href="/">
 
 	   <link rel="shortcut icon" href="content/images/favicon.ico">
         <link rel="stylesheet" href="content/css/style.css">
@@ -36,7 +37,10 @@
         <script src="lib/angular/scrollglue.js"></script>
         <script src="scripts/vendor/comser.js"></script>
         <script src="scripts/vendor/comservoicecall.js"></script>
+        <script src="scripts/vendor/adapter.js"></script>
+        <script src="scripts/vendor/comservideocall.js"></script>
         <script src="lib/angular-css-injector.js"></script>
+        <script src="lib/angular-post-message.js"></script>
         
         
         <script src="scripts/app.js"></script>
@@ -47,15 +51,19 @@
         <script src="scripts/controllers/chatviewController.js"></script>
         <script src="scripts/controllers/groupchatcontroller.js"></script>
         <script src="scripts/controllers/popupcontroller.js"></script>
+        <script src="scripts/controllers/videocontroller.js"></script>
         <script src="scripts/controllers/changepasswordController.js"></script>
 
         <!---Directives-->
         <script src="scripts/directives/scrollbar.js"></script>
         <script src="scripts/directives/voicecall.js"></script>
+        <script src="scripts/directives/videocall.js"></script>
         
 
         <!---Services-->
         <script src="scripts/services/teamrService.js"></script>
+        <script src="scripts/services/teamrvoipservice.js"></script>
+        <script src="scripts/services/teamrvideoservice.js"></script>
         <script src="scripts/services/cachefactory.js"></script>
 
     </head>

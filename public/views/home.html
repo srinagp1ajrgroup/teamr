@@ -236,48 +236,7 @@
                 </ul>
               </div>
             </div>
-            <div ng-hide="isSearch"> 
-              <!-- <div class="md-accordion" ng-repeat="data in accordianData">
-                                        <div ng-init="data.expanded = false" ng-click="collapseAll(data)">
-                                            <div class="">
-                                                <div class="side-chat-box" >
-                                                    <div class="chatlist"> 
-                                                        <span>{{data.heading}}</span> 
-                                                        <menu-toggle contact="contact"></menu-toggle>
-                                                    </div>
-                                                    <div class="addgroup-icons hide-icon">
-                                                        <div class="chatlist-right"> 
-                                                            <a> <i class="nc-icon-mini users_single-01"></i></a>
-                                                        </div>
-                                                    </div>
-                                                    <span ng-class="{expandCollapse:true, active:data.expanded}"></span> 
-                                                    <div class="clear"></div>
-                                                </div>
-                                                <span flex=""></span>                                                
-                                                <div class="scrollbar-box" ng-class="{dataContent:true, activeContent:data.expanded}" mb-scrollbar="scrollbar('vertical', true)">
-                                                    <div class="side-nav-main force-overflow">
-                                                        <ul class="nav-list list" ng-if="data.heading == 'Contacts' ">
-                                                            <li role="presentation" ng-repeat="contact in data.content" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == selected}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
-                                                                <div ng-class="contact.PRESENCE"> </div>
-                                                                <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
-                                                                <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
-                                                                <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div>
-                                                            </li>
-                                                        </ul>
-
-                                                        <ul class="nav-list list" ng-if="data.heading == 'Teams' ">
-                                                            <li role="presentation" class="" ng-repeat="group in data.content" ng-click="getSelgroup($index,group.NAME)" ng-class="{active: $index == selected}">
-                                                                <a ui-sref="home.groupchatview({group:group.NAME })">
-                                                                    <div class="offline"> </div>
-                                                                    <span>{{group.NAME}}</span>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
+            <div ng-hide="isSearch">
               <div class="clear"></div>
               <div class="side-chat-box" >
                 <div class="chatlist"> <span>Contacts</span> </div>
@@ -289,13 +248,14 @@
               <div class="scrollbar-box" mb-scrollbar="scrollbar('vertical', true)" >
                 <div class="side-nav-main force-overflow">
                   <ul class="nav-list list">
-                    <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == seluser}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
+                    <li role="presentation" ng-repeat="contact in contacts | limitTo:cLimit" ng-click="getSeluser($index,contact.USERNAME );" ng-class="{active: $index == seluser || contact.USERNAME == currentUserName}"> <a ui-sref="home.chatview({user:contact.USERNAME })">
                       <div ng-class="contact.PRESENCE"> </div>
-                      <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>
-                      <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
+                      <md-tooltip md-direction="right" ng-if="showmenu">{{contact.FIRSTNAME+' '+contact.LASTNAME}}</md-tooltip>
+                      <span>{{contact.FIRSTNAME+' '+contact.LASTNAME}}</span> </a>                      
                       <!-- <div class="badge" ng-if="contact.nCount > 0">{{contact.nCount}}</div> -->
                       <div class="badge" ng-if="contact.CONTACT_USER_ID1 == userdetails.user_id && contact.CONTACT_USER2_UMCOUNT > 0">{{contact.CONTACT_USER2_UMCOUNT}}</div>
                       <div class="badge" ng-if="contact.CONTACT_USER_ID2 == userdetails.user_id && contact.CONTACT_USER1_UMCOUNT > 0">{{contact.CONTACT_USER1_UMCOUNT}}</div>
+                      <div class="badge request-pending" ng-show="contact.WAITING_APPROVAL == true"><i class="nc-icon-mini ui-2_alert"></i></div>
                     </li>
                   </ul>
                 </div>
@@ -348,24 +308,24 @@
                             <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a</li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
-                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a>/li>
+                            <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
-                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a>/li>
+                            <li> <a href=""> <i class="nc-icon-mini users_single-03"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
                             <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
                             <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a> </li>
-                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a>/li>
+                            <li> <a href=""> <i class="nc-icon-mini ui-1_settings-gear-64"></i></a></li>
                             <li> <a href=""><i class="nc-icon-mini ui-1_email-84"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini ui-2_time-clock"></i></a></li>
                             <li> <a href=""> <i class="nc-icon-mini media-1_audio-91"></i></a> </li>
@@ -578,6 +538,26 @@
           </div>
         </div>
       </div>
+      <!-- <div class="audio-call-bg audio-call-receiving" ng-class="{minimum:!showmax,maximum:showmax}" ng-if="isinboundcall==true">
+        <div class="audio-call-max">
+          <div class="audio-calling-one">
+            <div class="audio-caller-name receiver-call"><img alt="audio-call" src="content/images/audio-call.jpg"></div>
+            <span>{{data.username}}</span>
+          </div>
+          <div class="audio-call-bottom">
+            <div class="audio-icon-option">
+              <ul>
+                <li ><a href=""><i class="nc-icon-mini ui-3_phone"></i></a></li>
+                <li><a href=""><i class="nc-icon-mini tech_webcam-39"></i></a></li>
+                <li class="active"><a href=""><i class="nc-icon-mini ui-1_simple-remove"></i></a>
+                </li>
+              </ul>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div> -->
       <div ui-view style="height:100%;"></div>
     </div>
     <div id="demo-switcher">

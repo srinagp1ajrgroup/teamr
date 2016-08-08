@@ -2,6 +2,8 @@
 var globals 	= require('../config/global');
 var extend 		= require('extend');
 var ntp 		= require('socket-kinda-ntp');
+var NodeCache 	= require( "node-cache" );
+var myCache 	= new NodeCache();
 module.exports = function(io, app, dbutils, scocu, utils)
 {
 	function sendUpdate(data, list, eventName){
@@ -20,10 +22,16 @@ module.exports = function(io, app, dbutils, scocu, utils)
 					err = "Invalid ID";
 					callback({success:false, data:err})
 				}
-				else{
-					console.log('subscribe: '+data.sessiontoken+'_'+data.username);
-					utils.setSocketId(io, data.sessiontoken+'_'+data.username, socket.id);
+				else{					
 					socket.username = data.sessiontoken+'_'+data.username;
+					myCache.get(socket.username, function(err, value){
+						if(value != undefined){
+							clearTimeout(value);
+						}
+					});
+
+					console.log('subscribe: '+data.sessiontoken+'_'+data.username);
+					utils.setSocketId(io, data.sessiontoken+'_'+data.username, socket.id);					
 					/*adding all users to main room*/
 					socket.join("allXenChatUsers");
 					callback({success:true, status:"success"})
@@ -46,7 +54,8 @@ module.exports = function(io, app, dbutils, scocu, utils)
 			});
 		});
 
-		function sendPresenceFunc(doc,data,callback){
+		function sendPresenceFunc(doc, data, callback)
+		{
 			var presence = {"user" : {"user_id" : doc.user_id, "presence" : data.status}}
 			scocu.senddata("comserv/users/"+doc.user_id+"/presence", "POST", presence, doc.token, function(err, result){
 				if(err){
@@ -338,7 +347,6 @@ module.exports = function(io, app, dbutils, scocu, utils)
 					callback({status:"error"})
 				}
 				else{
-
 					utils.emitMsg(io, data.touser,  data, "isTyping");
 				}
 			});
@@ -643,6 +651,38 @@ module.exports = function(io, app, dbutils, scocu, utils)
 				}
 			});
 		});
+
+		socket.on('videocall',function (data, callback){	
+			dbutils.getUserData(data.username, data.sessiontoken, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({success:false, data:err})
+				}
+				else{
+					utils.emitMsg(io, data.touser,  data, "videocall",function(flag)
+					{
+                        
+                    });
+				}
+			});
+		});
+
+		socket.on('disconnectvideocall',function (data, callback){	
+			dbutils.getUserData(data.username, data.sessiontoken, function(err, doc){
+				if(err || doc == null){
+					console.log('err @ getToken : '+err);
+					err = "Invalid ID";
+					callback({success:false, data:err})
+				}
+				else{
+					utils.emitMsg(io, data.fromuser,  data, "disconnectvideocall",function(flag)
+					{
+                        
+                    });
+				}
+			});
+		});
 	
 		socket.on('getOfflineMsgs',function (data,callback){	
 		});
@@ -653,10 +693,46 @@ module.exports = function(io, app, dbutils, scocu, utils)
 		socket.on('deletemessages',function (data,callback){
 		});
 
-		socket.on('disconnect', function (data) {
+		socket.on('disconnect', function (data) 
+		{
+			if (socket.username){
+				myCache.set(socket.username, setTimeout(function(){sendNotification(socket.username)}, 10000));
+			}
 
 			delete io.sockets.sockets[socket.username]
 	       	socket.disconnect();
 	    });
+
+	    function sendNotification(sockname){
+			var uName = sockname.split("_");
+			var sessiontoken = uName[0];
+			var username = uName[1];
+			dbutils.getUserData(username, sessiontoken, function(err, doc){
+				if (doc) {
+					var flag = false;
+					dbutils.getUserSessions(username,function(err,docs){
+						if (!err && docs) {
+							for (var i = 0; i < docs.length; i++) {
+								var sockid = utils.getSocketId(io,docs[i].sessiontoken+"_"+username);
+								if(sockid){
+									flag = true;
+									break;
+								}
+							}
+						}
+						if (!flag) {
+							utils.getusercontacts(scocu, doc.user_id, doc.token, function(resp){
+								if (resp.success) {
+									var datax = {list:resp.data}
+									datax.status = "offline";
+									sendPresenceFunc(doc, datax, function(obj){
+									});
+								}
+							})
+						}
+					});	
+				}
+			})
+		}
 	});
 }

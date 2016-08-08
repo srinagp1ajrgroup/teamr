@@ -1,7 +1,7 @@
 var chatList = [];
 var cacheObj = null;
 xenApp.controller('chatviewController', function ($scope, $state, $stateParams, $rootScope, $window, $cacheFactory, 
-    teamrService, localStorageService, $mdDialog, $mdMedia, teamrCache, $notification, $log){
+    teamrService, localStorageService, $mdDialog, $mdMedia, teamrCache, $notification, $log, teamrvoipservice, teamrvideoservice){
 
     $scope.userdetails  = JSON.parse(localStorageService.get("localpeer"));
     $scope.contacts     = localStorageService.get("user_contacts");
@@ -24,6 +24,9 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     $scope.errormsg     = "";
     $scope.isoutboundcall  = false;
     $scope.isinboundcall   = false;
+    $scope.isoutboundvcall  = false;
+    $scope.isinboundvcall   = false;
+    $scope.videocalldetails = null;
     var timeout;
     var offset = 0;
 
@@ -114,15 +117,16 @@ xenApp.controller('chatviewController', function ($scope, $state, $stateParams, 
     }
 
    
-$scope.audioplayer = function(msg, ev) {
-       $scope.mdDialogPopup($scope, audioplayer, '../../views/playaudio.html', ev);
-   };
-   function audioplayer($scope, parentscope) {
+    $scope.audioplayer = function(msg, ev) {
+        $scope.msg = msg;
+        $scope.mdDialogPopup($scope, audioplayer, '../../views/playaudio.html', ev);
+    };
+    function audioplayer($scope, parentscope) {
        $scope.isplay = false;
        $scope.duration = '';
        var timelineWidth = 0;
        var duration = 0;
-       teamrService.getfileurl(parentscope.userdetails.username, msg, function (response) {
+       teamrService.getfileurl(parentscope.userdetails.username, parentscope.msg, function (response) {
            if (response.success == true) {
                var resp = JSON.parse(response.data);
                if (resp.status == "redirect") {
@@ -135,8 +139,14 @@ $scope.audioplayer = function(msg, ev) {
            }
 
        })
-   }
-        function pvController(scope, parentscope){
+    }
+
+    $scope.videplayer = function(msg, ev) {
+        $scope.msg = msg;
+        $scope.mdDialogPopup($scope, parentscope, '../../views/playvideo.html', ev);
+    }
+    
+    function pvController(scope, parentscope){
         videoplayer_init = function(){
             var queryResult = $document[0].getElementById('my_video_1')                        
         }
@@ -153,11 +163,6 @@ $scope.audioplayer = function(msg, ev) {
                 }
             }
         }); 
-    }
-
-    $scope.videplayer = function(msg, ev) {
-        $scope.msg = msg;
-        $scope.mdDialogPopup($scope, parentscope, '../../views/playvideo.html', ev);
     }
 
     function pvController(scope, parentscope){
@@ -277,6 +282,7 @@ $scope.audioplayer = function(msg, ev) {
                 if(response.success == true){
                     $rootScope.$broadcast('updatecontact', response.data)
                     $mdDialog.hide();
+                    scope.refreshsearch();
                 }
             }); 
         }
@@ -324,6 +330,10 @@ $scope.audioplayer = function(msg, ev) {
             // updatecache(obj);
             $rootScope.$broadcast('privatechatupdate', obj);
             return;
+        }
+
+        if($rootScope.userPresenceStatus == 'hidden'){
+            $scope.desktopnotification('home.chatview', { user: obj.fromuser }, obj.fromuser, $scope.selindex)
         }
 
         updatechatui(obj.fromuser, obj.fromuser, obj.message, obj.message_id, "admin-chat", false, obj.delivered, 
@@ -375,6 +385,12 @@ $scope.audioplayer = function(msg, ev) {
             }, 2000);
         }
     });
+
+    $scope.$on('videocall', function(event, data){
+        $scope.isinboundvcall = true;
+        $scope.videocalldetails = data;
+        $scope.$digest();
+    })
 
     $scope.download = function (msg) {
         teamrService.getfileurl($scope.userdetails.username, msg, function(response){
@@ -699,6 +715,9 @@ $scope.audioplayer = function(msg, ev) {
             $scope.errorpopup("No Internet Connection")
             return;
         }
+        if($scope.selobj.WAITING_APPROVAL == true)
+            return;
+
         $scope.showSpinner = true;
         teamrService.getchathistory($scope.userdetails.username, $scope.userdetails.user_id, $scope.selid, offset,
             function (response) 
@@ -1000,12 +1019,17 @@ $scope.audioplayer = function(msg, ev) {
         });
     }
 
-    /***********************************************Audio Call*************************************************************/
-
+    /***********************************************Audio Call*************************************************************/    
     $scope.outboundvoicecall = function(){
-        $scope.isoutboundcall = true;
+        // $scope.isoutboundcall = true;
         var remoteaudio = document.getElementById('audio_remote');
-        teamrService.outboundcall(remoteaudio, "4692568482");
+        // teamrvoipservice.outboundcall(remoteaudio, "9183242715");
+
+        var url = $state.href('audio', {}, {absolute: true})
+        window.open(url,'_blank'); 
+        
+        // var url = $state.href('audiocall');
+        // $window.open("https://localhost:8081/#/audiocall", '_blank');
     }    
 
     $scope.acceptcall = function(){
@@ -1017,5 +1041,36 @@ $scope.audioplayer = function(msg, ev) {
     }
 
     /***********************************************Audio Call*************************************************************/
+
+    /***********************************************Video Call*************************************************************/
+
+    $scope.outboundvideocall = function(){
+        $scope.isoutboundvcall = true;
+        var url = $state.href('video', {roomid:roomid}, {absolute: true})
+        $rootScope.ref = window.open(url,'_blank'); 
+        var roomid = Math.floor(Math.random()*90000) + 10000;
+        localStorageService.set("roomid", roomid);
+        // teamrvideoservice.outboundcall($scope.userdetails.username, roomid);
+        teamrService.outboundvideocall($scope.seluser, roomid, function(response){
+
+        })
+    }    
+
+    $scope.acceptvideocall = function(){
+        localStorageService.set('roomid', $scope.videocalldetails.roomid)
+        localStorageService.set('videocall_from', $scope.videocalldetails.username)
+        var url = $state.href('video', {'roomid': $scope.videocalldetails.roomid}, {absolute: true})
+        window.open(url,'_blank'); 
+        $scope.isinboundvcall = false;
+        $scope.$digest();
+    }
+
+    $scope.rejectvideocall = function(){
+        $scope.isinboundvcall = false;
+        teamrService.disconnectvideocall($scope.videocalldetails.username, $scope.videocalldetails.roomid)
+    }
+
+    /***********************************************Video Call*************************************************************/
     
+
 });

@@ -1,31 +1,16 @@
-xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($state, $http, $rootScope)
-{
-   
-    var voiceCallService    = {};
-    // var voicecallobj        = new comservoicecall();
+xenApp.factory('teamrvoipservice', function($state, $rootScope, localStorageService) {
+    
+    var teamrvoipservice = {};
 
-    voiceCallService.connect = function (username) {
-        voicecallobj.connect(username, eventsListener);
+    var voipcallobj = new comservoipcall();
+
+    teamrvoipservice.sipregistration = function () {
+        var credentials = {privIdentity:"4692491578", password:"abcdef"};
+        voipcallobj.connect(credentials, eventsListener);
     }
 
-    voiceCallService.register = function () {
-        voicecallobj.register();
-    }
-
-    voiceCallService.unregister = function () {
-        voicecallobj.unregister(eventsListener);
-    }
-
-    voiceCallService.call = function (audioremote, sipext) {
-        voicecallobj.call(audioremote, sipext);
-    }
-
-    voiceCallService.accept = function (audioremote) {
-        voicecallobj.accept(audioremote);
-    }
-
-    voiceCallService.hangup = function () {
-        voicecallobj.hangup(eventsListener);
+    teamrvoipservice.outboundcall = function (audioremote, sipext) {
+        voipcallobj.call(audioremote, sipext);
     }
 
     function eventsListener(e)
@@ -34,7 +19,7 @@ xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($s
         {
             case 'started':
             {
-                voicecallobj.register();
+                voipcallobj.register();
             }
             break;
             case 'i_new_message':
@@ -44,14 +29,14 @@ xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($s
             break;
             case 'i_new_call':
             {
-                voicecallobj.callSession = e.newSession;
-                voicecallobj.callSession.setConfiguration(voicecallobj.oConfigCall);
+                voipcallobj.callSession = e.newSession;
+                voipcallobj.callSession.setConfiguration(voipcallobj.oConfigCall);
                 $rootScope.$broadcast('i_new_call');
             }
             break;
             case 'connected':
             {
-                if (e.session == voicecallobj.registerSession) {
+                if (e.session == voipcallobj.registerSession) {
                     $rootScope.$broadcast('registered');
                 }
             }
@@ -67,16 +52,16 @@ xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($s
             case 'failed_to_stop':
             {
                 var bFailure = (e.type == 'failed_to_start') || (e.type == 'failed_to_stop');
-                voicecallobj.sipStack = null;
-                voicecallobj.registerSession = null;
-                voicecallobj.callSession = null;
+                voipcallobj.sipStack = null;
+                voipcallobj.registerSession = null;
+                voipcallobj.callSession = null;
             }
             break;
             case 'terminating':
             case 'terminated':
             {
-                if (e.session == voicecallobj.callSession) {
-                    voicecallobj.callSession = null;
+                if (e.session == voipcallobj.callSession) {
+                    voipcallobj.callSession = null;
                     $rootScope.$broadcast('hangup');
                 }
             }
@@ -90,7 +75,7 @@ xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($s
             }
             case 'i_ao_request':
             {
-                if (e.session == voicecallobj.callSession) {
+                if (e.session == voipcallobj.callSession) {
                     var iSipResponseCode = e.getSipResponseCode();
                     if (iSipResponseCode == 180 || iSipResponseCode == 183) {
                         $rootScope.$broadcast('i_ao_request');
@@ -107,13 +92,13 @@ xenApp.factory('voiceCallService', ['$state','$http', '$rootScope', function ($s
             case 'm_permission_refused':
             {
                 if (e.type == 'm_permission_refused') {
-                    voicecallobj.callSession = null;
+                    voipcallobj.callSession = null;
                     $rootScope.$broadcast('m_permission_refused');
                 }
             }
             break;
         }
     }
-    
-    return voiceCallService;
-}]);
+
+    return teamrvoipservice;
+});

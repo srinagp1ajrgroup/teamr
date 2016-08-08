@@ -1,14 +1,12 @@
 xenApp.factory('teamrService', function($state, $rootScope, localStorageService) {
     var teamrService = {};
     var comser      = new ComSer();
-    var voipcallobj = new comservoipcall();
-
     teamrService.login = function (credentials, logincallback) {
         comser.login(credentials, logincallback);
     };
 
     teamrService.connect = function () {
-        comser.connect(eventsListener);
+        comser.connect();
     }
 
     teamrService.subscribe = function (data, callback) {
@@ -269,8 +267,30 @@ xenApp.factory('teamrService', function($state, $rootScope, localStorageService)
                     $rootScope.$broadcast('exitgroup', obj);
                 }
                 break;
+                case 'videocall':
+                {
+                    $rootScope.$broadcast('videocall', obj);
+                }
+                break;
+                case 'disconnectvideocall':
+                {
+                    var url = $state.href('video', {}, {absolute: true})
+                    $rootScope.ref.postMessage('wewfwff', url)
+                    // localStorageService.set('closevideocall', true);
+                    // $scope.$emit('$messageOutgoing',angular.toJson({"response":"hi"}));
+                    // $rootScope.$broadcast('closevideocall', obj);
+                }
+                break;
             }
         });
+    }
+
+    teamrService.outboundvideocall = function (touser, roomid, callback) {
+        comser.videocall(touser, roomid, callback);
+    }
+
+    teamrService.disconnectvideocall = function (fromuser, roomid) {
+        comser.disconnectvideocall(fromuser, roomid);
     }
 
     teamrService.sendreq = function (event, obj) {
@@ -299,103 +319,7 @@ xenApp.factory('teamrService', function($state, $rootScope, localStorageService)
 
     teamrService.removeAllListeners = function () {
         comser.removeAllListeners();
-    }
-
-    teamrService.sipregistration = function () {
-        var credentials = {privIdentity:"3xen3000", password:"abcdef"};
-        voipcallobj.connect(credentials, eventsListener);
-    }
-
-    teamrService.outboundcall = function (audioremote, sipext) {
-        voipcallobj.call(audioremote, sipext);
-    }
-
-    function eventsListener(e)
-    {
-        switch(e.type)
-        {
-            case 'started':
-            {
-                voipcallobj.register();
-            }
-            break;
-            case 'i_new_message':
-            {
-
-            }
-            break;
-            case 'i_new_call':
-            {
-                voipcallobj.callSession = e.newSession;
-                voipcallobj.callSession.setConfiguration(voipcallobj.oConfigCall);
-                $rootScope.$broadcast('i_new_call');
-            }
-            break;
-            case 'connected':
-            {
-                if (e.session == voipcallobj.registerSession) {
-                    $rootScope.$broadcast('registered');
-                }
-            }
-            break;
-            case 'm_early_media':
-            {
-                $rootScope.$broadcast('m_early_media');
-            }
-            break;
-            case 'stopping':
-            case 'stopped':
-            case 'failed_to_start':
-            case 'failed_to_stop':
-            {
-                var bFailure = (e.type == 'failed_to_start') || (e.type == 'failed_to_stop');
-                voipcallobj.sipStack = null;
-                voipcallobj.registerSession = null;
-                voipcallobj.callSession = null;
-            }
-            break;
-            case 'terminating':
-            case 'terminated':
-            {
-                if (e.session == voipcallobj.callSession) {
-                    voipcallobj.callSession = null;
-                    $rootScope.$broadcast('hangup');
-                }
-            }
-            break;
-            case 'm_stream_audio_local_added':
-            case 'm_stream_audio_local_removed':
-            case 'm_stream_audio_remote_added':
-            case 'm_stream_audio_remote_removed':
-            {
-                break;
-            }
-            case 'i_ao_request':
-            {
-                if (e.session == voipcallobj.callSession) {
-                    var iSipResponseCode = e.getSipResponseCode();
-                    if (iSipResponseCode == 180 || iSipResponseCode == 183) {
-                        $rootScope.$broadcast('i_ao_request');
-                    }
-                }
-            }
-            break;
-            case 'm_permission_requested':
-            {
-                
-                break;
-            }
-            case 'm_permission_accepted':
-            case 'm_permission_refused':
-            {
-                if (e.type == 'm_permission_refused') {
-                    voipcallobj.callSession = null;
-                    $rootScope.$broadcast('m_permission_refused');
-                }
-            }
-            break;
-        }
-    }
+    }    
 
     return teamrService;
 });

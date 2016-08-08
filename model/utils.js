@@ -41,7 +41,7 @@ globFunc.prototype.emitMsg = function(io,username, data, eventName, callback)
 	});
 }
 
-globFunc.prototype.getusercontacts = function(userid, token, callback)
+globFunc.prototype.getusercontacts = function(scocu, userid, token, callback)
 {
 	scocu.senddata( "comserv/contacts/"+userid, "GET", null, token, function(err, result){
 		if(err){
@@ -63,19 +63,19 @@ globFunc.prototype.getusercontacts = function(userid, token, callback)
 					if(data.PRESENCE == null)
 						data.PRESENCE = 'offline'
 
-					if(data.CONTACT_USER_ID1 == doc.user_id && data.WAITING_APPROVAL == true)
+					if(data.CONTACT_USER_ID1 == userid && data.WAITING_APPROVAL == true)
 						data.incomingreq = false;
-					else if(data.CONTACT_USER_ID2 == doc.user_id && data.WAITING_APPROVAL == true)
+					else if(data.CONTACT_USER_ID2 == userid && data.WAITING_APPROVAL == true)
 						data.incomingreq = true;
 
 					data.nCount = 0;
 					return true;
 				})
 
-				res.send({success:true, data:JSON.stringify(contacts)})
+				callback({success:true, data:contacts})
 			}
 			else
-				res.send({success:false, data:result})
+				callback({success:false, data:result})
 		}
 	})
 }

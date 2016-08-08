@@ -132,6 +132,10 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
             return;
         }
 
+        if($rootScope.userPresenceStatus == 'hidden'){
+            $scope.desktopnotification('home.groupchatview', { group: obj.NAME }, obj.NAME, $scope.selgroupindex);
+        }
+
         updatechatui(obj.username, obj.message, "user-chat", obj.file_transfer, obj.media, obj.audio, obj.video, obj.message_id, obj.file_name);
         $scope.$apply();
     });
@@ -157,81 +161,82 @@ xenApp.controller('groupchatController', function ($scope, $state, $stateParams,
 
           $scope.mdDialogPopup($scope, addmemberstogroupctrl, '../../views/addmembers.html', ev)
     }
-function addmemberstogroupctrl($scope, parentscope){
-                $scope.addmembers           = [];
-                $scope.updatedcontacts      = localStorageService.get('user_contacts');
-                $scope.isSending = false;
-                $scope.cancel = function(){
-                    $scope.addmembers = [];
-                    $mdDialog.hide();
+    function addmemberstogroupctrl($scope, parentscope)
+    {
+        $scope.addmembers           = [];
+        $scope.updatedcontacts      = localStorageService.get('user_contacts');
+        $scope.isSending = false;
+        $scope.cancel = function(){
+            $scope.addmembers = [];
+            $mdDialog.hide();
+        }
+
+        _.filter($scope.updatedcontacts, function(contact){
+            _.filter(parentscope.groupmembers, function(groupmember){
+                if(contact.USERNAME == groupmember.USERNAME)
+                    contact.existingroup = true;
+            })
+        })
+
+        $scope.addmembertogroup = function(contact)
+        {   
+            var ismember = _.where($scope.addmembers, {username:contact.USERNAME})
+            if ($scope.addmembers.length >= parentscope.selgroupobj.MAXLIMIT || parentscope.groupmembers.length >= parentscope.selgroupobj.MAXLIMIT) {
+               $scope.errorpopup("sry you have reached max limit");
+               return;
+           }
+            else{
+                if(ismember.length == 0){
+                    if(contact.CONTACT_USER_ID1 == parentscope.userdetails.user_id)
+                        $scope.addmembers.push({admin:false, user_id:contact.CONTACT_USER_ID2, username:contact.USERNAME, exit:false, is_delete:false}) 
+                    else if(contact.CONTACT_USER_ID2 == parentscope.userdetails.user_id)
+                        $scope.addmembers.push({admin:false, user_id:contact.CONTACT_USER_ID1, username:contact.USERNAME, exit:false, is_delete:false})
                 }
+            }
+        }
 
-                _.filter($scope.updatedcontacts, function(contact){
-                    _.filter(parentscope.groupmembers, function(groupmember){
-                        if(contact.USERNAME == groupmember.USERNAME)
-                            contact.existingroup = true;
-                    })
-                })
+        $scope.removemember = function($index){
+            $scope.addmembers.splice($index, 1);
+        }
 
-                $scope.addmembertogroup = function(contact)
-                {   
-                    var ismember = _.where($scope.addmembers, {username:contact.USERNAME})
-                    if ($scope.addmembers.length >= parentscope.selgroupobj.MAXLIMIT || parentscope.groupmembers.length >= parentscope.selgroupobj.MAXLIMIT) {
-                       $scope.errorpopup("sry you have reached max limit");
-                       return;
-                   }
-                    else{
-                        if(ismember.length == 0){
-                            if(contact.CONTACT_USER_ID1 == parentscope.userdetails.user_id)
-                                $scope.addmembers.push({admin:false, user_id:contact.CONTACT_USER_ID2, username:contact.USERNAME, exit:false, is_delete:false}) 
-                            else if(contact.CONTACT_USER_ID2 == parentscope.userdetails.user_id)
-                                $scope.addmembers.push({admin:false, user_id:contact.CONTACT_USER_ID1, username:contact.USERNAME, exit:false, is_delete:false})
+        $scope.add = function()
+        {
+           if ($scope.addmembers.length == 0 || parentscope.groupmembers.length > parentscope.selgroupobj.MAXLIMIT) {
+               $scope.errorpopup("sry you have reached max limit");
+               return;
+            }
+            // parentscope.addmembers = $scope.addmembers;
+            // parentscope.mergechat(ev);
+            // if(parentscope.groupmembers.length > 3)
+            {
+                $scope.isSending = true;
+                teamrService.addmemberstogroup(parentscope.userdetails.username, parentscope.selgroupobj, $scope.addmembers, 
+                    function(response){
+                        $scope.isSending = false;
+                        console.log(response);
+                        if(response.success == true){
+                            parentscope.groupmembers = response.data;
+                            $mdDialog.hide();
                         }
-                    }
-                }
-
-                $scope.removemember = function($index){
-                    $scope.addmembers.splice($index, 1);
-                }
-
-                $scope.add = function()
-                {
-                   if ($scope.addmembers.length == 0 || parentscope.groupmembers.length >= parentscope.selgroupobj.MAXLIMIT) {
-                       $scope.errorpopup("sry you have reached max limit");
-                       return;
-                    }
-                    // parentscope.addmembers = $scope.addmembers;
-                    // parentscope.mergechat(ev);
-                    // if(parentscope.groupmembers.length > 3)
-                    {
-                        $scope.isSending = true;
-                        teamrService.addmemberstogroup(parentscope.userdetails.username, parentscope.selgroupobj, $scope.addmembers, 
-                            function(response){
-                                $scope.isSending = false;
-                                console.log(response);
-                                if(response.success == true){
-                                    parentscope.groupmembers = response.data;
-                                    $mdDialog.hide();
-                                }
-                                else if(response.success == false){
-                                    parentscope.alert = response.data;
-                                    parentscope.mdToast.show({hideDelay:10000, position:'bottom right', templateUrl:'views/alert.html'});
-                                    $mdDialog.hide();
-                                }
-                        });
-                    }
-                    // else if(parentscope.groupmembers.length <= 3)
-                    // {
-                    //     parentscope.addmembers = $scope.addmembers;
-                    //     // suggestgroupname(ev);
-                    //     teamrService.updategroupname(parentscope.selgroupobj, parentscope.addmembers, function(response){
-                    //         console.log(response);
-                    //         parentscope.groups[parentscope.selgroupindex].NAME = parentscope.selgroupobj.NAME;
-                    //         $mdDialog.hide();
-                    //     })
-                    // }
-                }
-}
+                        else if(response.success == false){
+                            parentscope.alert = response.data;
+                            parentscope.mdToast.show({hideDelay:10000, position:'bottom right', templateUrl:'views/alert.html'});
+                            $mdDialog.hide();
+                        }
+                });
+            }
+            // else if(parentscope.groupmembers.length <= 3)
+            // {
+            //     parentscope.addmembers = $scope.addmembers;
+            //     // suggestgroupname(ev);
+            //     teamrService.updategroupname(parentscope.selgroupobj, parentscope.addmembers, function(response){
+            //         console.log(response);
+            //         parentscope.groups[parentscope.selgroupindex].NAME = parentscope.selgroupobj.NAME;
+            //         $mdDialog.hide();
+            //     })
+            // }
+        }
+    }
     $scope.showCustomToast = function() {
         $mdToast.show({
             hideDelay   : 3000,
@@ -507,9 +512,11 @@ function addmemberstogroupctrl($scope, parentscope){
             if(fileInput.files.length == 0)
                 return;
             var filename    = fileInput.files[0].name;
-            teamrService.fileupload($scope.userdetails.username, fileInput.files[0], function(response){    
+            $scope.showprogress = true;
+            var ret = teamrService.fileupload($scope.userdetails.username, fileInput.files[0], function(response){    
                 document.getElementById('choose').value = '';            
                 console.log(response);
+                $scope.showprogress = false;
                 if(response.success == true){
                     var resp = JSON.parse(response.data);
                     if(resp.status == "success"){
@@ -542,6 +549,16 @@ function addmemberstogroupctrl($scope, parentscope){
                             "file_ext"      : "",
                             "class"         : "user-chat"
                         };
+
+                        var str = filename.lastIndexOf(".");
+                        chat.ext = filename.substr(str + 1, filename.length)
+                        if(chat.ext == 'jpg' || chat.ext == 'png' || chat.ext == 'jpeg' || chat.ext == 'gif')
+                            chat.media = true;
+                        chat.time = gettime(timestamp);
+                        chat.date = today_yesterday(timestamp);
+                        chat.created_by = $scope.userdetails.username
+                        $scope.files.push(chat);
+                        
                         
                         updatechatui($scope.userdetails.username, resp.data.id, "user-chat", true, mediaflag, audioflag, videoflag, timestamp, filename);
                         $scope.$apply();

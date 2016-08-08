@@ -18,8 +18,8 @@ var GROUP_DEFAULT_MAXLIMIT = 10;
 
 var FILE_UPLOAD_LIMIT = 1024000;
 
-var ip = "192.168.1.90"
-var port = 8081;
+var ip = "teamr.ajrgroup.in"
+var port = 443;
 var url = 'https://'+ip+':'+port
 
 var filexmlhttp;
@@ -367,6 +367,14 @@ ComSer.prototype.listen = function(callback){
 
 		this.socket.on("isTyping", function(data){
 			callback("isTyping", data);
+		});
+
+		this.socket.on("videocall", function(data){
+			callback("videocall", data);
+		});
+
+		this.socket.on("disconnectvideocall", function(data){
+			callback("disconnectvideocall", data);
 		});
 	}		
 }
@@ -890,10 +898,14 @@ ComSer.prototype.getjoinedgroups = function(username, callback)
 	var data = {username:username, sessiontoken:userdetails.sessiontoken}
 	data['devType'] = 'w';
 
-	sendxmlhttp(data, url+'/getjoinedgroups', 'POST', function(response){
-		var res = JSON.parse(response);
-		callback(res);
-	});
+	// sendxmlhttp(data, url+'/getjoinedgroups', 'POST', function(response){
+	// 	var res = JSON.parse(response);
+	// 	callback(res);
+	// });
+
+	this.socket.emit('getjoinedgroups', data, function(ackData){
+		callback(ackData);
+	})
 }
 
 ComSer.prototype.subscribegroups = function(username, list)
@@ -1000,4 +1012,24 @@ ComSer.prototype.updateumcount = function (obj, callback) {
 		var res = JSON.parse(response);
 		callback(res);
 	});
+}
+
+ComSer.prototype.videocall = function (touser, roomid, callback) {
+	
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, touser:touser, roomid:roomid};
+
+	this.socket.emit('videocall', data, function(ackData){
+		callback(ackData);
+	})
+}
+
+ComSer.prototype.disconnectvideocall = function (fromuser, roomid) {
+	
+	var userdetails = JSON.parse(JSON.parse(localStorage.getItem('ls.localpeer')))
+	var data = {username:userdetails.username, sessiontoken:userdetails.sessiontoken, fromuser:fromuser, roomid:roomid};
+
+	this.socket.emit('disconnectvideocall', data, function(ackData){
+		callback(ackData);
+	})
 }

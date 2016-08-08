@@ -1,6 +1,6 @@
 {
   "name": "teamr",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "private": true,
   "main": "app.js",
   "devDependencies": {},
@@ -10,19 +10,24 @@
   "author": "ajr",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.1",
     "body-parser": "^1.15.2",
     "connect-mongo": "^1.2.1",
     "connect-multiparty": "^2.0.0",
     "express": "^4.14.0",
     "express-session": "^1.14.0",
+    "extend": "^3.0.0",
     "externalip": "^1.0.2",
+    "form-data": "^1.0.0-rc4",
     "mongoose": "^4.5.5",
+    "node-cache": "^3.2.1",
     "request": "^2.73.0",
     "request-ip": "^1.2.2",
     "requestify": "^0.1.17",
     "socket-kinda-ntp": "0.0.1",
     "socket.io": "^1.4.8",
-    "ua-parser-js": "^0.7.10"
+    "ua-parser-js": "^0.7.10",
+    "underscore": "^1.8.3"
   },
   "description": "Communication Services"
 }

@@ -1,13 +1,4 @@
 <div class="middle-contact padt50" ng-class="{slide:!showmenu,close:showmenu}" ng-init="groupchatinit()">
-    <div class="file_progress">
-        <div class="progressbar-bg" ng-show="showprogress == true">
-            <div id="progressBar" class="progressbar" max="100">
-                <div class="progressbartext"><span>{{filename}}</span></div>
-                <!-- <div class="progressbarpercent"><span>{{progresspercent}}%</span></div> -->
-            </div>
-            <div class="progressbarclose" ng-click="cancelFileUpload(event)"><span>x</span></div>
-        </div>
-    </div>
     <div class="middle-contact-inner">
         <div class="middle-contact-top">
             <div class="middle-contact-left"> 
@@ -66,10 +57,20 @@
                         </md-menu>
                         </md-menu-bar>
                     </li>
+                    <li class="right-toggle-btn"><a href="" ng-click="right_toggle()"><i class="nc-icon-mini ui-2_menu-dots"></i></a></li>
                 </ul>
             </div>
             <div class="clear"></div>
-        </div>      
+        </div>
+    <div class="upload-progressbar" ng-show="showprogress == true">
+        <div class="progressbar-bg">
+            <div id="progressBar" class="progressbar" max="100">
+                <div class="progressbartext"><span>{{filename}}</span></div>
+                <!-- <div class="progressbarpercent"><span>{{progresspercent}}%</span></div> -->
+            </div>            
+        </div>
+        <div class="progressbarclose" ng-click="cancelFileUpload(event)"><i class="nc-icon-mini ui-1_simple-remove"></i></div>
+    </div>      
     <div class="middle-contact-middle" scroll-glue chatmessagestatus=chatMessageStatus callback-fn="getgrouphistory()" topmiddleindex=topMiddleIndex>
         <div class="page-loader" ng-if="showSpinner==true">
             <div class="page-animate"><img src="../content/images/loader-logo.png" alt="" /> </div>
@@ -80,7 +81,7 @@
                 <div class="chat-icon-img" ng-if="chat.username != chattings[$index-1].username">
                     <span><img src="../content/images/01.jpg"></span>
                 </div>
-                <div class="chat-content">
+                <div class="chat-content" ng-class="{chatcontentmsgview: chat.username != chattings[$index+1].username}">
                     <div class="chat-content-text">
                         <div class="chat-username" ng-if="chat.username != chattings[$index-1].username">
                             <div>
@@ -122,13 +123,23 @@
                             </ul>
                             <div class="progress-status">
                                 <a href="" class="download-btn" ng-click="download(chat.message)">
+                                    <md-tooltip md-direction="bottom">Download</md-tooltip>
                                     <i class="nc-icon-mini arrows-2_hit-down"></i>
                                 </a>
+                                <span class="messageview text-right" ng-if="chat.from == chattings[$index-1].from">
+                                    <span class="time">{{chat.time.split(" ")[0]}}</span>
+                                    <span ng-if="chat.sent == true && chat.delivered == false" class="un-seen">
+                                        <i class="nc-icon-mini ui-1_eye-19"></i>
+                                    </span>                                       
+                                    <span class="seen" ng-if="chat.delivered == true">
+                                        <i class="nc-icon-mini ui-1_eye-19"></i>
+                                    </span>                                       
+                                </span> 
+                            </div>
+                            <div class="loading-status">
+                                <p class="loading-text">{{chat.filename}}</p>
                             </div>
                             <div class="clear"></div>
-                            <div class="loading-status">
-                                <p>{{chat.filename}}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,7 +170,7 @@
     </div>
 </div>
 
-<div class="middle-right">
+<div class="middle-right" ng-class="{rightviewshow:!filemenu,rightviewhide:filemenu}">
     <div class="select-options">
         <div class="dropdown"> 
             <i class="nc-icon-mini ui-2_menu-dots dropbtn" ng-click="myFunction()"></i>

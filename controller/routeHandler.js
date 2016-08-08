@@ -32,7 +32,6 @@ module.exports 		= function(io, app, dbutils, scocu, utils){
 				res.send(err.body)
 			}
 			else{
-				console.log('user : '+user);
 				user = JSON.parse(user); 
 				if(user.status == "success"){
 					// externalip(function (err, ip) {

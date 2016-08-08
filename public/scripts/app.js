@@ -1,5 +1,5 @@
 
-var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'luegg.directives', 'monospaced.elastic', 'angular.css.injector', 'notification']);
+var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMaterial', 'luegg.directives', 'monospaced.elastic', 'angular.css.injector', 'notification', 'ngPostMessage']);
     xenApp.config(function ($stateProvider, $urlRouterProvider, $locationProvider, cssInjectorProvider)
     {
         cssInjectorProvider.setSinglePageMode(true);
@@ -39,6 +39,17 @@ var xenApp = angular.module('xenChat', ['ui.router', 'LocalStorageModule', 'ngMa
             templateUrl: '../views/changepassword.html',
             controller: 'changepasswordController'
         })
+        .state('audio', {
+            url: '/audiocall',
+            templateUrl: '../views/voicecall.html'
+        })
+        .state('video', {
+            url: '/videocall',
+            templateUrl: '../views/videocall.html',
+            controller: 'videocontroller'
+        })
+
+        // $locationProvider.html5Mode(true);
     })
 
     xenApp.directive('schrollBottom', function ($timeout) {

@@ -7,9 +7,6 @@ var fs              = require('fs');
 function scocu(){
     this.senddata = function(excatURL, method, data, token, callback){
         var url      = globals.baseURL+excatURL
-        console.log(url)
-        console.log("token:")
-        console.log(token)
         switch(method){
             case 'POST':{
                 scocuRESTController(url, method, data, token, callback);
@@ -62,19 +59,6 @@ function scocu(){
             header['app_user_token'] = token;
         };
 
-        // request({method:method, url:url, body:JSON.stringify(data), headers:header}, function(err, response, body){
-        //     if(err)
-        //         callback(err,null)
-        //     else{
-        //         callback(null, body)
-        //     }
-        // })
-        // rp(options).then(function (body) {
-        //     // POST succeeded... 
-        //     callback(null, body);
-        // }).catch(function (err) {
-        //     callback(err, null)
-        // });
         requestify.request(url, {
             method: method,
             headers: header,
@@ -82,8 +66,6 @@ function scocu(){
             dataType: 'json'
         }).then(function (response) 
         {
-            console.log(response);
-            
             response.getBody();
             response.getHeaders();
             response.getHeader('Accept');

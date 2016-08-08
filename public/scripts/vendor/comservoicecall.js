@@ -18235,8 +18235,7 @@ comservoipcall.prototype.accept = function(audioremote)
 
 comservoipcall.prototype.hangup = function(eventslistener)
 {
-	if(this.callSession)
-	{
+	if(this.callSession){
 		this.callSession.hangup({events_listener: { events: '*', listener: eventslistener }});
 	}
 }
